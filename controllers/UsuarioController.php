@@ -79,13 +79,14 @@ class UsuarioController extends Controller {
         $model = new Usuario();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if ($model->idRol == \app\models\Rol::ROL_MAKER) {
+           /* if ($model->idRol == \app\models\Rol::ROL_MAKER) {
                 return $this->redirect(['hacedor/create', 'id' => $model->idUsuario]);
             } elseif ($model->idRol == \app\models\Rol::ROL_SOLICITANTE) {
                 return $this->redirect(['solicitante/create', 'id' => $model->idUsuario]);
             } else {
                 throw new Exception('error');
-            }
+            }*/
+             return $this->redirect(['view', 'id' => $model->idUsuario]);
         }
 
         return $this->render('create', [
