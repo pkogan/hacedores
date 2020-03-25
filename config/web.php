@@ -5,7 +5,7 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
-    'name'=>'Registro Makers',
+    'name'=>'hacedores',
     'language'=>'es',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],

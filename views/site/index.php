@@ -24,7 +24,10 @@ $this->title = 'Registro de Makers';
             <div class="col-lg-4">
                 <h2>Registro de Makers</h2>
 
-                <p> La fuente de datos de makers se obtiene de un registro realizado por el Gobierno de la Provincia de Neuquén y Centro PyME-ADENEU en el siguiente  <a class="btn btn-default" href="https://forms.gle/hEqG9YNnMjGduYEv6 ">formulario &raquo;</a></p>
+                <p> La fuente de datos de makers se obtiene de un registro realizado por el Gobierno de la Provincia de Neuquén y Centro PyME-ADENEU en el siguiente </p>
+                <p><a class="btn btn-default" href="https://forms.gle/hEqG9YNnMjGduYEv6 ">Formulario de Registro &raquo;</a></p>
+                <p>Y la red de makers de San Martín de Los Andes </p>
+                <p><a class="btn btn-default" href="https://web.facebook.com/impresoresneuquen/">Facebook del Grupo &raquo;</a></p>
         
 
             </div>
@@ -33,7 +36,7 @@ $this->title = 'Registro de Makers';
 
                   
                 <p> La fuente de datos de localidades y georreferenciamiento se obtiene de </p>
-                <p><a class="btn btn-default" href="https://datos.gob.ar/">datos.gob.ar&raquo;</a></p>
+                <p><a class="btn btn-default" href="https://datos.gob.ar/">Datos Nacionales &raquo;</a></p>
                 
 
 
@@ -42,7 +45,7 @@ $this->title = 'Registro de Makers';
                 <h2>Imágenes</h2>
 
                 <p> Las imágenes se obtienen de</p>
-                <p><a class="btn btn-default" href="https://www.openstreetmap.org/">https://www.openstreetmap.org/&raquo;</a>
+                <p><a class="btn btn-default" href="https://www.openstreetmap.org/">OpenStreetMap &raquo;</a>
 
                 
             </div>

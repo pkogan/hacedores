@@ -49,7 +49,8 @@ class RegistroController extends Controller {
 
         $query = Registro::find()->joinWith('idCiudad0');
         $query->groupBy(['ciudad.idCiudad', 'ciudad.ciudad', 'centroide_lat', 'centroide_lon']);
-        $query->select(['ciudad.idCiudad', 'ciudad.ciudad', 'centroide_lat', 'centroide_lon', 'Count(*) as voluntarios', 'Sum(impresores) as impresoras']);
+        $query->select(['ciudad.idCiudad', 'ciudad.ciudad', 'centroide_lat', 'centroide_lon', 'Count(*) as voluntarios', 'Sum(impresores) as impresoras',
+            'Sum(PLA) as PLA', 'Sum(ABS) as ABS','Sum(PETG) as PETG','Sum(FLEX) as FLEX','Sum(HIPS) as $HIPS']);
         $registros = $query->asArray()->all();
         return $this->render('mapa', [
                     'registros' => $registros

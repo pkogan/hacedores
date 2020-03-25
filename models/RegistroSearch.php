@@ -93,14 +93,17 @@ class RegistroSearch extends Registro
         return $dataProvider;
     }
 
-
-
-    public function searchResumen($params) {
-
+    public static function searchQuery(){
         $query = Registro::find()->joinWith('idCiudad0.idProvincia0');
         $query->groupBy(['ciudad.idCiudad', 'provincia.provincia','ciudad.departamento_nombre','ciudad.ciudad']);
         $query->select([ 'ciudad.idCiudad','provincia.provincia','ciudad.departamento_nombre','ciudad.ciudad', 'Count(*) as voluntarios', 'Sum(impresores) as impresoras',
             'Sum(PLA) as PLA', 'Sum(ABS) as ABS','Sum(PETG) as PETG','Sum(FLEX) as FLEX','Sum(HIPS) as $HIPS' ]);
+        return $query;
+    }
+
+    public function searchResumen($params) {
+
+        $query = RegistroSearch::searchQuery();
         
         // add conditions that should always apply here
 
