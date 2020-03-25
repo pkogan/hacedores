@@ -92,8 +92,10 @@ class RegistroSearch extends Registro
 
         return $dataProvider;
     }
-    
-      public function searchResumen($params) {
+
+
+
+    public function searchResumen($params) {
 
         $query = Registro::find()->joinWith('idCiudad0.idProvincia0');
         $query->groupBy(['ciudad.idCiudad', 'provincia.provincia','ciudad.departamento_nombre','ciudad.ciudad']);
@@ -134,5 +136,33 @@ class RegistroSearch extends Registro
         ]);
         return $dataProvider;
     }
+
+
+
+    public function totalResumen($params) {
+
+        $query = Registro::find()->joinWith('idCiudad0.idProvincia0');
+        //$query->groupBy(['ciudad.idCiudad', 'provincia.provincia','ciudad.departamento_nombre','ciudad.ciudad']);
+        $query->select([  'Count(*) as voluntarios', 'Sum(impresores) as impresoras',
+            'Sum(PLA) as PLA', 'Sum(ABS) as ABS','Sum(PETG) as PETG','Sum(FLEX) as FLEX','Sum(HIPS) as $HIPS' ]);
+
+        $this->load($params);
+
+        $query->andFilterWhere([
+            //'idAsistencia' => $this->idAsistencia,
+            'provincia.idProvincia' => $this->idProvincia,
+            //'Fecha' => $this->Fecha,
+            //'Asistencia.idTipo' => $this->idTipo,
+            //'idEstadoAsistencia' => $this->idEstadoAsistencia,
+        ]);
+
+        
+         
+        
+        return $query->asArray()->one();
+    }
+
+
+
     
 }

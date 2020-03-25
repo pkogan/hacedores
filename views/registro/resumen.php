@@ -37,7 +37,7 @@ $('.btn-search').click(function(){
     GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
-        //'showFooter' => true,
+        'showFooter' => true,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
                // ['label' => 'id', 'attribute' => 'idAsistencia'],
@@ -47,10 +47,13 @@ $('.btn-search').click(function(){
                   ['label' => 'Provincia',  'value' => 'idCiudad0.idProvincia0.provincia'],
                 ['label' => 'Departamento',  'value' => 'idCiudad0.departamento_nombre'],
                 ['label' => 'Ciudad',  'value' => 'idCiudad0.ciudad'],
-                ['label' => 'Makers',  'value' => 'voluntarios', ],
-                ['label' => 'Impresoras', 'value' => 'impresoras'],
-                ['label' => 'PLA', 'value' => 'PLA'],
-                ['label' => 'ABS', 'value' => 'ABS'],
+                ['label' => 'Makers',  'value' => 'voluntarios', 'footer'=>$total['voluntarios']],
+                ['label' => 'Impresoras', 'value' => 'impresoras', 'footer'=>$total['impresoras']],
+                ['label' => 'PLA', 'value' => 'PLA', 'footer'=>$total['PLA']],
+                ['label' => 'ABS', 'value' => 'ABS', 'footer'=>$total['ABS']],
+                ['label' => 'PETG', 'value' => 'PETG', 'footer'=>$total['PETG']],
+                ['label' => 'FLEX', 'value' => 'FLEX', 'footer'=>$total['FLEX']]
+                //['label' => 'HIPS', 'value' => 'HIPS']
                  
         //['label' => 'Estado','attribute' => 'idEstadoAsistencia0.Descripcion'],
         //'Lugar',

@@ -59,10 +59,12 @@ class RegistroController extends Controller {
     public function actionResumen() {
         $searchModel = new RegistroSearch();
         $dataProvider = $searchModel->searchResumen(Yii::$app->request->queryParams);
-
+        $total = $searchModel->totalResumen(Yii::$app->request->queryParams);
+        //print_r($total);exit;
         return $this->render('resumen', [
                     'searchModel' => $searchModel,
                     'dataProvider' => $dataProvider,
+            'total'=>$total,
         ]);
     }
 
