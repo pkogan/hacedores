@@ -30,10 +30,15 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'idProducto',
-            'idHacedor',
-            'idModelo',
+            'hacedor.nombre',
+            'modelo.nombre',
             'cantidad',
         ],
     ]) ?>
 
+    <?= Html::a('Ver modelo',
+              ['modelo/view', 'id' => $model->idModelo],
+              ['class' => 'btn btn-default']); 
+    ?>
+    
 </div>

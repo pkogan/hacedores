@@ -94,4 +94,16 @@ class Hacedor extends \yii\db\ActiveRecord
                  ->where(['idUsuario' => $user_id])
                  ->one();
     } // por_usuario
+
+    /**
+     */
+    public function getUsuario(){
+        return $this->hasOne(Usuario::className(), ['idUsuario' => 'idUsuario']);
+    } // getUsuario
+    
+    /**
+     */
+    public function getNombre(){
+        return $this->usuario->nombreUsuario;
+    } // getNombre
 }

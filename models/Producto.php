@@ -70,4 +70,16 @@ class Producto extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Modelo::className(), ['idModelo' => 'idModelo']);
     }
+
+    /**
+     */
+    public function getModelo(){
+        return $this->hasOne(Modelo::className(), ['idModelo' => 'idModelo']);
+    } // getModelo
+
+    /**
+     */
+    public function getHacedor(){
+        return $this->hasOne(Hacedor::className(), ['idHacedor' => 'idHacedor']);
+    } // getHacedor
 }
