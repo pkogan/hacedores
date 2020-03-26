@@ -26,10 +26,7 @@ class m200326_203857_tabla_reserva extends Migration
         $this->addForeignKey(
             'fk-reserva-gestor',
             'reserva', 'idUsuario',
-            'usuario', 'idUsuario');
-
-
-        
+            'usuario', 'idUsuario');        
     }
 
     /**

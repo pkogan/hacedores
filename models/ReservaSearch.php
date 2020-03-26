@@ -17,7 +17,7 @@ class ReservaSearch extends Reserva
     public function rules()
     {
         return [
-            [['idReserva', 'idProducto', 'idUsuario'], 'integer'],
+            [['idReserva', 'idProducto', 'idUsuario', 'cantidad'], 'integer'],
         ];
     }
 
@@ -60,6 +60,7 @@ class ReservaSearch extends Reserva
             'idReserva' => $this->idReserva,
             'idProducto' => $this->idProducto,
             'idUsuario' => $this->idUsuario,
+            'cantidad' => $this->cantidad,
         ]);
 
         return $dataProvider;

@@ -32,6 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'idReserva',
             'idProducto',
             'idUsuario',
+            'cantidad',
         ],
     ]) ?>
 

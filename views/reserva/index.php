@@ -30,6 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'idReserva',
             'idProducto',
             'idUsuario',
+            'cantidad',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
