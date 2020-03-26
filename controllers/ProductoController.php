@@ -37,12 +37,27 @@ class ProductoController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new ProductoSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $hacedor = Hacedor::por_usuario(Yii::$app->user->identity->idUsuario);
 
+        $searchModel = new ProductoSearch();
+
+        $can_view['todos'] = false;
+
+        // Nos aseguramos de que pueda ver sus productos a menos que tenga
+        // los permisos.
+        $params = Yii::$app->request->queryParams;
+        if (Yii::$app->user->identity->idRol == Rol::ROL_ADMIN){
+            $can_view['todos'] = true;
+        }else{
+            $params['ProductoSearch']['idHacedor'] = $hacedor->idHacedor;
+        }
+
+        $dataProvider = $searchModel->search($params);
+        
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'can_view' => $can_view,
         ]);
     }
 
@@ -53,7 +68,7 @@ class ProductoController extends Controller
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
-    {
+    {        
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
