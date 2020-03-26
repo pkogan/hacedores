@@ -30,7 +30,7 @@ class Reserva extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['idProducto', 'idUsuario'], 'integer'],
+            [['idProducto', 'idUsuario', 'cantidad'], 'integer'],
             [['idUsuario'], 'exist', 'skipOnError' => true, 'targetClass' => Usuario::className(), 'targetAttribute' => ['idUsuario' => 'idUsuario']],
             [['idProducto'], 'exist', 'skipOnError' => true, 'targetClass' => Producto::className(), 'targetAttribute' => ['idProducto' => 'idProducto']],
         ];
@@ -45,6 +45,7 @@ class Reserva extends \yii\db\ActiveRecord
             'idReserva' => 'Id Reserva',
             'idProducto' => 'Id Producto',
             'idUsuario' => 'Id Usuario',
+            'cantidad' => 'Cantidad',
         ];
     }
 
@@ -67,4 +68,20 @@ class Reserva extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Producto::className(), ['idProducto' => 'idProducto']);
     }
+    
+    public function getProducto()
+    {
+        return $this->hasOne(Producto::className(), ['idProducto' => 'idProducto']);
+    }
+
+    /**
+     * Gets query for [[IdUsuario0]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUsuario()
+    {
+        return $this->hasOne(Usuario::className(), ['idUsuario' => 'idUsuario']);
+    }
+    
 }

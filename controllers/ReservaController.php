@@ -5,6 +5,8 @@ namespace app\controllers;
 use Yii;
 use app\models\Reserva;
 use app\models\ReservaSearch;
+use app\models\Rol;
+use app\models\Producto;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -62,16 +64,28 @@ class ReservaController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($id_modelo = null)
     {
         $model = new Reserva();
+        $model->idUsuario = Yii::$app->user->identity->idUsuario;
 
+        $can_edit['idUsuario'] = $this->tiene_rol(Rol::ROL_ADMIN);
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->idReserva]);
         }
 
+        $productos = null;
+        if ($id_modelo != null){
+            $productos = Producto::find()
+                                 ->where(['idModelo' => $id_modelo])
+                                 ->all();
+        }
+        
         return $this->render('create', [
             'model' => $model,
+            'can_edit' => $can_edit,
+            'productos' => $productos,
         ]);
     }
 
@@ -123,5 +137,9 @@ class ReservaController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    protected function tiene_rol($rol){
+        return Yii::$app->user->identity->idRol == $rol;
     }
 }
