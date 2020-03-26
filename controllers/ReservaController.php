@@ -140,6 +140,25 @@ class ReservaController extends Controller
     }
 
     /**
+     * Setear que la reserva fue recibida.
+     */
+    public function actionRecibido($id){
+        $model = $this->findModel($id);
+
+        // Debe chequearse que el usuario sea el que creo la reserva o un
+        // admin
+        if (($this->tiene_rol(Rol::ROL_ADMIN)) or
+            (Yii::$app->user->identity->idUsuario == $model->idUsuario)) {
+            
+            $model->recibido = true;
+            $model->save();
+        }
+        
+
+        return $this->redirect(['view', 'id' => $model->idReserva]);
+    } // actionRecibido
+    
+    /**
      * Finds the Reserva model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id

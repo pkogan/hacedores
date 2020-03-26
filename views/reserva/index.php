@@ -31,6 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'idProducto',
             'idUsuario',
             'cantidad',
+            'recibido:boolean',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

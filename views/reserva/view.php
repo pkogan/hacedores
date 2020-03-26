@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\bootstrap\Alert;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Reserva */
@@ -41,11 +42,27 @@ $this->params['breadcrumbs'][] = $this->title;
     }
 
     if ($can_edit['recibir']){
-        echo Html::a('Recibido', '#',
-                    ['class' => 'btn btn-danger']);
+        if (!$model->recibido){
+            echo Html::a('Recibido',
+                        ['reserva/recibido', 'id' => $model->idReserva],
+                        ['class' => 'btn btn-danger']);
+        }else{
+            echo Html::a('Recibido',
+                        ['reserva/recibido', 'id' => $model->idReserva],
+                        ['class' => 'btn btn-danger disabled']);
+        }
     }
     ?>
   </p>
+
+  <?php
+  if ($model->recibido){
+      echo Alert::widget([
+          'options' => ['class' => 'alert-success'],
+          'body' => 'Esta reserva ya fue recibida.',
+      ]);
+  }
+  ?>
 
   <?= DetailView::widget([
       'model' => $model,
@@ -55,6 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
           ['attribute' => 'producto.modelo.nombre',
            'label' => 'Nombre Producto'],
           'cantidad',
+          'recibido:boolean',
           'usuario.nombreUsuario',
       ],
   ]) ?>
