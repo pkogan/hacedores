@@ -72,6 +72,10 @@ class ReservaController extends Controller
         $can_edit['idUsuario'] = $this->tiene_rol(Rol::ROL_ADMIN);
         
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            $model->producto->cantidad -= $model->cantidad;
+            $model->producto->save();
+            
             return $this->redirect(['view', 'id' => $model->idReserva]);
         }
 
