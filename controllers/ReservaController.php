@@ -54,8 +54,14 @@ class ReservaController extends Controller
      */
     public function actionView($id)
     {
+        $can_edit['editar'] = $this->tiene_rol(Rol::ROL_ADMIN);
+        $can_edit['eliminar'] = $this->tiene_rol(Rol::ROL_ADMIN);
+        $can_edit['recibir'] = $this->tiene_rol(Rol::ROL_ADMIN) ||
+                               $this->tiene_rol(Rol::ROL_GESTOR);
+        
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'can_edit' => $can_edit,
         ]);
     }
 
@@ -104,12 +110,18 @@ class ReservaController extends Controller
     {
         $model = $this->findModel($id);
 
+        $can_edit['editar'] = $this->tiene_rol(Rol::ROL_ADMIN);
+        $can_edit['eliminar'] = $this->tiene_rol(Rol::ROL_ADMIN);
+        $can_edit['recibir'] = $this->tiene_rol(Rol::ROL_ADMIN) ||
+                               $this->tiene_rol(Rol::ROL_GESTOR);
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->idReserva]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'can_edit' => $can_edit,
         ]);
     }
 
