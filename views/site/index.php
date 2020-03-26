@@ -7,14 +7,18 @@ $this->title = 'Registro de Makers';
 ?>
 <div class="site-index">
 
+  <?= $this->render('_carousel_modelos') ?>
+  
     <div class="jumbotron">
         <h1>Registro de Makers</h1>
 
         <p class="lead">El objetivo de esta aplicación es afrontar la demanda de insumos impresos en impresoras 3d para combatir el COVID-19, de forma colaborariva, juntando fuerzas de grupos y redes de makers.</p>
 
  
-        <p><?= Html::a('Ver Mapa', ['registro/mapa'], ['class' => 'btn btn-success']) ?></p>
-        <p><?= Html::a('Ver Resumen', ['registro/resumen'], ['class' => 'btn btn-success']) ?></p>
+        <p><?= Html::a('Ver Mapa', ['registro/mapa'],
+                     ['class' => 'btn btn-success']) ?>
+          <?= Html::a('Ver Resumen', ['registro/resumen'],
+                    ['class' => 'btn btn-success']) ?></p>
 
     </div>
 
