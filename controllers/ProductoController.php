@@ -5,6 +5,8 @@ namespace app\controllers;
 use Yii;
 use app\models\Producto;
 use app\models\ProductoSearch;
+use app\models\Hacedor;
+use app\models\Rol;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -59,12 +61,22 @@ class ProductoController extends Controller
 
     /**
      * Creates a new Producto model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * If creation is successful, the browser will be redirected to the 
+     * 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
         $model = new Producto();
+        $model->idHacedor = Hacedor::por_usuario(
+            Yii::$app->user->identity->idUsuario);
+
+        // Para mostrar u ocultar campos que no podría editar.
+        $can_edit['idHacedor'] = false;
+        
+        if (Yii::$app->user->identity->idRol == Rol::ROL_ADMIN){
+            $can_edit['idHacedor'] = true;
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->idProducto]);
@@ -72,6 +84,7 @@ class ProductoController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'can_edit' => $can_edit,
         ]);
     }
 

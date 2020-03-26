@@ -85,4 +85,13 @@ class Hacedor extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Modelo::className(), ['idHacedor' => 'idHacedor']);
     }
+
+    /**
+       Buscar el hacedor correspondiente al usuario dado.
+     */
+    public function por_usuario($user_id){
+        return Hacedor::find()
+                 ->where(['idUsuario' => $user_id])
+                 ->one();
+    } // por_usuario
 }
