@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Modelo;
 use app\models\ModeloSearch;
+use app\models\Rol;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -35,7 +36,7 @@ class ModeloController extends Controller
                 'only' => ['index', 'view', 'update', 'delete', 'create'],
                 'rules' => [
                     //'class' => AccessRule::className(),
-                        [
+                    [
                         'allow' => true,
                         'actions' => ['index', 'view', 'update', 'delete', 'create'],
                         'roles' => [\app\models\Rol::ROL_ADMIN],
@@ -68,8 +69,15 @@ class ModeloController extends Controller
      */
     public function actionView($id)
     {
+
+        $can_edit['editar'] = $this->tiene_rol(ROL::ROL_ADMIN);
+        $can_edit['eliminar'] = $this->tiene_rol(ROL::ROL_ADMIN);
+        $can_edit['reservar'] = $this->tiene_rol(ROL::ROL_ADMIN) ||
+                                $this->tiene_rol(ROL::ROL_GESTOR);;
+        
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'can_edit' => $can_edit,
         ]);
     }
 
@@ -139,5 +147,9 @@ class ModeloController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    protected function tiene_rol($rol){
+        return Yii::$app->user->identity->idRol == $rol;
     }
 }
