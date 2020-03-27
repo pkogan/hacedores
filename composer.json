@@ -21,7 +21,8 @@
         "kartik-v/yii2-widget-depdrop": "@dev",
         "2amigos/yii2-leaflet-extension": "*",
         "kartik-v/yii2-date-range": "dev-master",
-        "kartik-v/yii2-widget-datepicker": "dev-master"
+        "kartik-v/yii2-widget-datepicker": "dev-master",
+        "npm-asset/intro.js": "^2.9"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

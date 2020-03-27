@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c95cfa6d402f4025c61af885bcf056eb",
+    "content-hash": "cdceab57112f88636148b1c0a46f17f2",
     "packages": [
         {
             "name": "2amigos/yii2-leaflet-extension",
@@ -664,6 +664,18 @@
                 "yii2"
             ],
             "time": "2019-05-25T07:32:15+00:00"
+        },
+        {
+            "name": "npm-asset/intro.js",
+            "version": "2.9.3",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/intro.js/-/intro.js-2.9.3.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "AGPL-3.0"
+            ]
         },
         {
             "name": "swiftmailer/swiftmailer",
