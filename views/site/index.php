@@ -11,7 +11,7 @@ $this->title = 'Registro de Makers';
 
     <div class="jumbotron">
         <h1>Registro de Makers</h1>
-        <h3><span><span class="glyphicon glyphicon-user"></span><?= $total['voluntarios'] ?> Voluntarios</span> |<span> <span class="glyphicon glyphicon-cog"> </span><?= $total['impresoras'] ?> Impresoras</span></h3>
+        <h3><span><span class="glyphicon glyphicon-user"></span><?= $total['voluntarios'] ?> Voluntarios</span> | <span><span class="glyphicon glyphicon-cog"> </span><?= $total['impresoras'] ?> Impresoras</span></h3>
 <!--        <div class="row " >
             <div class="col-lg-3 ">
                 <div class="employees" >
