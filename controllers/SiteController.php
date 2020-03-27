@@ -61,7 +61,11 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $searchModel = new \app\models\RegistroSearch();
+        $total = $searchModel->totalResumen(null);
+        return $this->render('index',[
+            'total' => $total
+        ]);
     }
 
     /**

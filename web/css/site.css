@@ -113,3 +113,39 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+.counter
+{
+    background-color: #eaecf0;
+    text-align: center;
+}
+.employees,.customer,.design,.order
+{
+  /*  margin-top: 70px;
+    margin-bottom: 70px;*/
+}
+.counter-count
+{
+    font-size: 18px;
+    background-color: #1e6887;
+    border-radius: 50%;
+    position: relative;
+    color: #ffffff;
+    text-align: center;
+    line-height: 92px;
+    width: 92px;
+    height: 92px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    display: inline-block;
+}
+
+.employee-p,.customer-p,.order-p,.design-p
+{
+
+    font-size: 24px;
+    color: #000000;
+    line-height: 34px;
+}
