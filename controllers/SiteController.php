@@ -9,6 +9,7 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\Rol;
 
 class SiteController extends Controller
 {
@@ -61,7 +62,16 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+
+        $puede['ver_reservas'] = $this->tiene_roles(
+            [Rol::ROL_ADMIN, Rol::ROL_GESTOR]);
+        $puede['ver_productos'] = $this->tiene_roles(
+            [Rol::ROL_ADMIN, Rol::ROL_GESTOR, Rol::ROL_MAKER]
+            );
+
+        return $this->render('index', [
+            'puede' => $puede,
+        ]);
     }
 
     /**
@@ -124,5 +134,9 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    protected function tiene_roles($rol){
+        return in_array(Yii::$app->user->identity->idRol, $rol);
     }
 }

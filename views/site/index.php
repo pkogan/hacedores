@@ -1,5 +1,7 @@
 <?php
 use yii\helpers\Html;
+use app\assets\IntrojsAsset;
+IntrojsAsset::register($this);
 
 /* @var $this yii\web\View */
 
@@ -19,6 +21,23 @@ $this->title = 'Registro de Makers';
                      ['class' => 'btn btn-success']) ?>
           <?= Html::a('Ver Resumen', ['registro/resumen'],
                     ['class' => 'btn btn-success']) ?></p>
+
+        <p>
+          <?php
+          if ($puede['ver_reservas']){
+              echo Html::a('Reservas', ['reserva/index'],
+                          ['class' => 'btn btn-default',
+                           'data-hints' =>
+                               'Vea las reservas realizadas, solicite productos que ya fueron creados.']);
+              echo " ";
+          }
+          if ($puede['ver_productos']){
+              echo Html::a('Productos', ['producto/index'],
+                          ['class' => 'btn btn-default']);
+          }
+          ?>
+        </p>
+            
 
     </div>
 
