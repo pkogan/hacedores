@@ -82,4 +82,14 @@ class Producto extends \yii\db\ActiveRecord
     public function getHacedor(){
         return $this->hasOne(Hacedor::className(), ['idHacedor' => 'idHacedor']);
     } // getHacedor
+
+    /**
+       Retornar una representación en string del producto.
+       @return {string}
+     */
+    public function short_string(){
+        return $this->hacedor->nombre . ":" .
+          $this->modelo->nombre . " (" .
+          $this->cantidad . ")";
+    } // short_string
 }

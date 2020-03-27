@@ -5,6 +5,8 @@ namespace app\controllers;
 use Yii;
 use app\models\Entrega;
 use app\models\EntregaSearch;
+use app\models\Hacedor;
+use app\models\Producto;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -65,13 +67,36 @@ class EntregaController extends Controller
     public function actionCreate()
     {
         $model = new Entrega();
+        $model->fecha = date('d/m/Y');
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->idEntrega]);
+        if (Yii::$app->request->isPost){
+            $model->load(Yii::$app->request->post());
+            $model->fecha =  date("Y-m-d", strtotime($model->fecha));
+            
+            if ($model->cantidad > $model->producto->cantidad){
+                $bien = false;
+            }
+
+            $model->producto->cantidad -= $model->cantidad;
+            if (!$model->producto->save()){
+                $error = 'No se pudo guardar el producto';
+                throw new \Exception($error);
+            }else{
+                if ($model->save()) {
+                    return $this->redirect(['view', 'id' => $model->idEntrega]);
+                }
+            }
         }
 
+        $hacedor = Hacedor::por_usuario(Yii::$app->user->identity->idUsuario);
+        $productos = Producto::find()
+                             ->where(['idHacedor' => $hacedor->idHacedor])
+                             ->all();
+
+        
         return $this->render('create', [
             'model' => $model,
+            'productos' => $productos,
         ]);
     }
 
