@@ -1,3 +1,27 @@
+
+# Hacedores
+
+http://hacedores.fi.uncoma.edu.ar
+
+
+# Instalación
+
+1. Clonar repositorio.
+2. Composer install (usar update si la versión de PHP difiere de la usada).
+3. Configurar datos de la BD en config/db.php.
+3. Importar SQL base a la base de datos.
+4. `php yii migrate`
+5. `php yii serve 127.0.01`
+
+# Actualización
+
+1. `git pull`
+2. `composer install` (si hay plugins agregados)
+3. `php yii migrate`
+
+
+---- 
+
 <p align="center">
     <a href="https://github.com/yiisoft" target="_blank">
         <img src="https://avatars0.githubusercontent.com/u/993323" height="100px">

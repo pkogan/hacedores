@@ -75,4 +75,33 @@ class Modelo extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Pedido::className(), ['idModelo' => 'idModelo']);
     }
+
+    /**
+     */
+    public function getHacedor(){
+        return $this->hasOne(Hacedor::className(),
+                       ['idHacedor' => 'idHacedor']);        
+    } // getHacedor
+
+    /**
+       Devolver los productos de este modelo.
+     */
+    public function getProducidos(){
+        return $this->hasMany(Producto::className(),
+                        ['idModelo' => 'idModelo']);
+    } // getProducidos
+    
+    /**
+       Retornar la cantidad disponible.
+     */
+    public function getDisponible(){
+        $cant = 0;
+        $prods = $this->producidos;
+        
+        foreach ($prods as $producto){
+            $cant += $producto->cantidad;
+        }
+
+        return $cant;
+    } // getDisponible
 }

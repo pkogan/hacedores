@@ -3,17 +3,18 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Modelo;
-use app\models\ModeloSearch;
+use app\models\Producto;
+use app\models\ProductoSearch;
+use app\models\Hacedor;
 use app\models\Rol;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * ModeloController implements the CRUD actions for Modelo model.
+ * ProductoController implements the CRUD actions for Producto model.
  */
-class ModeloController extends Controller
+class ProductoController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -27,80 +28,83 @@ class ModeloController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
-            
-            'access' => [
-                'class' => \yii\filters\AccessControl::className(),
-                'ruleConfig' => [
-                    'class' => \app\models\AccessRule::className(),
-                ],
-                'only' => ['index', 'view', 'update', 'delete', 'create'],
-                'rules' => [
-                    //'class' => AccessRule::className(),
-                    [
-                        'allow' => true,
-                        'actions' => ['index', 'view', 'update', 'delete', 'create'],
-                        'roles' => [\app\models\Rol::ROL_ADMIN],
-                    ],
-                ],
-            ],
         ];
     }
 
     /**
-     * Lists all Modelo models.
+     * Lists all Producto models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new ModeloSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $hacedor = Hacedor::por_usuario(Yii::$app->user->identity->idUsuario);
 
+        $searchModel = new ProductoSearch();
+
+        $can_view['todos'] = false;
+
+        // Nos aseguramos de que pueda ver sus productos a menos que tenga
+        // los permisos.
+        $params = Yii::$app->request->queryParams;
+        if (Yii::$app->user->identity->idRol == Rol::ROL_ADMIN){
+            $can_view['todos'] = true;
+        }else{
+            $params['ProductoSearch']['idHacedor'] = $hacedor->idHacedor;
+        }
+
+        $dataProvider = $searchModel->search($params);
+        
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'can_view' => $can_view,
         ]);
     }
 
     /**
-     * Displays a single Modelo model.
+     * Displays a single Producto model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
-    {
-
-        $can_edit['editar'] = $this->tiene_rol(ROL::ROL_ADMIN);
-        $can_edit['eliminar'] = $this->tiene_rol(ROL::ROL_ADMIN);
-        $can_edit['reservar'] = $this->tiene_rol(ROL::ROL_ADMIN) ||
-                                $this->tiene_rol(ROL::ROL_GESTOR);;
-        
+    {        
         return $this->render('view', [
             'model' => $this->findModel($id),
+        ]);
+    }
+
+    /**
+     * Creates a new Producto model.
+     * If creation is successful, the browser will be redirected to the 
+     * 'view' page.
+     * @return mixed
+     */
+    public function actionCreate()
+    {
+        $model = new Producto();
+        $model->idHacedor = Hacedor::por_usuario(
+            Yii::$app->user->identity->idUsuario);
+
+        // Para mostrar u ocultar campos que no podría editar.
+        $can_edit['idHacedor'] = false;
+        
+        if (Yii::$app->user->identity->idRol == Rol::ROL_ADMIN){
+            $can_edit['idHacedor'] = true;
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->idProducto]);
+        }
+
+        return $this->render('create', [
+            'model' => $model,
             'can_edit' => $can_edit,
         ]);
     }
 
     /**
-     * Creates a new Modelo model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new Modelo();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->idModelo]);
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Updates an existing Modelo model.
+     * Updates an existing Producto model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -111,7 +115,7 @@ class ModeloController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->idModelo]);
+            return $this->redirect(['view', 'id' => $model->idProducto]);
         }
 
         return $this->render('update', [
@@ -120,7 +124,7 @@ class ModeloController extends Controller
     }
 
     /**
-     * Deletes an existing Modelo model.
+     * Deletes an existing Producto model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -134,22 +138,18 @@ class ModeloController extends Controller
     }
 
     /**
-     * Finds the Modelo model based on its primary key value.
+     * Finds the Producto model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Modelo the loaded model
+     * @return Producto the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Modelo::findOne($id)) !== null) {
+        if (($model = Producto::findOne($id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
-    }
-
-    protected function tiene_rol($rol){
-        return Yii::$app->user->identity->idRol == $rol;
     }
 }

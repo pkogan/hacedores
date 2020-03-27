@@ -35,7 +35,7 @@ class RegistroController extends Controller {
                         'actions' => ['mapa', 'resumen'],
                         'roles' => ['?'],
                     ],
-                    [
+                        [
                         'allow' => true,
                         'actions' => ['index', 'view', 'mapa', 'resumen'],
                         'roles' => ['@'],
@@ -50,7 +50,7 @@ class RegistroController extends Controller {
         $query = Registro::find()->joinWith('idCiudad0');
         $query->groupBy(['ciudad.idCiudad', 'ciudad.ciudad', 'centroide_lat', 'centroide_lon']);
         $query->select(['ciudad.idCiudad', 'ciudad.ciudad', 'centroide_lat', 'centroide_lon', 'Count(*) as voluntarios', 'Sum(impresores) as impresoras',
-            'Sum(PLA) as PLA', 'Sum(ABS) as ABS','Sum(PETG) as PETG','Sum(FLEX) as FLEX','Sum(HIPS) as $HIPS']);
+            'Sum(PLA) as PLA', 'Sum(ABS) as ABS', 'Sum(PETG) as PETG', 'Sum(FLEX) as FLEX', 'Sum(HIPS) as $HIPS']);
         $registros = $query->asArray()->all();
         return $this->render('mapa', [
                     'registros' => $registros
@@ -65,7 +65,7 @@ class RegistroController extends Controller {
         return $this->render('resumen', [
                     'searchModel' => $searchModel,
                     'dataProvider' => $dataProvider,
-            'total'=>$total,
+                    'total' => $total,
         ]);
     }
 
@@ -157,6 +157,66 @@ class RegistroController extends Controller {
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionRecuperar2($token) {
+        
+         $modelRegistro = Registro::find()
+                        ->where(['token'=>$token])
+                        ->one();
+                if (!is_null($modelRegistro)) {
+                    /********************/
+                    //1- Mostrar formulario de clave y reclave
+                    //2- en el Post Crear el usuario si no existe actualizar la Clave, Loguearlo
+                    //y Mandarlo a que actualice su registro 
+                }else{
+                    throw new \yii\base\UserException('Error Token');
+                }
+    }
+    
+    
+    public function actionRecuperar() {
+
+        $model = new \app\models\Registro();    //carga del modelo para utilizarlo luego
+        $model->mail = '';
+        print_r(\Yii::$app->request->post());
+        if ($model->load(Yii::$app->request->post())) {// si se realizo un submit del boton guardar
+            //print_r($model->email);
+            if (!$model->mail == '') {
+                $email = '' . $model->mail;
+                
+                $modelRegistro = Registro::find()
+                        ->where('mail="' . $model->mail . '"')
+                        ->one();
+                if (!is_null($modelRegistro)) {
+
+                    $nuevaClave = substr(md5(time()), 0, 6);
+                    /* Agrego token y dirección a Registro */
+                    print_r($modelRegistro);
+
+                    $modelRegistro->token = Yii::$app->getSecurity()->generatePasswordHash($nuevaClave);
+                    if ($modelRegistro->save(false)) {
+
+                        Yii::$app->mailer->compose()
+                                ->setFrom('hornero@fi.uncoma.edu.ar')
+                                ->setTo($model->mail)
+                                ->setSubject('Recuperar Contraseña sistema hacedores')
+                                //->setTextBody('probando')
+                                ->setHtmlBody('Estomadxs, '.$modelRegistro->apellidoNombre.
+                                        ' ingrese al siguiente '.\yii\helpers\Html::a('link', \yii\helpers\Url::base('http').'?r=registro/recuperar2&token='.$modelRegistro->token).' para Cargar Pructos, Entregas y Actualizar Stock de Material.')
+                                ->send();
+
+                        //$modelRegistro->enviarMail("Recuperar Contraseña de hacedores ", "");
+                        throw new \yii\base\UserException('Se ha enviado el mail. Revise su correo');
+                    } else {
+                        throw new \yii\base\UserException('no pudo guardar');
+                    }
+                } else {
+                    throw new \yii\base\UserException('el Correo no existe');
+                }
+            }
+        }
+        return $this->render('recuperar', ['model' => $model]);
     }
 
 }

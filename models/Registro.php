@@ -30,45 +30,47 @@ use Yii;
  * @property string|null $ciudad
  * @property int|null $idCiudad
  * @property Ciudad $idCiudad0
+ * @property string|null $direccion
+ * @property string|null $token
  */
-class Registro extends \yii\db\ActiveRecord
-{
-    
+class Registro extends \yii\db\ActiveRecord {
    
+    public $captcha;
+    
+    
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'registro';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
-            [['telefono', 'impresores', 'idCiudad'], 'integer'],
-            [['marca'], 'string', 'max' => 19],
-            [['mail'], 'string', 'max' => 35],
-            [['apellidoNombre'], 'string', 'max' => 32],
-            [['Localidad', 'provincia', 'ciudad'], 'string', 'max' => 23],
-            [['modelos'], 'string', 'max' => 58],
-            [['tipoFilamento'], 'string', 'max' => 63],
-            [['stock'], 'string', 'max' => 67],
-            [['recursos'], 'string', 'max' => 165],
-            [['contacto', 'PLA'], 'string', 'max' => 2],
-            [['Comentario'], 'string', 'max' => 347],
-            [['impresoras', 'ABS', 'PETG', 'FLEX', 'HIPS'], 'string', 'max' => 1],
+                [['telefono', 'impresores', 'idCiudad'], 'integer'],
+                [['marca'], 'string', 'max' => 19],
+                [['mail'], 'string', 'max' => 35],
+                [['apellidoNombre', 'token'], 'string', 'max' => 32],
+                [['Localidad', 'provincia', 'ciudad'], 'string', 'max' => 23],
+                [['modelos'], 'string', 'max' => 58],
+                [['tipoFilamento'], 'string', 'max' => 63],
+                [['stock'], 'string', 'max' => 67],
+                [['recursos'], 'string', 'max' => 165],
+                [['contacto', 'PLA'], 'string', 'max' => 2],
+                [['Comentario'], 'string', 'max' => 347],
+                [['impresoras', 'ABS', 'PETG', 'FLEX', 'HIPS'], 'string', 'max' => 1],
+                [['direccion'], 'string', 'max' => 300],
+                [['captcha'], 'captcha']
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'idRegistro' => 'Id Registro',
             'marca' => 'Marca',
@@ -92,13 +94,16 @@ class Registro extends \yii\db\ActiveRecord
             'HIPS' => 'Hips',
             'ciudad' => 'Ciudad',
             'idCiudad' => 'Id Ciudad',
+            'direccion' => 'Direccion',
+            'token' => 'Token',
         ];
     }
-    
-        /**
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getIdCiudad0() {
         return $this->hasOne(Ciudad::className(), ['idCiudad' => 'idCiudad']);
     }
+
 }

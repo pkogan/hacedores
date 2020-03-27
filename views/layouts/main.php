@@ -39,6 +39,8 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => 'Inicio', 'url' => ['/site/index']],
+            ['label' => 'Modelos', 'url' => ['/modelo']],
+            ['label' => 'Productos', 'url' => ['/producto']],
             ['label' => 'Resumen', 'url' => ['/registro/resumen']],
             ['label' => 'Mapa', 'url' => ['/registro/mapa']],
             ['label' => 'Acerca de', 'url' => ['/site/about']],

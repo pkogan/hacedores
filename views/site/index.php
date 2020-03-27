@@ -11,22 +11,8 @@ $this->title = 'Registro de Makers';
 
     <div class="jumbotron">
         <h1>Registro de Makers</h1>
-        <h3><span><span class="glyphicon glyphicon-user"></span><?= $total['voluntarios'] ?> Voluntarios</span> | <span><span class="glyphicon glyphicon-cog"> </span><?= $total['impresoras'] ?> Impresoras</span></h3>
-<!--        <div class="row " >
-            <div class="col-lg-3 ">
-                <div class="employees" >
-                    <p class="counter-count"><?= $total['voluntarios'] ?>
-                    </p>
-                    <p class="employee-p">Voluntarios</p>
-                </div>
-            </div>
-            <div class="col-lg-3 " >
-                <div class="customer">
-                    <p class="counter-count"><?= $total['impresoras'] ?></p>
-                    <p class="customer-p">Impresoras</p>
-                </div>
-            </div>
-        </div>-->
+
+ <h3><span><span class="glyphicon glyphicon-user"></span><?= $total['voluntarios'] ?> Voluntarios</span> | <span><span class="glyphicon glyphicon-cog"> </span><?= $total['impresoras'] ?> Impresoras</span></h3>
 
     <p class="lead">El objetivo de esta aplicación es afrontar la demanda de insumos impresos en impresoras 3d para combatir el COVID-19, de forma colaborativa, juntando fuerzas de grupos y redes de makers.</p>
     <p><?= Html::a('Ver Mapa', ['registro/mapa'], ['class' => 'btn btn-success']) ?> <?= Html::a('Ver Resumen', ['registro/resumen'], ['class' => 'btn btn-success']) ?> <a class="btn btn-success" href="#modelo">Descargar Modelo</a></p>
