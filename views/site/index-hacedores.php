@@ -66,6 +66,17 @@ $this->title = 'Registro de Makers';
       <?= GridView::widget([
           'dataProvider' => $productoProvider,
           // 'filterModel' => $productoSearch,
+
+          'rowOptions' => function ($model, $index, $widget, $grid) {
+
+              return [
+                  'id' => $model['idProducto'],
+                  'onclick' => 'location.href="'
+                          . Yii::$app->urlManager->createUrl('producto/view')
+                          . '&id="+(this.id);'
+              ];
+          },
+
           'columns' => [
               'modelo.nombre',
               'cantidad',
@@ -82,6 +93,17 @@ $this->title = 'Registro de Makers';
       <?= GridView::widget([
           'dataProvider' => $entregaProvider,
           // 'filterModel' => $entregaSearch,
+
+          'rowOptions' => function ($model, $index, $widget, $grid) {
+
+              return [
+                  'id' => $model['idEntrega'],
+                  'onclick' => 'location.href="'
+                          . Yii::$app->urlManager->createUrl('entrega/view')
+                          . '&id="+(this.id);'
+              ];
+          },
+
           'columns' => [
               'fecha',
               'producto.modelo.nombre',
@@ -150,14 +172,16 @@ $this->title = 'Registro de Makers';
 </div>
 <script>
  $('.counter-count').each(function () {
-     $(this).prop('Counter', 0).animate({
-         Counter: $(this).text()
-     }, {
-         duration: 5000,
-         easing: 'swing',
-         step: function (now) {
-             $(this).text(Math.ceil(now));
-         }
+     $(this).prop('Counter', 0).animate(
+         {
+             Counter: $(this).text()
+         },
+         {
+             duration: 5000,
+             easing: 'swing',
+             step: function (now) {
+                 $(this).text(Math.ceil(now));
+             }
      });
  });
 </script>
