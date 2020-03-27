@@ -29,7 +29,7 @@ class Entrega extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['fecha', 'cantidad', 'imagen'], 'required'],
+            [['fecha', 'cantidad'], 'required'],
             [['cantidad'], 'integer'],
             [['fecha'], 'safe'],
             [['imagen'], 'string', 'max' => 300],
@@ -39,6 +39,7 @@ class Entrega extends \yii\db\ActiveRecord
             [['idInstitucion'], 'exist', 'skipOnError' => true,
              'targetClass' => Institucion::className(),
              'targetAttribute' => ['idInstitucion' => 'idInstitucion']],
+            [['imagen'], 'default', 'value' => ''],
         ];
     }
 

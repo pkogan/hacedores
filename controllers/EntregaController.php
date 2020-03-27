@@ -61,33 +61,44 @@ class EntregaController extends Controller
 
     /**
      * Creates a new Entrega model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * If creation is successful, the browser will be redirected to
+     * the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Entrega();
-        $model->fecha = date('d/m/Y');
-
+        $model = new Entrega();       
+        
+        $bien = true;
         if (Yii::$app->request->isPost){
             $model->load(Yii::$app->request->post());
-            $model->fecha =  date("Y-m-d", strtotime($model->fecha));
-            
-            if ($model->cantidad > $model->producto->cantidad){
-                $bien = false;
-            }
 
-            $model->producto->cantidad -= $model->cantidad;
-            if (!$model->producto->save()){
-                $error = 'No se pudo guardar el producto';
-                throw new \Exception($error);
+            // Cambiar el formato recibido por el Widget (d/m/Y) al que
+            // soporta MySQL (Y-m-d).
+            $date = \DateTime::createFromFormat('d/m/Y', $model->fecha);
+            $model->fecha =  $date->format('Y-m-d');
+
+            if ($model->cantidad >= $model->producto->cantidad){
+                $error = 'La cantidad a entregar supera a la del producto';
             }else{
+                if(!$model->producto->save()){
+                    $error = 'No se pudo actualizar el producto';
+                    throw new \Exception($error);
+                }
                 if ($model->save()) {
                     return $this->redirect(['view', 'id' => $model->idEntrega]);
                 }
             }
         }
 
+        // Seteamos los valores por defecto
+        if ($model->fecha == null){
+            $model->fecha = date('d/m/Y');
+        }else{
+            $model->fecha = date("d/m/Y", strtotime($model->fecha));
+        }
+
+        
         $hacedor = Hacedor::por_usuario(Yii::$app->user->identity->idUsuario);
         $productos = Producto::find()
                              ->where(['idHacedor' => $hacedor->idHacedor])
@@ -97,6 +108,7 @@ class EntregaController extends Controller
         return $this->render('create', [
             'model' => $model,
             'productos' => $productos,
+            'error' => $error,
         ]);
     }
 
