@@ -8,12 +8,10 @@ use Yii;
  * This is the model class for table "entrega".
  *
  * @property int $idEntrega
- * @property int $idAsignacion
  * @property string $fecha
- * @property int $cantidadEntregada
+ * @property int $cantidad
  * @property string $imagen
  *
- * @property Asignacion $idAsignacion0
  */
 class Entrega extends \yii\db\ActiveRecord
 {
@@ -31,11 +29,16 @@ class Entrega extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['idAsignacion', 'fecha', 'cantidadEntregada', 'imagen'], 'required'],
-            [['idAsignacion', 'cantidadEntregada'], 'integer'],
+            [['fecha', 'cantidad', 'imagen'], 'required'],
+            [['cantidad'], 'integer'],
             [['fecha'], 'safe'],
             [['imagen'], 'string', 'max' => 300],
-            [['idAsignacion'], 'exist', 'skipOnError' => true, 'targetClass' => Asignacion::className(), 'targetAttribute' => ['idAsignacion' => 'idAsignacion']],
+            [['idProducto'], 'exist', 'skipOnError' => true,
+             'targetClass' => Producto::className(),
+             'targetAttribute' => ['idProducto' => 'idProducto']],
+            [['idInstitucion'], 'exist', 'skipOnError' => true,
+             'targetClass' => Institucion::className(),
+             'targetAttribute' => ['idInstitucion' => 'idInstitucion']],
         ];
     }
 
@@ -46,20 +49,29 @@ class Entrega extends \yii\db\ActiveRecord
     {
         return [
             'idEntrega' => 'Id Entrega',
-            'idAsignacion' => 'Id Asignacion',
+            'idInstitucion' => 'Id Institucion',
+            'idProducto' => 'Id Producto',
             'fecha' => 'Fecha',
-            'cantidadEntregada' => 'Cantidad Entregada',
+            'cantidad' => 'Cantidad Entregada',
             'imagen' => 'Imagen',
         ];
     }
 
     /**
-     * Gets query for [[IdAsignacion0]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getIdAsignacion0()
+    public function getProducto()
     {
-        return $this->hasOne(Asignacion::className(), ['idAsignacion' => 'idAsignacion']);
+        return $this->hasOne(Producto::className(), ['idProducto' => 'idProducto']);
+    }
+
+    /**
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getInstitucion()
+    {
+        return $this->hasOne(Institucion::className(), ['idInstitucion' => 'idInstitucion']);
     }
 }

@@ -17,7 +17,7 @@ class EntregaSearch extends Entrega
     public function rules()
     {
         return [
-            [['idEntrega', 'idAsignacion', 'cantidadEntregada'], 'integer'],
+            [['idEntrega', 'cantidad', 'idProducto', 'idInstitucion'], 'integer'],
             [['fecha', 'imagen'], 'safe'],
         ];
     }
@@ -59,9 +59,10 @@ class EntregaSearch extends Entrega
         // grid filtering conditions
         $query->andFilterWhere([
             'idEntrega' => $this->idEntrega,
-            'idAsignacion' => $this->idAsignacion,
             'fecha' => $this->fecha,
-            'cantidadEntregada' => $this->cantidadEntregada,
+            'cantidad' => $this->cantidad,
+            'idProducto' => $this->idProducto,
+            'idInstitucion' => $this->idInstitucion,
         ]);
 
         $query->andFilterWhere(['like', 'imagen', $this->imagen]);
