@@ -7,6 +7,7 @@ use app\models\Entrega;
 use app\models\EntregaSearch;
 use app\models\Hacedor;
 use app\models\Producto;
+use app\models\Rol;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -37,12 +38,25 @@ class EntregaController extends Controller
      */
     public function actionIndex()
     {
+        $hacedor = Hacedor::por_usuario(Yii::$app->user->identity->idUsuario);
+        $can_view['todos'] = false;
+        
         $searchModel = new EntregaSearch();
+        // Nos aseguramos de que pueda ver sus productos a menos que tenga
+        // los permisos.
+        $params = Yii::$app->request->queryParams;
+        if (Yii::$app->user->identity->idRol == Rol::ROL_ADMIN){
+            $can_view['todos'] = true;
+        }else{
+            $params['EntregaSearch']['idHacedor'] = $hacedor->idHacedor;
+        }
+
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'can_view' => $can_view,
         ]);
     }
 
