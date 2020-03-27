@@ -62,6 +62,8 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        $searchModel = new \app\models\RegistroSearch();
+        $total = $searchModel->totalResumen(null);           
 
         $puede['ver_reservas'] = $this->tiene_roles(
             [Rol::ROL_ADMIN, Rol::ROL_GESTOR]);
@@ -71,6 +73,7 @@ class SiteController extends Controller
 
         return $this->render('index', [
             'puede' => $puede,
+            'total' => $total,
         ]);
     }
 
