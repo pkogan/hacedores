@@ -92,4 +92,20 @@ class Producto extends \yii\db\ActiveRecord
           $this->modelo->nombre . " (" .
           $this->cantidad . ")";
     } // short_string
+
+    /**
+     */
+    public function getEntregas(){
+        return $this->hasMany(Entrega::className(), ['idProducto' => 'idProducto']);
+    } // getEntregas
+
+    /**
+     */
+    public function cant_entregas(){
+        $cant = 0;
+        foreach ($this->entregas as $entrega){
+            $cant += $entrega->cantidad;
+        }
+        return $cant;
+    } // cant_entregas
 }

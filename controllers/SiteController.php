@@ -10,6 +10,9 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\Rol;
+use app\models\Hacedor;
+use app\models\ProductoSearch;
+use app\models\EntregaSearch;
 
 class SiteController extends Controller
 {
@@ -63,18 +66,45 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $searchModel = new \app\models\RegistroSearch();
-        $total = $searchModel->totalResumen(null);           
+        $total = $searchModel->totalResumen(null);
 
         $puede['ver_reservas'] = $this->tiene_roles(
             [Rol::ROL_ADMIN, Rol::ROL_GESTOR]);
         $puede['ver_productos'] = $this->tiene_roles(
             [Rol::ROL_ADMIN, Rol::ROL_GESTOR, Rol::ROL_MAKER]
-            );
+        );
+        
+        if ($this->tiene_roles([Rol::ROL_ADMIN, Rol::ROL_MAKER])){
+            $hacedor = Hacedor::por_usuario(Yii::$app->user->identity->idUsuario);
+            
+            $productoSearch = new ProductoSearch();
+            $params = Yii::$app->request->queryParams;
+            $params['ProductoSearch']['idHacedor'] = $hacedor->idHacedor;
+            $productoProvider = $productoSearch->search($params);
 
-        return $this->render('index', [
-            'puede' => $puede,
-            'total' => $total,
-        ]);
+            $entregaSearch = new EntregaSearch();
+            $params = Yii::$app->request->queryParams;
+            $params['EntregaSearch']['idHacedor'] = $hacedor->idHacedor;
+            $entregaProvider = $entregaSearch->search($params);
+
+
+            
+            return $this->render('index-hacedores', [
+                'hacedor' => $hacedor,
+                'puede' => $puede,
+                'total' => $total,
+                'productoSearch' => $productoSearch,
+                'productoProvider' => $productoProvider,
+                'entregaSearch' => $entregaSearch,
+                'entregaProvider' => $entregaProvider,
+            ]);
+        }else{
+            return $this->render('index', [
+                'puede' => $puede,
+                'total' => $total,
+            ]);
+        }
+
     }
 
     /**
