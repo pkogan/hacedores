@@ -155,7 +155,7 @@ class Usuario extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getIdRol0() {
+    public function getRol() {
         return $this->hasOne(Rol::className(), ['idRol' => 'idRol']);
     }
     
