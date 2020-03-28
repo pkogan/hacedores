@@ -9,13 +9,22 @@ use yii\widgets\Pjax;
 
 $this->title = 'Modelos';
 $this->params['breadcrumbs'][] = $this->title;
+
+if (!isset($can_edit)){
+    $can_edit['create'] = false;
+}
 ?>
 <div class="modelo-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Modelo', ['create'], ['class' => 'btn btn-success']) ?>
+      <?php
+      if ($can_edit['create']){
+          echo Html::a('Create Modelo', ['create'],
+                      ['class' => 'btn btn-success']);
+      }
+      ?>
     </p>
 
     <?php Pjax::begin(); ?>
@@ -30,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'idModelo',
             'nombre',
             'descripcion:ntext',
-            'idHacedor',
+            'hacedor.nombre',
             'imagen',
             //'link',
 

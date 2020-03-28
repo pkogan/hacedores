@@ -6,6 +6,7 @@ use Yii;
 use app\models\Modelo;
 use app\models\ModeloSearch;
 use app\models\Rol;
+use app\models\Hacedor;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -38,9 +39,21 @@ class ModeloController extends Controller
                     //'class' => AccessRule::className(),
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'update', 'delete', 'create'],
+                        'actions' => ['index', 'view',
+                                     'update', 'delete', 'create'],
                         'roles' => [\app\models\Rol::ROL_ADMIN],
                     ],
+                    [
+                        'allow' => true,
+                        'actions' => [
+                            'index', 'view',
+                        ],
+                        'roles' => [
+                            \app\models\Rol::ROL_MAKER,
+                            \app\models\Rol::ROL_GESTOR,
+                        ],
+                    ],
+                            
                 ],
             ],
         ];
@@ -55,9 +68,12 @@ class ModeloController extends Controller
         $searchModel = new ModeloSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        $can_edit['create'] = $this->tiene_rol(Rol::ROL_ADMIN);
+        
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'can_edit' => $can_edit,
         ]);
     }
 
@@ -88,14 +104,21 @@ class ModeloController extends Controller
      */
     public function actionCreate()
     {
+        $hacedor = Hacedor::por_usuario(
+            Yii::$app->user->identity->idUsuario);
         $model = new Modelo();
+        $model->idHacedor = $hacedor->idHacedor;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->idModelo]);
         }
 
+        $can_edit['idHacedor'] = $this->tiene_rol(Rol::ROL_ADMIN);
+
+        
         return $this->render('create', [
             'model' => $model,
+            'can_edit' => $can_edit,
         ]);
     }
 
