@@ -21,6 +21,7 @@ body {
     padding-top: 20px;
 }
 
+
 .jumbotron {
     text-align: center;
     background-color: transparent;
@@ -148,4 +149,16 @@ a.desc:after {
     font-size: 24px;
     color: #000000;
     line-height: 34px;
+}
+.logos{
+    border-top: 1px solid #ddd;
+    text-align: center;
+    padding-bottom: 6px;
+    padding-top: 6px;
+}
+
+.logos img{
+
+    max-width: 170px;
+    max-height: 90px;
 }

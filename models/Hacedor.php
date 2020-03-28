@@ -14,7 +14,6 @@ use Yii;
  * @property string $materialImprimir
  * @property string $link
  *
- * @property Asignacion[] $asignacions
  * @property Usuario $idUsuario0
  * @property Modelo[] $modelos
  */
@@ -97,6 +96,13 @@ class Hacedor extends \yii\db\ActiveRecord
 
     /**
      */
+    public function getProductos(){
+        return $this->hasMany(Producto::className(), ['idHacedor' => 'idHacedor']);
+    } // getProductos
+
+   
+    /**
+     */
     public function getUsuario(){
         return $this->hasOne(Usuario::className(), ['idUsuario' => 'idUsuario']);
     } // getUsuario
@@ -106,4 +112,26 @@ class Hacedor extends \yii\db\ActiveRecord
     public function getNombre(){
         return $this->usuario->nombreUsuario;
     } // getNombre
+
+    
+    
+    /**
+     */
+    public function cant_productos(){
+        $cant = 0;
+        foreach ($this->productos as $prod){
+            $cant += $prod->cantidad;
+        }
+        return $cant;
+    } // cant_productos
+
+    /**
+     */
+    public function cant_entregas(){
+        $cant = 0;
+        foreach ($this->productos as $prod){
+            $cant += $prod->cant_entregas();
+        }
+        return $cant;
+    } // cant_entregas
 }

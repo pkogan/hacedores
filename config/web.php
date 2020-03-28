@@ -37,7 +37,7 @@ $config = [
                 'class' => 'Swift_SmtpTransport',
                 'host' => 'smtp.gmail.com',
                 'username' => 'pablo.kogan@fi.uncoma.edu.ar',
-                'password' => 'gm41l123',
+                'password' => 'gm41l234',
                 'port' => '587',
                 'encryption' => 'tls',
             ],

@@ -3,32 +3,33 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use yii\bootstrap\Alert;
+
+
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\ProductoSearch */
+/* @var $searchModel app\models\EntregaSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-if (!isset($can_view)){
-    $can_view['todos'] = false;
-}
-
-$this->title = 'Productos';
+$this->title = 'Entregas';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="producto-index">
+<div class="entrega-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-      <?= Html::a('Agregar Producto',
-                ['create'],
+      <?= Html::a('Registrar Entrega', ['create'],
                 ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?php if ($can_view['todos']){ ?>
-      <div class="alert alert-warning">
-        Rol admin: Puede ver todos los productos.
-      </div>
-    <?php } ?>
+    <?php
+    if ($can_view['todos']){
+        echo Alert::widget([
+            'options' => ['class' => 'alert-warning'],
+            'body' => 'Debido a su rol, puede ver todas las entregas',
+        ]);
+    }
+    ?>
     
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -39,9 +40,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'hacedor.nombre',
-            'modelo.nombre',
+            'idEntrega',
+            'fecha',
             'cantidad',
+            'imagen',
+            'producto.modelo.nombre',
+            ['attribute' => 'institucion.nombre',
+             'label' => 'Entregado a'],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

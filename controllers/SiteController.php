@@ -9,6 +9,10 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\Rol;
+use app\models\Hacedor;
+use app\models\ProductoSearch;
+use app\models\EntregaSearch;
 
 class SiteController extends Controller
 {
@@ -63,9 +67,44 @@ class SiteController extends Controller
     {
         $searchModel = new \app\models\RegistroSearch();
         $total = $searchModel->totalResumen(null);
-        return $this->render('index',[
-            'total' => $total
-        ]);
+
+        $puede['ver_reservas'] = $this->tiene_roles(
+            [Rol::ROL_ADMIN, Rol::ROL_GESTOR]);
+        $puede['ver_productos'] = $this->tiene_roles(
+            [Rol::ROL_MAKER]
+        );
+        
+        if ($this->tiene_roles([Rol::ROL_ADMIN, Rol::ROL_MAKER])){
+            $hacedor = Hacedor::por_usuario(Yii::$app->user->identity->idUsuario);
+            
+            $productoSearch = new ProductoSearch();
+            $params = Yii::$app->request->queryParams;
+            $params['ProductoSearch']['idHacedor'] = $hacedor->idHacedor;
+            $productoProvider = $productoSearch->search($params);
+
+            $entregaSearch = new EntregaSearch();
+            $params = Yii::$app->request->queryParams;
+            $params['EntregaSearch']['idHacedor'] = $hacedor->idHacedor;
+            $entregaProvider = $entregaSearch->search($params);
+
+
+            
+            return $this->render('index-hacedores', [
+                'hacedor' => $hacedor,
+                'puede' => $puede,
+                'total' => $total,
+                'productoSearch' => $productoSearch,
+                'productoProvider' => $productoProvider,
+                'entregaSearch' => $entregaSearch,
+                'entregaProvider' => $entregaProvider,
+            ]);
+        }else{
+            return $this->render('index', [
+                'puede' => $puede,
+                'total' => $total,
+            ]);
+        }
+
     }
 
     /**
@@ -128,5 +167,9 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    protected function tiene_roles($rol){
+        return in_array(Yii::$app->user->identity->idRol, $rol);
     }
 }

@@ -31,12 +31,12 @@ class AccessRule extends \yii\filters\AccessRule {
                 if ($user->getIsGuest()) {
                     return true;
                 }
-            } /*elseif ($role == User::ROLE_USER) {
+            } elseif ($role == '@') {
                 if (!$user->getIsGuest()) {
                     return true;
                 }
             // Check if the user is logged in, and the roles match
-            }*/ elseif (!$user->getIsGuest() && $role == $user->identity->idRol) {
+            } elseif (!$user->getIsGuest() && $role == $user->identity->idRol) {
                 return true;
             }
         }

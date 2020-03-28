@@ -22,7 +22,7 @@ class RegistroSearch extends Registro
     public function rules()
     {
         return [
-            [['idRegistro', 'telefono', 'impresores', 'idCiudad','idProvincia'], 'integer'],
+            [['idHacedor', 'telefono', 'impresores', 'idCiudad','idProvincia'], 'integer'],
             [['provinciaFiltro','ciudadFiltro', 'mail', 'apellidoNombre', 'modelos', 'tipoFilamento', 'stock', 'recursos', 'contacto',  'Comentario', 'impresoras'], 'safe'],
         ];
     }
@@ -45,9 +45,11 @@ class RegistroSearch extends Registro
      */
     public function search($params)
     {
-        $query = Registro::find()->joinWith('idCiudad0.idProvincia0');
-
-        // add conditions that should always apply here
+        $query = Registro::find()->joinWith('idCiudad0.idProvincia0')->joinWith('productos.entregas');
+        /*$query->groupBy(['idHacedor','ciudad.idCiudad', 'provincia.provincia','ciudad.departamento_nombre','ciudad.ciudad']);
+        $query->select([ 'ciudad.idCiudad','provincia.provincia','ciudad.departamento_nombre','ciudad.ciudad', 'Count(*) as voluntarios', 'Sum(impresores) as impresoras',
+            'Sum(PLA) as PLA', 'Sum(ABS) as ABS','Sum(PETG) as PETG','Sum(FLEX) as FLEX','Sum(HIPS) as HIPS', 'Sum(producto.cantidad) as productos1', 'Sum(entrega.cantidad) entregados' ]);
+        */// add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -63,7 +65,7 @@ class RegistroSearch extends Registro
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'idRegistro' => $this->idRegistro,
+            'idHacedor' => $this->idHacedor,
             'telefono' => $this->telefono,
             'impresores' => $this->impresores,
             'idCiudad' => $this->idCiudad,
@@ -94,10 +96,10 @@ class RegistroSearch extends Registro
     }
 
     public static function searchQuery(){
-        $query = Registro::find()->joinWith('idCiudad0.idProvincia0');
+        $query = Registro::find()->joinWith('idCiudad0.idProvincia0')->joinWith('productos.entregas');
         $query->groupBy(['ciudad.idCiudad', 'provincia.provincia','ciudad.departamento_nombre','ciudad.ciudad']);
         $query->select([ 'ciudad.idCiudad','provincia.provincia','ciudad.departamento_nombre','ciudad.ciudad', 'Count(*) as voluntarios', 'Sum(impresores) as impresoras',
-            'Sum(PLA) as PLA', 'Sum(ABS) as ABS','Sum(PETG) as PETG','Sum(FLEX) as FLEX','Sum(HIPS) as $HIPS' ]);
+            'Sum(PLA) as PLA', 'Sum(ABS) as ABS','Sum(PETG) as PETG','Sum(FLEX) as FLEX','Sum(HIPS) as HIPS', 'Sum(producto.cantidad) as productos1', 'Sum(entrega.cantidad) entregados' ]);
         return $query;
     }
 
@@ -144,10 +146,10 @@ class RegistroSearch extends Registro
 
     public function totalResumen($params) {
 
-        $query = Registro::find()->joinWith('idCiudad0.idProvincia0');
+        $query = Registro::find()->joinWith('idCiudad0.idProvincia0')->joinWith('productos.entregas');
         //$query->groupBy(['ciudad.idCiudad', 'provincia.provincia','ciudad.departamento_nombre','ciudad.ciudad']);
         $query->select([  'Count(*) as voluntarios', 'Sum(impresores) as impresoras',
-            'Sum(PLA) as PLA', 'Sum(ABS) as ABS','Sum(PETG) as PETG','Sum(FLEX) as FLEX','Sum(HIPS) as $HIPS' ]);
+            'Sum(PLA) as PLA', 'Sum(ABS) as ABS','Sum(PETG) as PETG','Sum(FLEX) as FLEX','Sum(HIPS) as $HIPS','Sum(producto.cantidad) as productos1', 'Sum(entrega.cantidad) entregados'  ]);
 
         $this->load($params);
 

@@ -1,6 +1,8 @@
 <?php
 
 use yii\helpers\Html;
+use app\assets\IntrojsAsset;
+IntrojsAsset::register($this);
 
 /* @var $this yii\web\View */
 
@@ -11,14 +13,46 @@ $this->title = 'Registro de Makers';
 
     <div class="jumbotron">
         <h1>Registro de Makers</h1>
-
- <h3><span><span class="glyphicon glyphicon-user"></span><?= $total['voluntarios'] ?> Voluntarios</span> | <span><span class="glyphicon glyphicon-cog"> </span><?= $total['impresoras'] ?> Impresoras</span></h3>
+        <h3><span><span class="glyphicon glyphicon-user"></span><?= $total['voluntarios'] ?> Voluntarios</span> |<span> <span class="glyphicon glyphicon-cog"> </span><?= $total['impresoras'] ?> Impresoras</span></h3>
+<!--        <div class="row " >
+            <div class="col-lg-3 ">
+                <div class="employees" >
+                    <p class="counter-count"><?= $total['voluntarios'] ?>
+                    </p>
+                    <p class="employee-p">Voluntarios</p>
+                </div>
+            </div>
+            <div class="col-lg-3 " >
+                <div class="customer">
+                    <p class="counter-count"><?= $total['impresoras'] ?></p>
+                    <p class="customer-p">Impresoras</p>
+                </div>
+            </div>
+        </div>-->
 
     <p class="lead">El objetivo de esta aplicación es afrontar la demanda de insumos impresos en impresoras 3d para combatir el COVID-19, de forma colaborativa, juntando fuerzas de grupos y redes de makers.</p>
     <p><?= Html::a('Ver Mapa', ['registro/mapa'], ['class' => 'btn btn-success']) ?> <?= Html::a('Ver Resumen', ['registro/resumen'], ['class' => 'btn btn-success']) ?> <a class="btn btn-success" href="#modelo">Descargar Modelo</a></p>
-
+ 
 </div>
 
+        <p>
+          <?php
+          if ($puede['ver_reservas']){
+              echo Html::a('Reservas', ['reserva/index'],
+                          ['class' => 'btn btn-default',
+                           'data-hints' =>
+                               'Vea las reservas realizadas, solicite productos que ya fueron creados.']);
+              echo " ";
+          }
+          if ($puede['ver_productos']){
+              echo Html::a('Productos', ['producto/index'],
+                          ['class' => 'btn btn-default']);
+          }
+          ?>
+        </p>
+            
+
+    </div>
 <div class="body-content">
 
     <div class="row">
@@ -61,6 +95,8 @@ Les pedimos, mientras tanto, se extremen las medidas de cuidado, en el sentido m
             <p> Las imágenes se obtienen de</p>
             <p><a class="btn btn-default" href="https://www.openstreetmap.org/">OpenStreetMap &raquo;</a>
 
+                <p> Las imágenes se obtienen de</p>
+                <p><a class="btn btn-default" href="https://www.openstreetmap.org/">OpenStreetMap &raquo;</a>
 
 
         </div>

@@ -11,7 +11,10 @@ foreach ($modelos as $modelo){
         'content' => Html::img($modelo->imagen,
                              ['style' => 'height: 200px',
                               'class' => 'center-block']),
-        'caption' => $modelo->nombre,
+        'caption' => $modelo->nombre .
+                  ' (' .
+                  Html::a('Ver', ['modelo/view', 'id' => $modelo->idModelo]) .
+                  ')',
     ];
 }
 

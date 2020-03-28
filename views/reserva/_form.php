@@ -20,9 +20,7 @@ if (!isset($productos) || $productos == null){
 $lst_productos = [];
 foreach ($productos as $prod){
     $lst_productos[$prod->idProducto] =
-        $prod->hacedor->nombre . ":" .
-        $prod->modelo->nombre . " (" .
-        $prod->cantidad . ")";
+        $prod->short_string();
 }
 
 ?>

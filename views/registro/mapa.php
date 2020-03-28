@@ -16,7 +16,7 @@ use dosamigos\leaflet\widgets\Map;
 // The Tile Layer (very important)
 $markers = [];
 foreach ($registros as $registro) {
-   
+    if(!is_null($registro['centroide_lat'])){
         $center = new LatLng(['lat' => $registro['centroide_lat'], 'lng' => $registro['centroide_lon']]);
 
 // now lets create a marker that we are going to place on our map
@@ -25,7 +25,7 @@ foreach ($registros as $registro) {
         $marker = new Marker(['latLng' => $center, 'popupContent' => $descripcion
         ]);
         $markers[] = $marker; // add the marker (addLayer is used to add different layers to our map)
-   
+    }
 }
 
 $tileLayer = new TileLayer([
