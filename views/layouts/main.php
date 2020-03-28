@@ -79,8 +79,8 @@ AppAsset::register($this);
 <div class="logos">
     <h5>Intituciones que son parte de este proyecto</h5>
                      
-    <img src="img/faif.png" alt="Facultad de Informática"/>
-                        <img width="70px" src="img/fain.png" alt="Facultad de Ingeniería"/> 
+<!--    <img src="img/faif.png" alt="Facultad de Informática"/>
+                        <img width="70px" src="img/fain.png" alt="Facultad de Ingeniería"/> -->
                         <img src="img/uncoma.png" alt="UNCo"/>
                         <img src="img/unrn.png" alt="UNRN"/>
                         <img src="img/utn.png" alt="UTN"/>
