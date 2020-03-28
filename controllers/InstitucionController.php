@@ -26,6 +26,21 @@ class InstitucionController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+             'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'ruleConfig' => [
+                    'class' => \app\models\AccessRule::className(),
+                ],
+                'only' => ['index', 'view', 'update', 'delete', 'create'],
+                'rules' => [
+                    //'class' => AccessRule::className(),
+                        [
+                        'allow' => true,
+                        'actions' => ['index', 'view', 'update', 'delete', 'create'],
+                        'roles' => [\app\models\Rol::ROL_ADMIN],
+                    ],
+                ],
+            ],
         ];
     }
 

@@ -38,17 +38,18 @@ AppAsset::register($this);
                 'options' => ['class' => 'navbar-nav navbar-right'],
                 'items' => [
                         ['label' => 'Inicio', 'url' => ['/site/index']],
-                        ['label' => 'Modelos', 'url' => ['/modelo']],
-                        ['label' => 'Productos', 'url' => ['/producto']],
+                        
+                        ['label' => 'Productos', 'url' => ['/producto'],'visible' => !Yii::$app->user->isGuest
+                    && Yii::$app->user->identity->idRol == \app\models\Rol::ROL_ADMIN],
+                        ['label' => 'Modelos', 'url' => ['/modelo'],'visible' => !Yii::$app->user->isGuest
+                    && Yii::$app->user->identity->idRol == \app\models\Rol::ROL_ADMIN],
                         ['label' => 'Resumen', 'url' => ['/registro/resumen']],
                         ['label' => 'Mapa', 'url' => ['/registro/mapa']],
                         ['label' => 'Acerca de', 'url' => ['/site/about']],
-                        ['label' => 'Registro', 'url' => ['/registro'], 'visible' => !Yii::$app->user->isGuest],
-                    /* ['label' => 'Carrera', 'url' => ['/carrera'],'visible' => !Yii::$app->user->isGuest && Yii::$app->user->identity->idRol== \app\models\Rol::ROL_ADMIN],
-                      ['label' => 'Categoria', 'url' => ['/categoria'],'visible' => !Yii::$app->user->isGuest && Yii::$app->user->identity->idRol== \app\models\Rol::ROL_ADMIN],
-                      ['label' => 'Punto', 'url' => ['/punto'],'visible' => !Yii::$app->user->isGuest && Yii::$app->user->identity->idRol== \app\models\Rol::ROL_ADMIN],
-                     */
-                        ['label' => 'Usuarios', 'url' => ['/usuario'], 'visible' => !Yii::$app->user->isGuest && Yii::$app->user->identity->idRol == \app\models\Rol::ROL_ADMIN],
+                        ['label' => 'Registro', 'url' => ['/registro'], 'visible' => !Yii::$app->user->isGuest
+                        && in_array(Yii::$app->user->identity->idRol,[\app\models\Rol::ROL_ADMIN, app\models\Rol::ROL_GESTOR])],
+                        ['label' => 'Usuarios', 'url' => ['/usuario'], 'visible' => !Yii::$app->user->isGuest
+                                && Yii::$app->user->identity->idRol == \app\models\Rol::ROL_ADMIN],
                     Yii::$app->user->isGuest ? (
                                 ['label' => 'Login', 'url' => ['/site/login']]
                             ) : (
