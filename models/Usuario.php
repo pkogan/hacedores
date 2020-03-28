@@ -19,15 +19,15 @@ use Yii;
  * @property string $direccion
  *
  * @property Hacedor[] $hacedors
+ * @property Registro[] $registros
+ * @property Reserva[] $reservas
  * @property Solicitante[] $solicitantes
- * @property Ciudad $idCiudad0
  * @property Rol $idRol0
  */
 class Usuario extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
 
     /**************************************************/
     private $username;
-    public $idProvincia;
 
     public function getUsername() {
         return $this->nombreUsuario;
@@ -78,38 +78,39 @@ class Usuario extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return $this->getAuthKey() === $authKey;
     }
 
+    
     /*     * ******************************************************* */
 
     /**
      * {@inheritdoc}
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return 'usuario';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules() {
+    public function rules()
+    {
         return [
-                [[ 'nombreUsuario', 'clave', 'mail', 'idRol', 'telefono', 'telegram', 'idCiudad', 'nombreApellido', 'direccion'], 'required'],
-                [['idUsuario', 'idRol', 'idCiudad'], 'integer'],
-                [['nombreUsuario', 'clave'], 'string', 'max' => 100],
-                [['mail', 'telefono', 'telegram'], 'string', 'max' => 200],
-                [['nombreApellido', 'direccion'], 'string', 'max' => 300],
-                [['idUsuario'], 'unique'],
-                [['idCiudad'], 'exist', 'skipOnError' => true, 'targetClass' => Ciudad::className(), 'targetAttribute' => ['idCiudad' => 'idCiudad']],
-                [['idRol'], 'exist', 'skipOnError' => true, 'targetClass' => Rol::className(), 'targetAttribute' => ['idRol' => 'idRol']],
+            [['nombreUsuario', 'clave', 'idRol'], 'required'],
+            [['idRol'], 'integer'],
+            [['nombreUsuario', 'clave'], 'string', 'max' => 100],
+            [['idRol'], 'exist', 'skipOnError' => true, 'targetClass' => Rol::className(), 'targetAttribute' => ['idRol' => 'idRol']],
+  
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'idUsuario' => 'Id Usuario',
-            'nombreUsuario' => 'Nombre Usuario',
+            'nombreUsuario' => 'Nombre Usuario/Mail',
             'clave' => 'Clave',
             'mail' => 'Mail',
             'idRol' => 'Id Rol',
@@ -126,29 +127,31 @@ class Usuario extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getHacedors() {
+    public function getHacedors()
+    {
         return $this->hasMany(Hacedor::className(), ['idUsuario' => 'idUsuario']);
     }
 
     /**
-     * Gets query for [[Solicitantes]].
+     * Gets query for [[Registros]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getSolicitantes() {
-        return $this->hasMany(Solicitante::className(), ['idUsuario' => 'idUsuario']);
+    public function getRegistros()
+    {
+        return $this->hasMany(Registro::className(), ['idUsuario' => 'idUsuario']);
     }
 
     /**
-     * Gets query for [[IdCiudad0]].
+     * Gets query for [[Reservas]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getIdCiudad0() {
-        return $this->hasOne(Ciudad::className(), ['idCiudad' => 'idCiudad']);
+    public function getReservas()
+    {
+        return $this->hasMany(Reserva::className(), ['idUsuario' => 'idUsuario']);
     }
-    
-   
+
 
     /**
      * Gets query for [[IdRol0]].
@@ -158,7 +161,17 @@ class Usuario extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function getRol() {
         return $this->hasOne(Rol::className(), ['idRol' => 'idRol']);
     }
+
     
+    /**
+     * Gets query for [[IdCiudad]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCiudad() {
+        return $this->hasOne(Ciudad::className(), ['idCiudad' => 'idCiudad']);
+    }
+
     public function getIdProvincia() {
         return $this->idCiudad0->idProvincia;
     }

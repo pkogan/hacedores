@@ -135,7 +135,7 @@ class UsuarioController extends Controller {
      */
     protected function findModel($id) {
         if (($model = Usuario::findOne($id)) !== null) {
-            $model->idProvincia = $model->getIdProvincia();
+            
             return $model;
         }
 

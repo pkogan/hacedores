@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'marca')->textInput(['maxlength' => true]) ?>
+    <?php //echo $form->field($model, 'marca')->textInput(['maxlength' => true]): ?>
 
     <?= $form->field($model, 'mail')->textInput(['maxlength' => true]) ?>
 
@@ -20,26 +20,37 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'telefono')->textInput() ?>
 
-    <?= $form->field($model, 'Localidad')->textInput(['maxlength' => true]) ?>
+    <?php
+    $options = [
+        //'type' => \kartik\depdrop\DepDrop::TYPE_SELECT2,
+        'options' => ['id' => 'idCiudad', 'placeholder' => 'Seleccionar ...'],
+        //'select2Options' => ['pluginOptions' => ['allowClear' => true]],
+        'id' => 'idCuidad',
+        'pluginOptions' => [
+            'depends' => ['idProvincia'],
+            //'placeholder' => 'Seleccionar...',
+            'url' => \yii\helpers\Url::to(['/ciudad/combo'])
+    ]];
+    if (!is_null($model->idCiudad)) {
+        $model->idProvincia = $model->idCiudad0->idProvincia;
+
+        $options['data'] = yii\helpers\ArrayHelper::map(\app\models\Ciudad::find()->where("idProvincia in ($model->idProvincia)")->orderBy('ciudad')->all(), 'idCiudad', 'ciudad');
+    }
+    echo $form->field($model, 'idProvincia')->dropDownList(yii\helpers\ArrayHelper::map(\app\models\Provincia::find()->orderBy('provincia')->all(), 'idProvincia', 'provincia'), ['id' => 'idProvincia','prompt' => 'Seleccionar ...'])
+    ?>
+    <?php //print_r($model->idCiudad0->idProvincia); print_r($model->idCiudad); print_r($options);//exit();?>
+    <?=
+    $form->field($model, 'idCiudad')->widget(\kartik\depdrop\DepDrop::classname(),$options)
+    ?>
+
+    <?= $form->field($model, 'direccion')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'impresores')->textInput() ?>
 
     <?= $form->field($model, 'modelos')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'tipoFilamento')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'stock')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'recursos')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'contacto')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'provincia')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'Comentario')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'impresoras')->textInput(['maxlength' => true]) ?>
-
+    <p>Stock de Material disponible en Kg.</p>
     <?= $form->field($model, 'PLA')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'ABS')->textInput(['maxlength' => true]) ?>
@@ -50,14 +61,24 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'HIPS')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'ciudad')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'stock')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'idCiudad')->textInput() ?>
+
+    <?= $form->field($model, 'recursos')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'contacto')->textInput(['maxlength' => true]) ?>
+
+
+<?= $form->field($model, 'Comentario')->textarea(['maxlength' => true]) ?>
+
+
+
+
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+    <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
 
-    <?php ActiveForm::end(); ?>
+<?php ActiveForm::end(); ?>
 
 </div>

@@ -14,7 +14,6 @@ use Yii;
  * @property string $materialImprimir
  * @property string $link
  *
- * @property Asignacion[] $asignacions
  * @property Usuario $idUsuario0
  * @property Modelo[] $modelos
  */

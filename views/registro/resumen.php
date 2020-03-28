@@ -40,15 +40,15 @@ $('.btn-search').click(function(){
         'showFooter' => true,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-               // ['label' => 'id', 'attribute' => 'idAsistencia'],
-            //'idAsistencia',
-            //['label' => 'Guardavidas', 'attribute' => 'guardavidas', 'value' => 'idGuardavidas0.Nombre'],
-                //'idTipo0.Descripcion',
+
                   ['label' => 'Provincia',  'value' => 'idCiudad0.idProvincia0.provincia'],
                 ['label' => 'Departamento',  'value' => 'idCiudad0.departamento_nombre'],
                 ['label' => 'Ciudad',  'value' => 'idCiudad0.ciudad'],
                 ['label' => 'Makers',  'value' => 'voluntarios', 'footer'=>$total['voluntarios']],
                 ['label' => 'Impresoras', 'value' => 'impresoras', 'footer'=>$total['impresoras']],
+                ['label' => 'Productos', 'value' => 'productos1', 'footer'=>$total['productos1']],
+                ['label' => 'Entregados', 'value' => 'entregados', 'footer'=>$total['entregados']],
+            
                 ['label' => 'PLA', 'value' => 'PLA', 'footer'=>$total['PLA']],
                 ['label' => 'ABS', 'value' => 'ABS', 'footer'=>$total['ABS']],
                 ['label' => 'PETG', 'value' => 'PETG', 'footer'=>$total['PETG']],

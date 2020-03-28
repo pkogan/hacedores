@@ -7,7 +7,8 @@ use Yii;
 /**
  * This is the model class for table "registro".
  *
- * @property int $idRegistro
+ * @property int $idHacedor
+ * @property int|null $idUsuario
  * @property string|null $marca
  * @property string|null $mail
  * @property string|null $apellidoNombre
@@ -29,18 +30,22 @@ use Yii;
  * @property string|null $HIPS
  * @property string|null $ciudad
  * @property int|null $idCiudad
+ * @property string|null $direccion
+ * @property string|null $token
+ *
  * @property Ciudad $idCiudad0
+ * @property Usuario $idUsuario0
+ * @property Producto[] $productos
  */
 class Registro extends \yii\db\ActiveRecord
 {
-    
-   
     /**
      * {@inheritdoc}
      */
+    public $idProvincia;
     public static function tableName()
     {
-        return 'registro';
+        return 'hacedor';
     }
 
     /**
@@ -49,18 +54,24 @@ class Registro extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['telefono', 'impresores', 'idCiudad'], 'integer'],
+            [['mail','apellidoNombre','telefono','impresores','idCiudad','idProvincia'],'required'],
+            [['idUsuario', 'telefono', 'impresores', 'idCiudad','PLA','ABS', 'PETG', 'FLEX', 'HIPS'], 'integer'],
             [['marca'], 'string', 'max' => 19],
             [['mail'], 'string', 'max' => 35],
-            [['apellidoNombre'], 'string', 'max' => 32],
+            [['mail'], 'unique'],
+            [['apellidoNombre', 'token'], 'string', 'max' => 32],
             [['Localidad', 'provincia', 'ciudad'], 'string', 'max' => 23],
             [['modelos'], 'string', 'max' => 58],
             [['tipoFilamento'], 'string', 'max' => 63],
             [['stock'], 'string', 'max' => 67],
             [['recursos'], 'string', 'max' => 165],
-            [['contacto', 'PLA'], 'string', 'max' => 2],
+            [['contacto',], 'string', 'max' => 2],
             [['Comentario'], 'string', 'max' => 347],
-            [['impresoras', 'ABS', 'PETG', 'FLEX', 'HIPS'], 'string', 'max' => 1],
+            [['impresoras'], 'string', 'max' => 1],
+            [['direccion'], 'string', 'max' => 300],
+            [['mail'], 'email'],
+            [['idCiudad'], 'exist', 'skipOnError' => true, 'targetClass' => Ciudad::className(), 'targetAttribute' => ['idCiudad' => 'idCiudad']],
+            [['idUsuario'], 'exist', 'skipOnError' => true, 'targetClass' => Usuario::className(), 'targetAttribute' => ['idUsuario' => 'idUsuario']]
         ];
     }
 
@@ -70,35 +81,66 @@ class Registro extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'idRegistro' => 'Id Registro',
+            'idHacedor' => 'Id Hacedor',
+            'idUsuario' => 'Id Usuario',
             'marca' => 'Marca',
             'mail' => 'Mail',
             'apellidoNombre' => 'Apellido Nombre',
             'telefono' => 'Telefono',
             'Localidad' => 'Localidad',
-            'impresores' => 'Impresores',
-            'modelos' => 'Modelos',
+            'impresores' => 'Cantidad de Impresoras 3D',
+            'modelos' => 'Modelos de Impresoras',
             'tipoFilamento' => 'Tipo Filamento',
-            'stock' => 'Stock',
-            'recursos' => 'Recursos',
+            'stock' => 'Stock de Material',
+            'recursos' => 'Cuenta con Recursos Humanos y Técnicos para operar las impresoras',
             'contacto' => 'Contacto',
             'provincia' => 'Provincia',
             'Comentario' => 'Comentario',
             'impresoras' => 'Impresoras',
-            'PLA' => 'Pla',
-            'ABS' => 'Abs',
-            'PETG' => 'Petg',
-            'FLEX' => 'Flex',
-            'HIPS' => 'Hips',
+            'PLA' => 'PLA',
+            'ABS' => 'ABS',
+            'PETG' => 'PETG',
+            'FLEX' => 'FLEX',
+            'HIPS' => 'HIPS',
             'ciudad' => 'Ciudad',
-            'idCiudad' => 'Id Ciudad',
+            'idCiudad' => 'Ciudad',
+            'idProvincia' => 'Provincia',
+
+            'direccion' => 'Dirección',
+            'token' => 'Token',
         ];
     }
-    
-        /**
+
+    /**
+     * Gets query for [[IdCiudad0]].
+     *
      * @return \yii\db\ActiveQuery
      */
-    public function getIdCiudad0() {
+    public function getIdCiudad0()
+    {
         return $this->hasOne(Ciudad::className(), ['idCiudad' => 'idCiudad']);
     }
+
+    /**
+     * Gets query for [[IdUsuario0]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getIdUsuario0()
+    {
+        return $this->hasOne(Usuario::className(), ['idUsuario' => 'idUsuario']);
+    }
+    
+    public function getIdProvincia()
+    {
+        return $this->idCiudad0->idProvincia;
+    }
+    
+    /**
+     */
+    public function getProductos(){
+        return $this->hasMany(Producto::className(), ['idHacedor' => 'idHacedor']);
+    }
+    
+    
 }

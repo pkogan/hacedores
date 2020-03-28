@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Registro */
 
-$this->title = $model->idRegistro;
+$this->title = $model->idHacedor;
 $this->params['breadcrumbs'][] = ['label' => 'Registros', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -18,8 +18,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?php
         if (Yii::$app->user->identity->idRol == \app\models\Rol::ROL_ADMIN) {
-            echo Html::a('Update', ['update', 'id' => $model->idRegistro], ['class' => 'btn btn-primary']);
-            echo Html::a('Delete', ['delete', 'id' => $model->idRegistro], [
+            echo Html::a('Update', ['update', 'id' => $model->idHacedor], ['class' => 'btn btn-primary']);
+            echo Html::a('Delete', ['delete', 'id' => $model->idHacedor], [
                 'class' => 'btn btn-danger',
                 'data' => [
                     'confirm' => 'Are you sure you want to delete this item?',
@@ -35,28 +35,29 @@ $this->params['breadcrumbs'][] = $this->title;
     DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'idRegistro',
             'marca',
+            'idHacedor',
+            'idUsuario',
+            'token',
+            
             'mail',
             'apellidoNombre',
             'telefono',
-            'Localidad',
+            'idCiudad0.idProvincia0.provincia',
+            'idCiudad0.ciudad',
+            'direccion',
             'impresores',
             'modelos',
             'tipoFilamento',
             'stock',
-            'recursos',
-            'contacto',
-            'provincia',
-            'Comentario',
-            'impresoras',
             'PLA',
             'ABS',
             'PETG',
             'FLEX',
             'HIPS',
-            'ciudad',
-            'idCiudad',
+            'recursos',
+            'contacto',
+            'Comentario',
         ],
     ])
     ?>

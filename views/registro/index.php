@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'rowOptions' => function ($model, $index, $widget, $grid) {
 
             return [
-                'id' => $model['idRegistro'],
+                'id' => $model['idHacedor'],
                 'onclick' => 'location.href="'
                 . Yii::$app->urlManager->createUrl('registro/view')
                 . '&id="+(this.id);'
@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
         },
         'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
-            //'idRegistro',
+            //'idHacedor',
             //'marca',
             'apellidoNombre',
             'mail',
@@ -53,6 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'Localidad',
             'impresores',
             'modelos',
+           
             'tipoFilamento',
             //'stock',
             //'recursos',

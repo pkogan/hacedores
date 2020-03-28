@@ -71,7 +71,7 @@ class SiteController extends Controller
         $puede['ver_reservas'] = $this->tiene_roles(
             [Rol::ROL_ADMIN, Rol::ROL_GESTOR]);
         $puede['ver_productos'] = $this->tiene_roles(
-            [Rol::ROL_ADMIN, Rol::ROL_GESTOR, Rol::ROL_MAKER]
+            [Rol::ROL_MAKER]
         );
         
         if ($this->tiene_roles([Rol::ROL_ADMIN, Rol::ROL_MAKER])){
