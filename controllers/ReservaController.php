@@ -95,7 +95,6 @@ class ReservaController extends Controller
         
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-            $model->producto->cantidad -= $model->cantidad;
             $model->producto->save();
             
             return $this->redirect(['view', 'id' => $model->idReserva]);
