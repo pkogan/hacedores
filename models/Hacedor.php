@@ -100,7 +100,7 @@ class Hacedor extends \yii\db\ActiveRecord
         return $this->hasMany(Producto::className(), ['idHacedor' => 'idHacedor']);
     } // getProductos
 
-   
+    
     /**
      */
     public function getUsuario(){
@@ -110,7 +110,17 @@ class Hacedor extends \yii\db\ActiveRecord
     /**
      */
     public function getNombre(){
-        return $this->usuario->nombreUsuario;
+        $nombre = $this->usuario->nombreUsuario;
+        if (($nombre == null) or ($nombre == '')){
+            $nombre = $this->apellidoNombre;
+        }
+        if (($nombre == null) or ($nombre == '')){
+            $nombre = $this->mail;
+        }
+        if (($nombre == null) or ($nombre == '')){
+            $nombre = 'Id: ' . $this->idHacedor . " (sin nombre)";
+        }
+        return $nombre;
     } // getNombre
 
     
