@@ -36,16 +36,24 @@ if (isset($hacedor) and ($hacedor != null)){
 
   <div class="jumbotron">
     <h1>Bienvenido/a</h1>
-    <h3>
-      <span class="glyphicon glyphicon-wrench" />
-      <?= $cantidades['producidos'] ?> Total Producido |
-      
-      <span class="glyphicon glyphicon-cog" />
-      <?= $cantidades['stock'] ?> En stock |
 
-      <span class="glyphicon glyphicon-cog" />
-      <?= $cantidades['entregas']  ?> Entregados 
+    <h3>
+      <div class="row">
+        <div class="col-md-4">          
+          <span class="glyphicon glyphicon-wrench" />  Total Producido <br/>
+          <?= $cantidades['producidos'] ?>
+        </div>
+        <div class="col-md-4">
+          <span class="glyphicon glyphicon-list-alt" /> En stock <br/>
+          <?= $cantidades['stock'] ?> 
+        </div>
+        <div class="col-md-4">
+          <span class="glyphicon glyphicon-gift" /> Entregados <br/>
+          <?= $cantidades['entregas']  ?> 
+        </div>
+      </div>
     </h3>
+
     <h3>
       <span class="glyphicon glyphicon-user"></span>
       <?= $total['voluntarios'] ?> Voluntarios |
@@ -69,7 +77,7 @@ if (isset($hacedor) and ($hacedor != null)){
       ?> <?= Html::a('Actualizar Stock de Material', ['registro/update', 'id' => Yii::$app->user->identity->hacedors[0]->idHacedor    ], ['class' => 'btn btn-success'])
          ?>
     </p>
-  </div>            
+</div>            
 
 </div>
 
@@ -88,12 +96,14 @@ if (isset($hacedor) and ($hacedor != null)){
         ?>
       </h1>
 
-      <?=
-      ListView::widget([
-          'dataProvider' => $productoProvider,
-          // 'filterModel' => $productoSearch,
-          'itemView' => '_producto_view',]);
-      ?>
+      <ul class="list-group">
+        <?=
+        ListView::widget([
+            'dataProvider' => $productoProvider,
+            // 'filterModel' => $productoSearch,
+            'itemView' => '_producto_view',]);
+        ?>
+      </ul>
 
     </div>
     <div class="col-lg-6">
