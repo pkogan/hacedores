@@ -24,9 +24,7 @@ if (!isset($can_edit)){
   <?php if ($can_edit['idHacedor']){ ?>
     <?= $form->field($model, 'idHacedor')->dropdownList(
         Hacedor::find()
-               ->join('LEFT JOIN', 'usuario',
-                     'usuario.idUsuario = hacedor.idUsuario')
-               ->select(['usuario.nombreUsuario'])
+               ->select(['apellidoNombre'])
                ->indexBy('idHacedor')
                ->column()
     )

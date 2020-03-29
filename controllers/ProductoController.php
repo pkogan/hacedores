@@ -131,13 +131,19 @@ class ProductoController extends Controller
         if ($producto != null){
             $modelo_id = $producto['idModelo'];
             $cant = $producto['cantidad'];
+            $id_hacedor = $producto['idHacedor'];
         }else{
             $modelo_id = null;
             $cant = null;
+            $id_hacedor = null;
         }
-        
-        $hacedor = Hacedor::por_usuario(
-            Yii::$app->user->identity->idUsuario);
+
+        if ($id_hacedor == null){
+            $hacedor = Hacedor::por_usuario(
+                Yii::$app->user->identity->idUsuario);
+        }else{
+            $hacedor = Hacedor::find($id_hacedor)->one();
+        }
 
         
         $model = Producto::find()
