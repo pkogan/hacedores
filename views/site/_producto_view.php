@@ -10,11 +10,17 @@ use yii\helpers\HtmlPurifier;
     <?= Html::encode($model->stock) ?>
   </div>
   <div class="col-md-4">
-    <?= Html::a('Agregar',
-              ['producto/create',
-               'Producto' => ['idModelo' => $model->idModelo,
-                             'idHacedor' => $model->idHacedor]],
-              ['class' => 'btn btn-small btn-success']);
-    ?>
+    <div class="btn-group" role="group">
+      <?= Html::a('Agregar',
+                ['producto/create',
+                 'Producto' => ['idModelo' => $model->idModelo,
+                               'idHacedor' => $model->idHacedor]],
+                ['class' => 'btn btn-small btn-success']);
+      ?>
+      <?= Html::a('Ver',
+                ['producto/view',
+                 'id' => $model->idProducto],
+                ['class' => 'btn btn-small btn-default'])?>
+    </div>
   </div>
 </div>

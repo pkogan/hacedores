@@ -11,6 +11,13 @@ use yii\widgets\ListView;
 /* @var $this yii\web\View */
 
 $this->title = 'Registro de Makers';
+
+$entrega_grid_buttons = [
+    'view' => function ($url, $model, $key) {
+        return Html::a('<span class="glyphicon glyphicon-eye-open" />',
+                 ['entrega/view', 'id' => $model->idEntrega]);
+    },
+];
 ?>
 <div class="site-index">
 
@@ -61,7 +68,12 @@ $this->title = 'Registro de Makers';
 
   <div class="row">
     <div class="col-lg-6">
-      <h1> Sus productos </h1>
+      <h1> Sus productos
+        <?= Html::a('Agregar',
+                    ['producto/create'],
+                    ['class' => 'btn btn-sm btn-success']);
+        ?>
+      </h1>
 
       <?=
       ListView::widget([
@@ -95,7 +107,8 @@ $this->title = 'Registro de Makers';
               'producto.modelo.nombre',
               'cantidad',
               ['class' => 'yii\grid\ActionColumn',
-               'template' => '{view}'],
+               'template' => '{view}',
+               'buttons' => $entrega_grid_buttons],
           ],
       ]);
       ?>
