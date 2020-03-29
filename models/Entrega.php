@@ -75,4 +75,17 @@ class Entrega extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Institucion::className(), ['idInstitucion' => 'idInstitucion']);
     }
+
+    /**
+     */
+    public function getHacedor(){
+        return $this->hasOne(Hacedor::className(), ['idHacedor' => 'idHacedor'])
+              ->viaTable('producto', ['idProducto' => 'idProducto']);
+    } // getHacedor
+
+    /**
+     */
+    public function getIdHacedor(){
+        return $this->hacedor->idHacedor;
+    } // getIdHacedor
 }

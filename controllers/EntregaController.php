@@ -29,7 +29,7 @@ class EntregaController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
-             'access' => [
+            'access' => [
                 'class' => \yii\filters\AccessControl::className(),
                 'ruleConfig' => [
                     'class' => \app\models\AccessRule::className(),
@@ -37,7 +37,7 @@ class EntregaController extends Controller
                 'only' => ['index', 'view', 'update', 'delete', 'create'],
                 'rules' => [
                     //'class' => AccessRule::className(),
-                        [
+                    [
                         'allow' => true,
                         'actions' => ['index', 'view',
                                      'update', 'delete', 'create'],
@@ -65,10 +65,14 @@ class EntregaController extends Controller
         if (Yii::$app->user->identity->idRol == Rol::ROL_ADMIN){
             $can_view['todos'] = true;
         }else{
-            $params['EntregaSearch']['idHacedor'] = $hacedor->idHacedor;
+            if ($hacedor != null){
+                $params['EntregaSearch']['idHacedor'] = $hacedor->idHacedor;
+            }else{
+                $params['EntregaSearch']['idHacedor'] = -1;
+            }
         }
 
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search($params);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

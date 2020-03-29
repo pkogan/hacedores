@@ -11,13 +11,16 @@ use app\models\Entrega;
  */
 class EntregaSearch extends Entrega
 {
+
+    public $idHacedor;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['idEntrega', 'cantidad', 'idProducto', 'idInstitucion'], 'integer'],
+            [['idEntrega', 'cantidad', 'idProducto', 'idInstitucion',
+              'idHacedor'], 'integer'],
             [['fecha', 'imagen'], 'safe'],
         ];
     }
@@ -56,6 +59,11 @@ class EntregaSearch extends Entrega
             return $dataProvider;
         }
 
+        $query->join('LEFT JOIN', 'producto',
+                    'producto.idProducto = entrega.idProducto');
+        $query->join('LEFT JOIN', 'hacedor',
+                    'hacedor.idHacedor = producto.idHacedor');
+
         // grid filtering conditions
         $query->andFilterWhere([
             'idEntrega' => $this->idEntrega,
@@ -63,7 +71,9 @@ class EntregaSearch extends Entrega
             'cantidad' => $this->cantidad,
             'idProducto' => $this->idProducto,
             'idInstitucion' => $this->idInstitucion,
+            'hacedor.idHacedor' => $this->idHacedor,
         ]);
+
 
         $query->andFilterWhere(['like', 'imagen', $this->imagen]);
 
