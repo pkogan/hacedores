@@ -127,9 +127,9 @@ class Usuario extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getHacedors()
+    public function getHacedor()
     {
-        return $this->hasMany(Hacedor::className(), ['idUsuario' => 'idUsuario']);
+        return $this->hasOne(Hacedor::className(), ['idUsuario' => 'idUsuario']);
     }
 
     /**
