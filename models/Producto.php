@@ -31,8 +31,9 @@ class Producto extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['idHacedor', 'idModelo'], 'required'],
+            [['idHacedor', 'idModelo','cantidad'], 'required'],
             [['idHacedor', 'idModelo', 'cantidad'], 'integer'],
+            [['cantidad'],'number','min'=>1,'max'=>1000],
             [['idHacedor'], 'exist', 'skipOnError' => true, 'targetClass' => Hacedor::className(), 'targetAttribute' => ['idHacedor' => 'idHacedor']],
             [['idModelo'], 'exist', 'skipOnError' => true, 'targetClass' => Modelo::className(), 'targetAttribute' => ['idModelo' => 'idModelo']],
         ];
@@ -44,9 +45,9 @@ class Producto extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'idProducto' => 'Id Producto',
-            'idHacedor' => 'Id Hacedor',
-            'idModelo' => 'Id Modelo',
+            'idProducto' => 'Producto',
+            'idHacedor' => 'Maker',
+            'idModelo' => 'Modelo',
             'cantidad' => 'Cantidad',
         ];
     }
@@ -109,14 +110,18 @@ class Producto extends \yii\db\ActiveRecord
         return $cant;
     } // cant_entregas
 
+    public function getSumentregas(){
+        $this->getEntregas()->sum('entrega.cantidad');
+    }
+           
     /**
        La cantidad disponible de este producto.
 
        @return {integer}
      */
     public function getStock(){
-        $cant_entregas = $this->cant_entregas();
-        return $this->cantidad - $cant_entregas;
+        
+        return $this->cantidad - $this->cant_entregas();
     } // getStock
 
     /**

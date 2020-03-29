@@ -9,24 +9,25 @@ use app\models\Institucion;
 /**
  * InstitucionSearch represents the model behind the search form of `app\models\Institucion`.
  */
-class InstitucionSearch extends Institucion
-{
+class InstitucionSearch extends Institucion {
+
+    public $provinciaFiltro;
+    public $ciudadFiltro;
+
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
-            [['idInstitucion'], 'integer'],
-            [['nombre', 'logo', 'direccion', 'tel'], 'safe'],
+                [['idInstitucion', 'idCiudad'], 'integer'],
+                [['provinciaFiltro', 'ciudadFiltro', 'nombre', 'logo', 'direccion', 'tel'], 'safe'],
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function scenarios()
-    {
+    public function scenarios() {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
@@ -38,13 +39,14 @@ class InstitucionSearch extends Institucion
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
-    {
-        $query = Institucion::find();
+    public function search($params) {
+        $query = Institucion::find()->joinWith('idCiudad0.idProvincia0')->joinWith('pedidos');//->joinWith('entregas')
+/*        ->select(['institucion.idInstitucion','institucion.nombre','ciudad','provincia.provincia','sum(pedido.cantidad)  as pedidos1'])//,'sum(entrega.cantidad) as entregas1'])
+        ->groupBy(['institucion.idInstitucion','nombre','ciudad','provincia']);*/
 
         // add conditions that should always apply here
 
-        $dataProvider = new ActiveDataProvider([
+       $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
@@ -55,17 +57,27 @@ class InstitucionSearch extends Institucion
             // $query->where('0=1');
             return $dataProvider;
         }
-
+        
         // grid filtering conditions
         $query->andFilterWhere([
             'idInstitucion' => $this->idInstitucion,
+            'idCiudad' => $this->idCiudad,
         ]);
 
         $query->andFilterWhere(['like', 'nombre', $this->nombre])
-            ->andFilterWhere(['like', 'logo', $this->logo])
-            ->andFilterWhere(['like', 'direccion', $this->direccion])
-            ->andFilterWhere(['like', 'tel', $this->tel]);
+                ->andFilterWhere(['like', 'logo', $this->logo])
+                ->andFilterWhere(['like', 'direccion', $this->direccion])
+                ->andFilterWhere(['like', 'tel', $this->tel])
+                ->andFilterWhere(['like', 'ciudad.ciudad', $this->ciudadFiltro])
+                ->andFilterWhere(['like', 'provincia.provincia', $this->provinciaFiltro]);
+        ;
+        
+       $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
 
         return $dataProvider;
     }
+
 }

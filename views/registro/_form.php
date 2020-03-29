@@ -66,7 +66,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'recursos')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'contacto')->textInput(['maxlength' => true]) ?>
+    <?php //echo $form->field($model, 'contacto')->textInput(['maxlength' => true]) ?>
 
 
 <?= $form->field($model, 'Comentario')->textarea(['maxlength' => true]) ?>

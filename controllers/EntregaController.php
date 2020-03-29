@@ -15,13 +15,12 @@ use yii\filters\VerbFilter;
 /**
  * EntregaController implements the CRUD actions for Entrega model.
  */
-class EntregaController extends Controller
-{
+class EntregaController extends Controller {
+
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -37,12 +36,12 @@ class EntregaController extends Controller
                 'only' => ['index', 'view', 'update', 'delete', 'create'],
                 'rules' => [
                     //'class' => AccessRule::className(),
-                    [
+                        [
                         'allow' => true,
                         'actions' => ['index', 'view',
-                                     'update', 'delete', 'create'],
+                            'update', 'delete', 'create'],
                         'roles' => [\app\models\Rol::ROL_ADMIN,
-                                   \app\models\Rol::ROL_MAKER],
+                            \app\models\Rol::ROL_MAKER],
                     ],
                 ],
             ],
@@ -53,21 +52,20 @@ class EntregaController extends Controller
      * Lists all Entrega models.
      * @return mixed
      */
-    public function actionIndex()
-    {
+    public function actionIndex() {
         $hacedor = Hacedor::por_usuario(Yii::$app->user->identity->idUsuario);
         $can_view['todos'] = false;
-        
+
         $searchModel = new EntregaSearch();
         // Nos aseguramos de que pueda ver sus productos a menos que tenga
         // los permisos.
         $params = Yii::$app->request->queryParams;
-        if (Yii::$app->user->identity->idRol == Rol::ROL_ADMIN){
+        if (Yii::$app->user->identity->idRol == Rol::ROL_ADMIN) {
             $can_view['todos'] = true;
-        }else{
-            if ($hacedor != null){
+        } else {
+            if ($hacedor != null) {
                 $params['EntregaSearch']['idHacedor'] = $hacedor->idHacedor;
-            }else{
+            } else {
                 $params['EntregaSearch']['idHacedor'] = -1;
             }
         }
@@ -75,9 +73,9 @@ class EntregaController extends Controller
         $dataProvider = $searchModel->search($params);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'can_view' => $can_view,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+                    'can_view' => $can_view,
         ]);
     }
 
@@ -87,19 +85,9 @@ class EntregaController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
-    {
-
-        $model = $this->findModel($id);
-        
-        $hacedor = Hacedor::por_usuario(Yii::$app->user->identity->idUsuario);
-        if ((!$this->tiene_roles([Rol::ROL_ADMIN, Rol::ROL_GESTOR])) and
-            ($model->idHacedor != $hacedor->idHacedor)){
-            throw new \yii\web\ForbiddenHttpException('No puede acceder a entregas de otras personas');
-        }
-        
+    public function actionView($id) {
         return $this->render('view', [
-            'model' => $model,
+                    'model' => $this->findModel($id),
         ]);
     }
 
@@ -109,50 +97,62 @@ class EntregaController extends Controller
      * the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
-        $model = new Entrega();       
-        
+    protected function validarDuenoProducto($model) {
+        if ($model !== null) {
+            if ($model->idHacedor0->idUsuario != \Yii::$app->user->identity->idUsuario) {
+                throw new \yii\web\HttpException('Está intentando crear una entrega para un producto ajeno');
+            }
+        } else {
+            throw new NotFoundHttpException('No existe el Producto');
+        }
+    }
+
+    public function actionCreate($idProducto) {
+        $this->validarDuenoProducto(Producto::findOne($idProducto));
+
+
+        $model = new Entrega();
+        $model->idProducto = $idProducto;
         $bien = true;
-        if (Yii::$app->request->isPost){
+        if (Yii::$app->request->isPost) {
             $model->load(Yii::$app->request->post());
 
             // Cambiar el formato recibido por el Widget (d/m/Y) al que
             // soporta MySQL (Y-m-d).
-            $date = \DateTime::createFromFormat('d/m/Y', $model->fecha);
-            $model->fecha =  $date->format('Y-m-d');
-
-            if ($model->cantidad >= $model->producto->cantidad){
-                $error = 'La cantidad a entregar supera a la del producto';
-            }else{
-                if(!$model->producto->save()){
+            /*$date = \DateTime::createFromFormat('d/m/Y', $model->fecha);
+            $model->fecha = $date->format('Y-m-d');
+*/
+            if ($model->cantidad > $model->producto->stock) {
+                $model->addError('cantidad', 'La cantidad a entregar supera a la del producto('.$model->producto->stock.')') ;
+            } else {
+                if (!$model->producto->save()) {
                     $error = 'No se pudo actualizar el producto';
                     throw new \Exception($error);
                 }
                 if ($model->save()) {
-                    return $this->redirect(['site/index']);
+                    return $this->goHome(); //$this->redirect(['site/index']);
                 }
             }
         }
 
         // Seteamos los valores por defecto
-        if ($model->fecha == null){
+        /*if ($model->fecha == null) {
             $model->fecha = date('d/m/Y');
-        }else{
+        } else {
             $model->fecha = date("d/m/Y", strtotime($model->fecha));
-        }
+        }*/
 
-        
+
         $hacedor = Hacedor::por_usuario(Yii::$app->user->identity->idUsuario);
         $productos = Producto::find()
-                             ->where(['idHacedor' => $hacedor->idHacedor])
-                             ->all();
+                ->where(['idHacedor' => $hacedor->idHacedor])
+                ->all();
 
-        
+
         return $this->render('create', [
-            'model' => $model,
-            'productos' => $productos,
-            'error' => $error,
+                    'model' => $model,
+                    'productos' => $productos,
+                    'error' => $error,
         ]);
     }
 
@@ -163,22 +163,21 @@ class EntregaController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
-    {
+    public function actionUpdate($id) {
         $model = $this->findModel($id);
-
-        $hacedor = Hacedor::por_usuario(Yii::$app->user->identity->idUsuario);
-        if ((!$this->tiene_roles([Rol::ROL_ADMIN])) and
-            ($model->idHacedor != $hacedor->idHacedor)){
-            throw new \yii\web\ForbiddenHttpException('No puede acceder a entregas de otras personas');
-        }
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['site/index']);
+        $this->validarDuenoProducto($model->producto);
+        $stockSinActual = $model->producto->stock + $model->cantidad;
+        if ($model->load(Yii::$app->request->post())) {
+            
+            if ($model->cantidad > $stockSinActual) {
+                $model->addError('cantidad', 'La cantidad a entregar supera a la del producto('.$stockSinActual.')');
+            } elseif ($model->save()) {
+                return $this->goHome();
+            }
         }
 
         return $this->render('update', [
-            'model' => $model,
+                    'model' => $model,
         ]);
     }
 
@@ -189,19 +188,13 @@ class EntregaController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
-    {
+    public function actionDelete($id) {
         $model = $this->findModel($id);
-        
-        $hacedor = Hacedor::por_usuario(Yii::$app->user->identity->idUsuario);
-        if ((!$this->tiene_roles([Rol::ROL_ADMIN])) and
-            ($model->idHacedor != $hacedor->idHacedor)){
-            throw new \yii\web\ForbiddenHttpException('No puede acceder a entregas de otras personas');
-        }
 
+        $this->validarDuenoProducto($model->producto);
         $model->delete();
 
-        return $this->redirect(['index']);
+        return $this->goHome();
     }
 
     /**
@@ -211,8 +204,7 @@ class EntregaController extends Controller
      * @return Entrega the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
-    {
+    protected function findModel($id) {
         if (($model = Entrega::findOne($id)) !== null) {
             return $model;
         }
@@ -220,7 +212,4 @@ class EntregaController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    protected function tiene_roles($rol){
-        return in_array(Yii::$app->user->identity->idRol, $rol);
-    }
 }

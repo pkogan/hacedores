@@ -21,7 +21,7 @@ class EntregaSearch extends Entrega
         return [
             [['idEntrega', 'cantidad', 'idProducto', 'idInstitucion',
               'idHacedor'], 'integer'],
-            [['fecha', 'imagen'], 'safe'],
+            [['fecha', 'observacion'], 'safe'],
         ];
     }
 
@@ -75,7 +75,7 @@ class EntregaSearch extends Entrega
         ]);
 
 
-        $query->andFilterWhere(['like', 'imagen', $this->imagen]);
+        $query->andFilterWhere(['like', 'observacion', $this->observacion]);
 
         return $dataProvider;
     }

@@ -9,7 +9,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $searchModel app\models\AsistenciaSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Resumen';
+$this->title = 'Resumen de Producción';
 $this->params['breadcrumbs'][] = $this->title;
 $this->registerJs("
 $('.btn-search').click(function(){
@@ -43,12 +43,12 @@ $('.btn-search').click(function(){
 
                   ['label' => 'Provincia',  'value' => 'idCiudad0.idProvincia0.provincia'],
                 ['label' => 'Departamento',  'value' => 'idCiudad0.departamento_nombre'],
-                ['label' => 'Ciudad',  'value' => 'idCiudad0.ciudad'],
+                ['label' => 'Ciudad',  'value' => 'idCiudad0.ciudad','footer'=>'TOTAL'],
                 ['label' => 'Makers',  'value' => 'voluntarios', 'footer'=>$total['voluntarios']],
                 ['label' => 'Impresoras', 'value' => 'impresoras', 'footer'=>$total['impresoras']],
-                ['label' => 'Productos', 'value' => 'productos1', 'footer'=>$total['productos1']],
-                ['label' => 'Entregados', 'value' => 'entregados', 'footer'=>$total['entregados']],
-            
+                ['label' => 'Impresiones', 'value' => 'productos1', 'footer'=>$total['productos1']],
+                ['label' => 'Entregadas', 'value' => 'entregados', 'footer'=>$total['entregados']],
+                ['label' => 'A Entregar', 'value' => 'aentregar', 'footer'=>$total['aentregar']],
                 ['label' => 'PLA', 'value' => 'PLA', 'footer'=>$total['PLA']],
                 ['label' => 'ABS', 'value' => 'ABS', 'footer'=>$total['ABS']],
                 ['label' => 'PETG', 'value' => 'PETG', 'footer'=>$total['PETG']],

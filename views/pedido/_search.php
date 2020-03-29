@@ -20,15 +20,19 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'idPedido') ?>
 
+    <?= $form->field($model, 'idInstitucion') ?>
+
     <?= $form->field($model, 'idSolicitante') ?>
 
     <?= $form->field($model, 'fecha') ?>
 
     <?= $form->field($model, 'observacion') ?>
 
-    <?= $form->field($model, 'imagen') ?>
+    <?php // echo $form->field($model, 'imagen') ?>
 
     <?php // echo $form->field($model, 'idModelo') ?>
+
+    <?php // echo $form->field($model, 'cantidad') ?>
 
     <?php // echo $form->field($model, 'idEstado') ?>
 

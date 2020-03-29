@@ -16,7 +16,6 @@ use yii\filters\VerbFilter;
  */
 class ProductoController extends Controller
 {
-    
     /**
      * {@inheritdoc}
      */
@@ -34,15 +33,22 @@ class ProductoController extends Controller
                 'ruleConfig' => [
                     'class' => \app\models\AccessRule::className(),
                 ],
-                'only' => ['index', 'view', 'update', 'delete', 'create'],
+                'only' => ['index', 'view', 'update', 'delete', 'create','agregar'],
                 'rules' => [
                     //'class' => AccessRule::className(),
+                    
+                    [
+                        'allow' => true,
+                        'actions' => ['update', 'delete', 'agregar'],
+                        'roles' => [\app\models\Rol::ROL_MAKER
+                                   ],
+                    ],
                     [
                         'allow' => true,
                         'actions' => ['index', 'view',
                                      'update', 'delete', 'create'],
                         'roles' => [\app\models\Rol::ROL_ADMIN,
-                                   \app\models\Rol::ROL_MAKER],
+                                   ],
                     ],
                 ],
             ],
@@ -75,15 +81,11 @@ class ProductoController extends Controller
         }
 
         $dataProvider = $searchModel->search($params);
-
-        $error = Yii::$app->session->get('error');
-        Yii::$app->session->set('error', null);
         
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'can_view' => $can_view,
-            'error' => $error,
         ]);
     }
 
@@ -94,47 +96,37 @@ class ProductoController extends Controller
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
-    {
-        $model = $this->findModel($id);
-
-        $hacedor = Hacedor::por_usuario(Yii::$app->user->identity->idUsuario);
-        if ((!$this->tiene_roles([Rol::ROL_ADMIN, Rol::ROL_GESTOR])) and
-            ($model->idHacedor != $hacedor->idHacedor)){
-            throw new \yii\web\ForbiddenHttpException('No puede acceder a productos de otras personas');
-        }
-        
+    {        
         return $this->render('view', [
-            'model' => $model,
+            'model' => $this->findModel($id),
         ]);
     }
 
     /**
      */
     public function actionAgregar(){
-        if (Yii::$app->request->isPost){
-            $modelo_id = Yii::$app->request->post('Producto[idModelo]');
-            $producto = Producto::find()
-                                ->where(['idModelo' => $modelo_id])
-                                ->one();
-            
-            if ($producto == null){
-                // No hay producto asociado... crearlo.
-                $producto = new Producto();
-                $producto->load(Yii::$app->request->post());
-            }else{
+        $producto = new Producto();
+        
+        $producto->idHacedor=\Yii::$app->user->identity->hacedor->idHacedor;
+        if (Yii::$app->request->isPost&&$producto->load(Yii::$app->request->post())){
+            $productoExistente = Producto::find()
+                                ->where(['idModelo' => $producto->idModelo,'idHacedor'=>$producto->idHacedor
+                                ])->one();
+            if (!is_null($productoExistente)){
                 // El producto ya existe... sumar la cantidad.
-                $cant = Yii::$app->request->post('Producto[cantidad]');
-                $producto->cantidad += $cant;
+                $productoExistente->cantidad+=$producto->cantidad;
+                $producto=$productoExistente;
             }
 
             if ($producto->save()){
-                return $this->redirect(['view', 'id' => $producto->idProducto]);
+                return $this->goHome();
             }
-            return $this->render('agregar', [
-                'model' => $producto,
-                'can_edit' => $can_edit,
-            ]);
+            
         }
+        return $this->render('agregar', [
+                'model' => $producto,
+              
+            ]);
     } // actionAgregar
     
     /**
@@ -213,15 +205,13 @@ class ProductoController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        $hacedor = Hacedor::por_usuario(Yii::$app->user->identity->idUsuario);
-        if ((!$this->tiene_roles([Rol::ROL_ADMIN])) and
-            ($model->idHacedor != $hacedor->idHacedor)){
-            throw new \yii\web\ForbiddenHttpException('No puede acceder a productos de otras personas');
+        
+        if($model->idHacedor0->idUsuario!= \Yii::$app->user->identity->idUsuario){
+            throw new \yii\base\UserException('Error al tratar de editar un Producto Ajeno.');
         }
         
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->idProducto]);
+            return $this->goHome();//$this->redirect(['view', 'id' => $model->idProducto]);
         }
 
         return $this->render('update', [
@@ -238,21 +228,13 @@ class ProductoController extends Controller
      */
     public function actionDelete($id)
     {
-        $model = $this->findModel($id);
+        $producto=$this->findModel($id);
+        if($producto->idHacedor0->idUsuario!= \Yii::$app->user->identity->idUsuario){
+            throw new \yii\base\UserException('Esta intentando borrar un producto ajeno');
+        }
+        $producto->delete();
 
-        $hacedor = Hacedor::por_usuario(Yii::$app->user->identity->idUsuario);
-        if ((!$this->tiene_roles([Rol::ROL_ADMIN])) and
-            ($model->idHacedor != $hacedor->idHacedor)){
-            throw new \yii\web\ForbiddenHttpException('No puede acceder a productos de otras personas');
-        }
-        
-        if ($model->tiene_entregas()){
-            Yii::$app->session->set('error', "No se puede borrar un producto con entregas.");
-        }else{
-            $model->delete();
-        }
-        
-        return $this->redirect(['index']);
+        return $this->goHome(); //$this->redirect(['index']);
     }
 
     /**
@@ -269,9 +251,5 @@ class ProductoController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
-    }
-
-    protected function tiene_roles($rol){
-        return in_array(Yii::$app->user->identity->idRol, $rol);
     }
 }

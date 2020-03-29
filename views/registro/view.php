@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Registro */
 
-$this->title = $model->idHacedor;
+$this->title = $model->apellidoNombre;
 $this->params['breadcrumbs'][] = ['label' => 'Registros', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -35,9 +35,9 @@ $this->params['breadcrumbs'][] = $this->title;
     DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'marca',
-            'idHacedor',
-            'idUsuario',
+            //'marca',
+            //'idHacedor',
+            'idUsuario0.nombreUsuario',
             'token',
             
             'mail',
@@ -46,6 +46,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'idCiudad0.idProvincia0.provincia',
             'idCiudad0.ciudad',
             'direccion',
+            //'sumproductos',
+            ['label' => 'Impresiones', 'attribute' => 'sumproductos'],
+            ['label' => 'Entregadas', 'attribute' => 'sumentregada'],
+            ['label' => 'A Entregar', 'attribute' => 'Stock'],
             'impresores',
             'modelos',
             'tipoFilamento',

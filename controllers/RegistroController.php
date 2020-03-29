@@ -172,7 +172,7 @@ class RegistroController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id) {
-        if (($model = Registro::find()->joinWith('idCiudad0')->where('idHacedor='.$id)->one()) !== null) {
+        if (($model = Registro::find()->joinWith('idCiudad0')->joinWith('productos.entregas')->where('hacedor.idHacedor='.$id)->one()) !== null) {
             return $model;
         }
 
@@ -222,6 +222,7 @@ class RegistroController extends Controller {
                 }
                 $modelRegistro->direccion = $modelForm->direccion;
                 if (!$modelRegistro->save()) {
+                    //print_r($modelRegistro->errors);exit;
                     throw new \yii\base\UserException('No se puede actualizar la Dirección del Registro');
                 }
                 //limpio token para futuros casos????

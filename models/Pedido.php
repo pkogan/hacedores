@@ -8,17 +8,19 @@ use Yii;
  * This is the model class for table "pedido".
  *
  * @property int $idPedido
+ * @property int $idInstitucion
  * @property int $idSolicitante
  * @property string $fecha
  * @property string|null $observacion
  * @property string|null $imagen
  * @property int $idModelo
+ * @property int $cantidad
  * @property int $idEstado
  *
- * @property Asignacion[] $asignacions
- * @property Estado $idEstado0
- * @property Solicitante $idSolicitante0
+ * @property Institucion $idInstitucion0
+ * @property Usuario $idSolicitante0
  * @property Modelo $idModelo0
+ * @property Estado $idEstado0
  */
 class Pedido extends \yii\db\ActiveRecord
 {
@@ -36,15 +38,15 @@ class Pedido extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['idPedido', 'idSolicitante', 'fecha', 'idModelo', 'idEstado'], 'required'],
-            [['idPedido', 'idSolicitante', 'idModelo', 'idEstado'], 'integer'],
+            [['idInstitucion', 'idSolicitante', 'fecha', 'cantidad','idModelo', 'idEstado'], 'required'],
+            [['idInstitucion', 'idSolicitante', 'idModelo', 'cantidad', 'idEstado'], 'integer'],
             [['fecha'], 'safe'],
             [['observacion'], 'string', 'max' => 300],
             [['imagen'], 'string', 'max' => 200],
-            [['idPedido'], 'unique'],
-            [['idEstado'], 'exist', 'skipOnError' => true, 'targetClass' => Estado::className(), 'targetAttribute' => ['idEstado' => 'idEstado']],
-            [['idSolicitante'], 'exist', 'skipOnError' => true, 'targetClass' => Solicitante::className(), 'targetAttribute' => ['idSolicitante' => 'idSolicitante']],
+            [['idInstitucion'], 'exist', 'skipOnError' => true, 'targetClass' => Institucion::className(), 'targetAttribute' => ['idInstitucion' => 'idInstitucion']],
+            [['idSolicitante'], 'exist', 'skipOnError' => true, 'targetClass' => Usuario::className(), 'targetAttribute' => ['idSolicitante' => 'idUsuario']],
             [['idModelo'], 'exist', 'skipOnError' => true, 'targetClass' => Modelo::className(), 'targetAttribute' => ['idModelo' => 'idModelo']],
+            [['idEstado'], 'exist', 'skipOnError' => true, 'targetClass' => Estado::className(), 'targetAttribute' => ['idEstado' => 'idEstado']],
         ];
     }
 
@@ -55,33 +57,25 @@ class Pedido extends \yii\db\ActiveRecord
     {
         return [
             'idPedido' => 'Id Pedido',
-            'idSolicitante' => 'Id Solicitante',
+            'idInstitucion' => 'Institucion',
+            'idSolicitante' => 'Solicitante',
             'fecha' => 'Fecha',
             'observacion' => 'Observacion',
             'imagen' => 'Imagen',
-            'idModelo' => 'Id Modelo',
-            'idEstado' => 'Id Estado',
+            'idModelo' => 'Modelo',
+            'cantidad' => 'Cantidad',
+            'idEstado' => 'Estado',
         ];
     }
 
     /**
-     * Gets query for [[Asignacions]].
+     * Gets query for [[IdInstitucion0]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getAsignacions()
+    public function getIdInstitucion0()
     {
-        return $this->hasMany(Asignacion::className(), ['idPedido' => 'idPedido']);
-    }
-
-    /**
-     * Gets query for [[IdEstado0]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getIdEstado0()
-    {
-        return $this->hasOne(Estado::className(), ['idEstado' => 'idEstado']);
+        return $this->hasOne(Institucion::className(), ['idInstitucion' => 'idInstitucion']);
     }
 
     /**
@@ -91,7 +85,7 @@ class Pedido extends \yii\db\ActiveRecord
      */
     public function getIdSolicitante0()
     {
-        return $this->hasOne(Solicitante::className(), ['idSolicitante' => 'idSolicitante']);
+        return $this->hasOne(Usuario::className(), ['idUsuario' => 'idSolicitante']);
     }
 
     /**
@@ -102,5 +96,15 @@ class Pedido extends \yii\db\ActiveRecord
     public function getIdModelo0()
     {
         return $this->hasOne(Modelo::className(), ['idModelo' => 'idModelo']);
+    }
+
+    /**
+     * Gets query for [[IdEstado0]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getIdEstado0()
+    {
+        return $this->hasOne(Estado::className(), ['idEstado' => 'idEstado']);
     }
 }

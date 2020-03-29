@@ -123,7 +123,25 @@ class Hacedor extends \yii\db\ActiveRecord
         return $nombre;
     } // getNombre
 
+    public function getEntregas()
+    {
+        return $this->hasMany(Entrega::className(), ['idProducto' => 'idProducto'])
+            ->via('productos');
+    }
     
+    public function getSumproductos()
+    {
+        return $this->getProductos()->sum('producto.cantidad');
+    }
+    
+    public function getSumentregada()
+    {
+        return $this->getEntregas()->sum('entrega.cantidad');
+    }
+    
+    public function getStock(){
+        return $this->getSumproductos()-$this->getSumentregada();
+    }
     
     /**
      */
