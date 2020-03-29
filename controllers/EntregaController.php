@@ -89,8 +89,17 @@ class EntregaController extends Controller
      */
     public function actionView($id)
     {
+
+        $model = $this->findModel($id);
+        
+        $hacedor = Hacedor::por_usuario(Yii::$app->user->identity->idUsuario);
+        if ((!$this->tiene_roles([Rol::ROL_ADMIN, Rol::ROL_GESTOR])) and
+            ($model->idHacedor != $hacedor->idHacedor)){
+            throw new \yii\web\ForbiddenHttpException('No puede acceder a entregas de otras personas');
+        }
+        
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
         ]);
     }
 
@@ -158,6 +167,12 @@ class EntregaController extends Controller
     {
         $model = $this->findModel($id);
 
+        $hacedor = Hacedor::por_usuario(Yii::$app->user->identity->idUsuario);
+        if ((!$this->tiene_roles([Rol::ROL_ADMIN])) and
+            ($model->idHacedor != $hacedor->idHacedor)){
+            throw new \yii\web\ForbiddenHttpException('No puede acceder a entregas de otras personas');
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['site/index']);
         }
@@ -176,7 +191,15 @@ class EntregaController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        
+        $hacedor = Hacedor::por_usuario(Yii::$app->user->identity->idUsuario);
+        if ((!$this->tiene_roles([Rol::ROL_ADMIN])) and
+            ($model->idHacedor != $hacedor->idHacedor)){
+            throw new \yii\web\ForbiddenHttpException('No puede acceder a entregas de otras personas');
+        }
+
+        $model->delete();
 
         return $this->redirect(['index']);
     }
@@ -195,5 +218,9 @@ class EntregaController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    protected function tiene_roles($rol){
+        return in_array(Yii::$app->user->identity->idRol, $rol);
     }
 }

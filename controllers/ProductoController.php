@@ -16,7 +16,7 @@ use yii\filters\VerbFilter;
  */
 class ProductoController extends Controller
 {
-   
+    
     /**
      * {@inheritdoc}
      */
@@ -94,9 +94,17 @@ class ProductoController extends Controller
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
-    {        
+    {
+        $model = $this->findModel($id);
+
+        $hacedor = Hacedor::por_usuario(Yii::$app->user->identity->idUsuario);
+        if ((!$this->tiene_roles([Rol::ROL_ADMIN, Rol::ROL_GESTOR])) and
+            ($model->idHacedor != $hacedor->idHacedor)){
+            throw new \yii\web\ForbiddenHttpException('No puede acceder a productos de otras personas');
+        }
+        
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
         ]);
     }
 
@@ -206,6 +214,12 @@ class ProductoController extends Controller
     {
         $model = $this->findModel($id);
 
+        $hacedor = Hacedor::por_usuario(Yii::$app->user->identity->idUsuario);
+        if ((!$this->tiene_roles([Rol::ROL_ADMIN])) and
+            ($model->idHacedor != $hacedor->idHacedor)){
+            throw new \yii\web\ForbiddenHttpException('No puede acceder a productos de otras personas');
+        }
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->idProducto]);
         }
@@ -225,13 +239,20 @@ class ProductoController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
+
+        $hacedor = Hacedor::por_usuario(Yii::$app->user->identity->idUsuario);
+        if ((!$this->tiene_roles([Rol::ROL_ADMIN])) and
+            ($model->idHacedor != $hacedor->idHacedor)){
+            throw new \yii\web\ForbiddenHttpException('No puede acceder a productos de otras personas');
+        }
+        
         if ($model->tiene_entregas()){
             Yii::$app->session->set('error', "No se puede borrar un producto con entregas.");
         }else{
             $model->delete();
         }
-        return $this->redirect([
-            'index']);
+        
+        return $this->redirect(['index']);
     }
 
     /**
@@ -248,5 +269,9 @@ class ProductoController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    protected function tiene_roles($rol){
+        return in_array(Yii::$app->user->identity->idRol, $rol);
     }
 }
