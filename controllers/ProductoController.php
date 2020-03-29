@@ -55,7 +55,7 @@ class ProductoController extends Controller
     public function actionIndex()
     {
         $hacedor = Hacedor::por_usuario(Yii::$app->user->identity->idUsuario);
-
+        
         $searchModel = new ProductoSearch();
 
         $can_view['todos'] = false;
@@ -66,7 +66,11 @@ class ProductoController extends Controller
         if (Yii::$app->user->identity->idRol == Rol::ROL_ADMIN){
             $can_view['todos'] = true;
         }else{
-            $params['ProductoSearch']['idHacedor'] = $hacedor->idHacedor;
+            if ($hacedor != null){
+                $params['ProductoSearch']['idHacedor'] = $hacedor->idHacedor;
+            }else{
+                $params['ProductoSearch']['idHacedor'] = -1;
+            }
         }
 
         $dataProvider = $searchModel->search($params);
