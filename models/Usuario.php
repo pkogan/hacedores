@@ -99,7 +99,7 @@ class Usuario extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             [['idRol'], 'integer'],
             [['nombreUsuario', 'clave'], 'string', 'max' => 100],
             [['idRol'], 'exist', 'skipOnError' => true, 'targetClass' => Rol::className(), 'targetAttribute' => ['idRol' => 'idRol']],
-  
+            
         ];
     }
 
@@ -121,6 +121,12 @@ class Usuario extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             'direccion' => 'Direccion',
         ];
     }
+
+    /**
+     */
+    public function getHacedors(){
+        return $this->hasMany(Hacedor::className(), ['idUsuario' => 'idUsuario']);
+    } // getHacedors
 
     /**
      * Gets query for [[Hacedors]].
