@@ -7,7 +7,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\InstitucionSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Institucions';
+$this->title = 'Instituciones';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="institucion-index">
@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Institucion', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Crear Institución', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
@@ -24,16 +24,29 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+         'rowOptions' => function ($model, $index, $widget, $grid) {
+
+            return [
+                'id' => $model['idInstitucion'],
+                'onclick' => 'location.href="'
+                . Yii::$app->urlManager->createUrl('institucion/view')
+                . '&id="+(this.id);'
+            ];
+        },
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'idInstitucion',
+            //'idInstitucion',
             'nombre',
-            'logo',
-            'direccion',
-            'tel',
+            //'logo',
+            ['label' => 'Provincia', 'attribute' => 'provinciaFiltro', 'value' => 'idCiudad0.idProvincia0.provincia'],
+            ['label' => 'Ciudad', 'attribute' => 'ciudadFiltro', 'value' => 'idCiudad0.ciudad'],
+            ['label' => 'Productos Pedidos', 'value' => 'sumpedidos'],
+            ['label' => 'Productos Entregados', 'value' =>'sumentregada']
+            //'direccion',
+            //'tel',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            //['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 

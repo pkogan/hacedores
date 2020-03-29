@@ -74,11 +74,12 @@ class SiteController extends Controller
             [Rol::ROL_MAKER]
         );
         
-        if ($this->tiene_roles([Rol::ROL_ADMIN, Rol::ROL_MAKER])){
-            $hacedor = Hacedor::por_usuario(Yii::$app->user->identity->idUsuario);
+        if ($this->tiene_roles([ Rol::ROL_MAKER])){
+            $hacedor = Yii::$app->user->identity->hacedor;
             
             $productoSearch = new ProductoSearch();
             $params = Yii::$app->request->queryParams;
+            
             $params['ProductoSearch']['idHacedor'] = $hacedor->idHacedor;
             $productoProvider = $productoSearch->search($params);
 
@@ -86,13 +87,9 @@ class SiteController extends Controller
             $params = Yii::$app->request->queryParams;
             $params['EntregaSearch']['idHacedor'] = $hacedor->idHacedor;
             $entregaProvider = $entregaSearch->search($params);
-
-
             
             return $this->render('index-hacedores', [
                 'hacedor' => $hacedor,
-                'puede' => $puede,
-                'total' => $total,
                 'productoSearch' => $productoSearch,
                 'productoProvider' => $productoProvider,
                 'entregaSearch' => $entregaSearch,
@@ -100,7 +97,6 @@ class SiteController extends Controller
             ]);
         }else{
             return $this->render('index', [
-                'puede' => $puede,
                 'total' => $total,
             ]);
         }

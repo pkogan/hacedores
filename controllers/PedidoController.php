@@ -38,7 +38,7 @@ class PedidoController extends Controller
                         [
                         'allow' => true,
                         'actions' => ['index', 'view', 'update', 'delete', 'create'],
-                        'roles' => [\app\models\Rol::ROL_ADMIN],
+                        'roles' => [\app\models\Rol::ROL_ADMIN, \app\models\Rol::ROL_GESTOR],
                     ],
                 ],
             ],
@@ -83,7 +83,7 @@ class PedidoController extends Controller
         $model = new Pedido();
         
         $model->idEstado= \app\models\Estado::ESTADO_CREADO;
-        $model->idSolicitante=Yii::$app->user->identity->solicitantes[0]->idSolicitante;
+        $model->idSolicitante=Yii::$app->user->identity->idUsuario;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->idPedido]);

@@ -11,14 +11,17 @@ use app\models\Pedido;
  */
 class PedidoSearch extends Pedido
 {
+    public $usuarioFilter;
+    public $institucionFilter;
+    public $estadoFilter;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['idPedido', 'idSolicitante', 'idModelo', 'idEstado'], 'integer'],
-            [['fecha', 'observacion', 'imagen'], 'safe'],
+            [['idPedido', 'idInstitucion', 'idSolicitante', 'idModelo', 'cantidad', 'idEstado'], 'integer'],
+            [['estadoFilter','usuarioFilter','institucionFilter','fecha', 'observacion', 'imagen'], 'safe'],
         ];
     }
 
@@ -40,7 +43,7 @@ class PedidoSearch extends Pedido
      */
     public function search($params)
     {
-        $query = Pedido::find();
+        $query = Pedido::find()->joinWith('idInstitucion0')->joinWith('idSolicitante0');
 
         // add conditions that should always apply here
 
@@ -59,14 +62,19 @@ class PedidoSearch extends Pedido
         // grid filtering conditions
         $query->andFilterWhere([
             'idPedido' => $this->idPedido,
+            'idInstitucion' => $this->idInstitucion,
             'idSolicitante' => $this->idSolicitante,
             'fecha' => $this->fecha,
             'idModelo' => $this->idModelo,
+            'cantidad' => $this->cantidad,
             'idEstado' => $this->idEstado,
         ]);
 
         $query->andFilterWhere(['like', 'observacion', $this->observacion])
-            ->andFilterWhere(['like', 'imagen', $this->imagen]);
+            ->andFilterWhere(['like', 'imagen', $this->imagen])
+            ->andFilterWhere(['like', 'institucion.nombre', $this->institucionFilter])
+            ->andFilterWhere(['like', 'usuario.nombreUsuario', $this->usuarioFilter])
+                ->andFilterWhere(['like', 'estado.estado', $this->estadoFilter]);
 
         return $dataProvider;
     }

@@ -6,8 +6,8 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Institucion */
 
-$this->title = $model->idInstitucion;
-$this->params['breadcrumbs'][] = ['label' => 'Institucions', 'url' => ['index']];
+$this->title = $model->nombre;
+$this->params['breadcrumbs'][] = ['label' => 'Instituciones', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -29,9 +29,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'idInstitucion',
+            //'idInstitucion',
             'nombre',
-            'logo',
+            //'logo',
+            'idCiudad0.idProvincia0.provincia',
+            'idCiudad0.ciudad',
             'direccion',
             'tel',
         ],

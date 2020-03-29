@@ -98,8 +98,9 @@ class RegistroSearch extends Registro
     public static function searchQuery(){
         $query = Registro::find()->joinWith('idCiudad0.idProvincia0')->joinWith('productos.entregas');
         $query->groupBy(['ciudad.idCiudad', 'provincia.provincia','ciudad.departamento_nombre','ciudad.ciudad']);
-        $query->select([ 'ciudad.idCiudad','provincia.provincia','ciudad.departamento_nombre','ciudad.ciudad', 'Count(*) as voluntarios', 'Sum(impresores) as impresoras',
-            'Sum(PLA) as PLA', 'Sum(ABS) as ABS','Sum(PETG) as PETG','Sum(FLEX) as FLEX','Sum(HIPS) as HIPS', 'Sum(producto.cantidad) as productos1', 'Sum(entrega.cantidad) entregados' ]);
+        $query->select([ 'ciudad.idCiudad','provincia.provincia','ciudad.departamento_nombre','ciudad.ciudad', 'Count(distinct hacedor.idHacedor) as voluntarios', 'Sum(distinct impresores) as impresoras',
+            'Sum(distinct PLA) as PLA', 'Sum(distinct ABS) as ABS','Sum(distinct PETG) as PETG','Sum(distinct FLEX) as FLEX','Sum(distinct HIPS) as HIPS', 'Sum(distinct producto.cantidad) as productos1', 'Sum(entrega.cantidad) entregados',
+                       'Sum(distinct producto.cantidad)-Sum(distinct entrega.cantidad) as aentregar']);
         return $query;
     }
 
@@ -148,8 +149,9 @@ class RegistroSearch extends Registro
 
         $query = Registro::find()->joinWith('idCiudad0.idProvincia0')->joinWith('productos.entregas');
         //$query->groupBy(['ciudad.idCiudad', 'provincia.provincia','ciudad.departamento_nombre','ciudad.ciudad']);
-        $query->select([  'Count(*) as voluntarios', 'Sum(impresores) as impresoras',
-            'Sum(PLA) as PLA', 'Sum(ABS) as ABS','Sum(PETG) as PETG','Sum(FLEX) as FLEX','Sum(HIPS) as $HIPS','Sum(producto.cantidad) as productos1', 'Sum(entrega.cantidad) entregados'  ]);
+        $query->select([   'Count(distinct hacedor.idHacedor) as voluntarios', 'Sum(distinct impresores) as impresoras',
+            'Sum(distinct PLA) as PLA', 'Sum(distinct ABS) as ABS','Sum(distinct PETG) as PETG','Sum(distinct FLEX) as FLEX','Sum(distinct HIPS) as HIPS', 'Sum(distinct producto.cantidad) as productos1', 'Sum(entrega.cantidad) entregados',
+                       'Sum(distinct producto.cantidad)-Sum(distinct entrega.cantidad) as aentregar']);
 
         $this->load($params);
 

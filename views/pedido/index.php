@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Pedido', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Crear Pedido', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
@@ -24,18 +24,30 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+                'rowOptions' => function ($model, $index, $widget, $grid) {
+
+            return [
+                'id' => $model['idPedido'],
+                'onclick' => 'location.href="'
+                . Yii::$app->urlManager->createUrl('pedido/view')
+                . '&id="+(this.id);'
+            ];
+        },
+ 
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'idPedido',
-            'idSolicitante',
+            //'idPedido',
+            ['label'=>'Institucion','attribute'=>'institucionFilter','value'=>'idInstitucion0.nombre'],
+            ['label'=>'Usuario','attribute'=>'usuarioFilter','value'=>'idSolicitante0.nombreUsuario'],
             'fecha',
-            'observacion',
-            'imagen',
+            //'observacion',
+            //'imagen',
             //'idModelo',
-            //'idEstado',
+            'cantidad',
+            ['label'=>'Estado','attribute'=>'estadoFilter','value'=>'idEstado0.estado'],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            //['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 

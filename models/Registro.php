@@ -43,6 +43,7 @@ class Registro extends \yii\db\ActiveRecord
      * {@inheritdoc}
      */
     public $idProvincia;
+    //public $sumproductos;
     public static function tableName()
     {
         return 'hacedor';
@@ -54,7 +55,7 @@ class Registro extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['mail','apellidoNombre','telefono','impresores','idCiudad','idProvincia'],'required'],
+            [['mail','apellidoNombre','telefono','impresores','idCiudad'],'required'],
             [['idUsuario', 'telefono', 'impresores', 'idCiudad','PLA','ABS', 'PETG', 'FLEX', 'HIPS'], 'integer'],
             [['marca'], 'string', 'max' => 19],
             [['mail'], 'string', 'max' => 35],
@@ -142,5 +143,23 @@ class Registro extends \yii\db\ActiveRecord
         return $this->hasMany(Producto::className(), ['idHacedor' => 'idHacedor']);
     }
     
+    public function getEntregas()
+    {
+        return $this->hasMany(Entrega::className(), ['idProducto' => 'idProducto'])
+            ->via('productos');
+    }
     
+    public function getSumproductos()
+    {
+        return $this->getProductos()->sum('producto.cantidad');
+    }
+    
+    public function getSumentregada()
+    {
+        return $this->getEntregas()->sum('entrega.cantidad');
+    }
+    
+    public function getStock(){
+        return $this->getSumproductos()-$this->getSumentregada();
+    }
 }

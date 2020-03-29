@@ -115,41 +115,7 @@ a.desc:after {
     outline: none;
 }
 
-.counter
-{
-    background-color: #eaecf0;
-    text-align: center;
-}
-.employees,.customer,.design,.order
-{
-  /*  margin-top: 70px;
-    margin-bottom: 70px;*/
-}
-.counter-count
-{
-    font-size: 18px;
-    background-color: #1e6887;
-    border-radius: 50%;
-    position: relative;
-    color: #ffffff;
-    text-align: center;
-    line-height: 92px;
-    width: 92px;
-    height: 92px;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    -ms-border-radius: 50%;
-    -o-border-radius: 50%;
-    display: inline-block;
-}
 
-.employee-p,.customer-p,.order-p,.design-p
-{
-
-    font-size: 24px;
-    color: #000000;
-    line-height: 34px;
-}
 .logos{
     border-top: 1px solid #ddd;
     text-align: center;
@@ -161,4 +127,16 @@ a.desc:after {
 
     max-width: 170px;
     max-height: 90px;
+}
+.tablero{
+    font-size:20px; font-weight:bold; text-transform:uppercase;
+}
+.c-no{height:150px;}
+.grey-bg{background:#ebebeb;}
+.counter-Txt{text-align:center; font-size:17px; font-weight:bold; text-transform:uppercase; margin-top:10px;}
+.counter-Txt span{display:block; font-size:20px}
+@media(min-width:320px) and (max-width:767px){ 
+.c-no{height:100%;}
+.counter-Txt{margin-top:10px;}
+.margin-bot-35{margin-bottom:35px;}
 }

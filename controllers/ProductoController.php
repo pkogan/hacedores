@@ -33,15 +33,22 @@ class ProductoController extends Controller
                 'ruleConfig' => [
                     'class' => \app\models\AccessRule::className(),
                 ],
-                'only' => ['index', 'view', 'update', 'delete', 'create'],
+                'only' => ['index', 'view', 'update', 'delete', 'create','agregar'],
                 'rules' => [
                     //'class' => AccessRule::className(),
+                    
+                    [
+                        'allow' => true,
+                        'actions' => ['update', 'delete', 'agregar'],
+                        'roles' => [\app\models\Rol::ROL_MAKER
+                                   ],
+                    ],
                     [
                         'allow' => true,
                         'actions' => ['index', 'view',
                                      'update', 'delete', 'create'],
                         'roles' => [\app\models\Rol::ROL_ADMIN,
-                                   \app\models\Rol::ROL_MAKER],
+                                   ],
                     ],
                 ],
             ],
@@ -98,30 +105,28 @@ class ProductoController extends Controller
     /**
      */
     public function actionAgregar(){
-        if (Yii::$app->request->isPost){
-            $modelo_id = Yii::$app->request->post('Producto[idModelo]');
-            $producto = Producto::find()
-                                ->where(['idModelo' => $modelo_id])
-                                ->one();
-            
-            if ($producto == null){
-                // No hay producto asociado... crearlo.
-                $producto = new Producto();
-                $producto->load(Yii::$app->request->post());
-            }else{
+        $producto = new Producto();
+        
+        $producto->idHacedor=\Yii::$app->user->identity->hacedor->idHacedor;
+        if (Yii::$app->request->isPost&&$producto->load(Yii::$app->request->post())){
+            $productoExistente = Producto::find()
+                                ->where(['idModelo' => $producto->idModelo,'idHacedor'=>$producto->idHacedor
+                                ])->one();
+            if (!is_null($productoExistente)){
                 // El producto ya existe... sumar la cantidad.
-                $cant = Yii::$app->request->post('Producto[cantidad]');
-                $producto->cantidad += $cant;
+                $productoExistente->cantidad+=$producto->cantidad;
+                $producto=$productoExistente;
             }
 
             if ($producto->save()){
-                return $this->redirect(['view', 'id' => $producto->idProducto]);
+                return $this->goHome();
             }
-            return $this->render('agregar', [
-                'model' => $producto,
-                'can_edit' => $can_edit,
-            ]);
+            
         }
+        return $this->render('agregar', [
+                'model' => $producto,
+              
+            ]);
     } // actionAgregar
     
     /**
@@ -200,9 +205,13 @@ class ProductoController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+        
+        if($model->idHacedor0->idUsuario!= \Yii::$app->user->identity->idUsuario){
+            throw new \yii\base\UserException('Error al tratar de editar un Producto Ajeno.');
+        }
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->idProducto]);
+            return $this->goHome();//$this->redirect(['view', 'id' => $model->idProducto]);
         }
 
         return $this->render('update', [
@@ -219,9 +228,13 @@ class ProductoController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $producto=$this->findModel($id);
+        if($producto->idHacedor0->idUsuario!= \Yii::$app->user->identity->idUsuario){
+            throw new \yii\base\UserException('Esta intentando borrar un producto ajeno');
+        }
+        $producto->delete();
 
-        return $this->redirect(['index']);
+        return $this->goHome(); //$this->redirect(['index']);
     }
 
     /**

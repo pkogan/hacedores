@@ -33,11 +33,10 @@ class InstitucionController extends Controller
                 ],
                 'only' => ['index', 'view', 'update', 'delete', 'create'],
                 'rules' => [
-                    //'class' => AccessRule::className(),
                         [
                         'allow' => true,
                         'actions' => ['index', 'view', 'update', 'delete', 'create'],
-                        'roles' => [\app\models\Rol::ROL_ADMIN],
+                        'roles' => [\app\models\Rol::ROL_ADMIN, \app\models\Rol::ROL_GESTOR],
                     ],
                 ],
             ],

@@ -10,13 +10,17 @@ use Yii;
  * @property int $idInstitucion
  * @property string|null $nombre
  * @property string|null $logo
+ * @property int $idCiudad
  * @property string|null $direccion
  * @property string|null $tel
  *
  * @property Entrega[] $entregas
+ * @property Ciudad $idCiudad0
+ * @property Pedido[] $pedidos
  */
 class Institucion extends \yii\db\ActiveRecord
 {
+    public $idProvincia;
     /**
      * {@inheritdoc}
      */
@@ -31,7 +35,10 @@ class Institucion extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['idCiudad','nombre', 'idProvincia'], 'required'],
+            [['idCiudad'], 'integer'],
             [['nombre', 'logo', 'direccion', 'tel'], 'string', 'max' => 255],
+            [['idCiudad'], 'exist', 'skipOnError' => true, 'targetClass' => Ciudad::className(), 'targetAttribute' => ['idCiudad' => 'idCiudad']],
         ];
     }
 
@@ -41,9 +48,11 @@ class Institucion extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'idInstitucion' => 'Id Institucion',
+            'idInstitucion' => 'Institucion',
             'nombre' => 'Nombre',
             'logo' => 'Logo',
+            'idCiudad' => 'Ciudad',
+            'idProvincia' => 'Provincia',
             'direccion' => 'Direccion',
             'tel' => 'Tel',
         ];
@@ -57,5 +66,35 @@ class Institucion extends \yii\db\ActiveRecord
     public function getEntregas()
     {
         return $this->hasMany(Entrega::className(), ['idInstitucion' => 'idInstitucion']);
+    }
+
+    /**
+     * Gets query for [[IdCiudad0]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getIdCiudad0()
+    {
+        return $this->hasOne(Ciudad::className(), ['idCiudad' => 'idCiudad']);
+    }
+
+    /**
+     * Gets query for [[Pedidos]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPedidos()
+    {
+        return $this->hasMany(Pedido::className(), ['idInstitucion' => 'idInstitucion']);
+    }
+    
+    public function getSumpedidos()
+    {
+        return $this->getPedidos()->sum('pedido.cantidad');
+    }
+    
+    public function getSumentregada()
+    {
+        return $this->getEntregas()->sum('entrega.cantidad');
     }
 }

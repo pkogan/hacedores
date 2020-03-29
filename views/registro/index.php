@@ -49,9 +49,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'telefono',
             ['label' => 'Provincia', 'attribute' => 'provinciaFiltro', 'value' => 'idCiudad0.idProvincia0.provincia'],
             ['label' => 'Ciudad', 'attribute' => 'ciudadFiltro', 'value' => 'idCiudad0.ciudad'],
-
+            ['label' => 'Impresiones', 'value' => 'sumproductos'],
+            ['label' => 'Entregadas', 'value' => 'sumentregada'],
+            ['label' => 'A Entregar', 'value' => 'Stock'],
             //'Localidad',
             'impresores',
+            
             'modelos',
            
             'tipoFilamento',

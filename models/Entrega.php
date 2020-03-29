@@ -10,7 +10,7 @@ use Yii;
  * @property int $idEntrega
  * @property string $fecha
  * @property int $cantidad
- * @property string $imagen
+ * @property string $observacion
  *
  */
 class Entrega extends \yii\db\ActiveRecord
@@ -29,17 +29,18 @@ class Entrega extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['fecha', 'cantidad'], 'required'],
+            [['fecha', 'cantidad','idInstitucion'], 'required'],
             [['cantidad'], 'integer'],
             [['fecha'], 'safe'],
-            [['imagen'], 'string', 'max' => 300],
+            [['observacion'], 'string', 'max' => 300],
+            [['cantidad'],'number','min'=>1,'max'=>1000],
             [['idProducto'], 'exist', 'skipOnError' => true,
              'targetClass' => Producto::className(),
              'targetAttribute' => ['idProducto' => 'idProducto']],
             [['idInstitucion'], 'exist', 'skipOnError' => true,
              'targetClass' => Institucion::className(),
              'targetAttribute' => ['idInstitucion' => 'idInstitucion']],
-            [['imagen'], 'default', 'value' => ''],
+            [['observacion'], 'default', 'value' => ''],
         ];
     }
 
@@ -50,11 +51,11 @@ class Entrega extends \yii\db\ActiveRecord
     {
         return [
             'idEntrega' => 'Id Entrega',
-            'idInstitucion' => 'Id Institucion',
+            'idInstitucion' => 'Institucion',
             'idProducto' => 'Id Producto',
             'fecha' => 'Fecha',
             'cantidad' => 'Cantidad Entregada',
-            'imagen' => 'Imagen',
+            'observacion' => 'Observación',
         ];
     }
 

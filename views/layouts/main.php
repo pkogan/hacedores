@@ -38,18 +38,29 @@ AppAsset::register($this);
                 'options' => ['class' => 'navbar-nav navbar-right'],
                 'items' => [
                         ['label' => 'Inicio', 'url' => ['/site/index']],
-                        
+                        ['label' => 'Actualizar Registro', 'url' => ['/registro/update','id'=> Yii::$app->user->identity->hacedor->idHacedor],'visible' => !Yii::$app->user->isGuest
+                    && Yii::$app->user->identity->idRol == \app\models\Rol::ROL_MAKER],                        
+                        ['label' => 'Agregar Producto', 'url' => ['/producto/agregar'],'visible' => !Yii::$app->user->isGuest
+                    && Yii::$app->user->identity->idRol == \app\models\Rol::ROL_MAKER],                        
                         ['label' => 'Productos', 'url' => ['/producto'],'visible' => !Yii::$app->user->isGuest
                     && Yii::$app->user->identity->idRol == \app\models\Rol::ROL_ADMIN],
                         ['label' => 'Modelos', 'url' => ['/modelo'],'visible' => !Yii::$app->user->isGuest
                     && Yii::$app->user->identity->idRol == \app\models\Rol::ROL_ADMIN],
-                        ['label' => 'Resumen', 'url' => ['/registro/resumen']],
+                        
                         ['label' => 'Mapa', 'url' => ['/registro/mapa']],
-                        ['label' => 'Acerca de', 'url' => ['/site/about']],
+                        
+                        ['label' => 'Producción', 'url' => ['/registro/resumen']],
                         ['label' => 'Registro', 'url' => ['/registro'], 'visible' => !Yii::$app->user->isGuest
                         && in_array(Yii::$app->user->identity->idRol,[\app\models\Rol::ROL_ADMIN, app\models\Rol::ROL_GESTOR])],
+                    
+                        ['label' => 'Institucion', 'url' => ['/institucion'], 'visible' => !Yii::$app->user->isGuest
+                        && in_array(Yii::$app->user->identity->idRol,[\app\models\Rol::ROL_ADMIN, app\models\Rol::ROL_GESTOR])],
+                        ['label' => 'Pedidos (Demanda)', 'url' => ['/pedido'], 'visible' => !Yii::$app->user->isGuest
+                        && in_array(Yii::$app->user->identity->idRol,[\app\models\Rol::ROL_ADMIN, app\models\Rol::ROL_GESTOR])],
+                    
                         ['label' => 'Usuarios', 'url' => ['/usuario'], 'visible' => !Yii::$app->user->isGuest
                                 && Yii::$app->user->identity->idRol == \app\models\Rol::ROL_ADMIN],
+                    ['label' => 'Acerca de', 'url' => ['/site/about']],
                     Yii::$app->user->isGuest ? (
                                 ['label' => 'Login', 'url' => ['/site/login']]
                             ) : (

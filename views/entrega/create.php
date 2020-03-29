@@ -7,8 +7,8 @@ use yii\bootstrap\Alert;
 /* @var $model app\models\Entrega */
 /* @var $productos Array[Producto] */
 
-$this->title = 'Create Entrega';
-$this->params['breadcrumbs'][] = ['label' => 'Entregas', 'url' => ['index']];
+$this->title = 'Crear Entrega';
+
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="entrega-create">
