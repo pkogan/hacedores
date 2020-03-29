@@ -39,8 +39,10 @@ class EntregaController extends Controller
                     //'class' => AccessRule::className(),
                         [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'update', 'delete', 'create'],
-                        'roles' => [\app\models\Rol::ROL_ADMIN],
+                        'actions' => ['index', 'view',
+                                     'update', 'delete', 'create'],
+                        'roles' => [\app\models\Rol::ROL_ADMIN,
+                                   \app\models\Rol::ROL_MAKER],
                     ],
                 ],
             ],
