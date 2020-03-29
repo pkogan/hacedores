@@ -81,12 +81,15 @@ AppAsset::register($this);
                      
 <!--    <img src="img/faif.png" alt="Facultad de Informática"/>
                         <img width="70px" src="img/fain.png" alt="Facultad de Ingeniería"/> -->
-                        <img src="img/uncoma.png" alt="UNCo"/>
+                        <img width="70px" src="img/uflo.png" alt="UFLO"/>
                         <img src="img/unrn.png" alt="UNRN"/>
                         <img src="img/utn.png" alt="UTN"/>
-                         
+                        <img src="img/uncoma.png" alt="UNCo"/>
+                        
+                        <img src="img/nqn.png" alt="Gobierno Provincia Neuquén"/> 
                         <img src="img/cepyme.png" alt="CEPyme"/>
-                        <img src="img/nqn.png" alt="Gobierno Provincia Neuquén"/>
+                        <img src="img/minsalud.jpeg" alt="MinSalud"/>
+                        
                 </div>
 
         <footer class="footer">
