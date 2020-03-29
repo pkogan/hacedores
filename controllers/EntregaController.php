@@ -121,7 +121,7 @@ class EntregaController extends Controller
                     throw new \Exception($error);
                 }
                 if ($model->save()) {
-                    return $this->redirect(['view', 'id' => $model->idEntrega]);
+                    return $this->redirect(['site/index']);
                 }
             }
         }
@@ -159,7 +159,7 @@ class EntregaController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->idEntrega]);
+            return $this->redirect(['site/index']);
         }
 
         return $this->render('update', [

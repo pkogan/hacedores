@@ -181,7 +181,7 @@ class ProductoController extends Controller
         // Intentamos guardar
         $bien = $bien && $model->save();
         if (Yii::$app->request->isPost && $bien) {
-            return $this->redirect(['index']);
+            return $this->redirect(['site/index']);
         }
 
         return $this->render('create', [
