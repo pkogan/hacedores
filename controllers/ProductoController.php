@@ -16,6 +16,7 @@ use yii\filters\VerbFilter;
  */
 class ProductoController extends Controller
 {
+   
     /**
      * {@inheritdoc}
      */
@@ -74,11 +75,15 @@ class ProductoController extends Controller
         }
 
         $dataProvider = $searchModel->search($params);
+
+        $error = Yii::$app->session->get('error');
+        Yii::$app->session->set('error', null);
         
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'can_view' => $can_view,
+            'error' => $error,
         ]);
     }
 
@@ -219,9 +224,14 @@ class ProductoController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        $model = $this->findModel($id);
+        if ($model->tiene_entregas()){
+            Yii::$app->session->set('error', "No se puede borrar un producto con entregas.");
+        }else{
+            $model->delete();
+        }
+        return $this->redirect([
+            'index']);
     }
 
     /**
