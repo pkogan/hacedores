@@ -90,7 +90,7 @@ class Producto extends \yii\db\ActiveRecord
     public function short_string(){
         return $this->hacedor->nombre . ":" .
           $this->modelo->nombre . " (" .
-          $this->cantidad . ")";
+          $this->stock . ")";
     } // short_string
 
     /**
@@ -108,4 +108,14 @@ class Producto extends \yii\db\ActiveRecord
         }
         return $cant;
     } // cant_entregas
+
+    /**
+       La cantidad disponible de este producto.
+
+       @return {integer}
+     */
+    public function getStock(){
+        $cant_entregas = $this->cant_entregas();
+        return $this->cantidad - $cant_entregas;
+    } // getStock
 }

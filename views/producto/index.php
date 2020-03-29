@@ -42,6 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'hacedor.nombre',
             'modelo.nombre',
             'cantidad',
+            'stock',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
