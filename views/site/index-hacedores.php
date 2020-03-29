@@ -18,6 +18,16 @@ $entrega_grid_buttons = [
                  ['entrega/view', 'id' => $model->idEntrega]);
     },
 ];
+
+if (isset($hacedor) and ($hacedor != null)){
+    $cantidades = $hacedor->datos_prod();
+}else{
+    $cantidades = [
+        'producidos' => 0,
+        'stock' => 0,
+        'entregas' => 0
+    ];
+}
 ?>
 <div class="site-index">
 
@@ -27,11 +37,14 @@ $entrega_grid_buttons = [
   <div class="jumbotron">
     <h1>Bienvenido/a</h1>
     <h3>
+      <span class="glyphicon glyphicon-wrench" />
+      <?= $cantidades['producidos'] ?> Total Producido |
+      
       <span class="glyphicon glyphicon-cog" />
-      <?= !is_null($hacedor) ? $hacedor->cant_productos() : 0 ?> En stock |
+      <?= $cantidades['stock'] ?> En stock |
 
       <span class="glyphicon glyphicon-cog" />
-      <?= !is_null($hacedor) ? $hacedor->cant_entregas() : 0 ?> Entregados 
+      <?= $cantidades['entregas']  ?> Entregados 
     </h3>
     <h3>
       <span class="glyphicon glyphicon-user"></span>

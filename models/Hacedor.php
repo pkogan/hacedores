@@ -144,4 +144,42 @@ class Hacedor extends \yii\db\ActiveRecord
         }
         return $cant;
     } // cant_entregas
+
+    /**
+     */
+    public function stock_total(){
+        $cant = 0;
+        foreach ($this->productos as $prod){
+            $cant += $prod->stock();
+        }
+        
+        return $cant;
+    } // stock
+
+    /**
+       Para más eficiencia, calcular los siguientes totales:
+       - Cant. de productos producidos.
+       - Cant. de productos en stock.
+       - Cant. de producots entregados.
+
+       @return {array} Un arreglo de `['producidos' => {int}, 
+         'stock' => {int}, 'entregas' => {int}]`.
+     */
+    public function datos_prod(){
+        $producidos = 0;
+        $stock = 0;
+        $entregas = 0;
+
+        foreach ($this->productos as $prod){
+            $producidos += $prod->cantidad;
+            $stock += $prod->stock;
+            $entregas += $prod->cant_entregas();
+        }
+
+        return [
+            'producidos' => $producidos,
+            'stock' => $stock,
+            'entregas' => $entregas
+        ];
+    } // datos_prod
 }
