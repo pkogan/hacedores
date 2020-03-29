@@ -28,7 +28,7 @@ class ProductoController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
-             'access' => [
+            'access' => [
                 'class' => \yii\filters\AccessControl::className(),
                 'ruleConfig' => [
                     'class' => \app\models\AccessRule::className(),
@@ -36,9 +36,10 @@ class ProductoController extends Controller
                 'only' => ['index', 'view', 'update', 'delete', 'create'],
                 'rules' => [
                     //'class' => AccessRule::className(),
-                        [
+                    [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'update', 'delete', 'create'],
+                        'actions' => ['index', 'view',
+                                     'update', 'delete', 'create'],
                         'roles' => [\app\models\Rol::ROL_ADMIN],
                     ],
                 ],
@@ -127,7 +128,11 @@ class ProductoController extends Controller
     public function actionCreate()
     {
         // Si ya existe el producto, usarlo.
-        $producto = Yii::$app->request->post('Producto');
+        if (Yii::$app->request->isPost){
+            $producto = Yii::$app->request->post('Producto');
+        }else{
+            $producto = Yii::$app->request->get('Producto');
+        }
         if ($producto != null){
             $modelo_id = $producto['idModelo'];
             $cant = $producto['cantidad'];
