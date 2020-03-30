@@ -39,19 +39,26 @@ if (isset($productos)){
                  'options' => ['placeholder' => 'Fecha de entrega'],
                  'convertFormat' => true,
                  'pluginOptions' => [
-                     'format' => 'yyyy-M-dd',
+                     'format' => 'dd/MM/yyyy',
                  ],
          ])
   ?>
 
   <?= $form->field($model, 'cantidad')->textInput() ?>
-    <p>En el caso de no Encontrar la Institución o tratarse de un caso particular agregar la Información en el siguiente campo</p>
+    <p>En el caso de no Encontrar la Institución o tratarse de un caso particular agregar la Información detallada en el siguiente campo</p>
   <?php
    echo $form->field($model, 'observacion')->textarea(['maxlength' => true])
   ?>
 
   <div class="form-group">
     <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?> 
+    <?php if(isset($model->idEntrega)) echo Html::a('Eliminar', ['delete', 'id' => $model->idEntrega], [
+            'class' => 'btn btn-danger',
+            'data' => [
+                'confirm' => 'Está seguro de eliminar la entrega?',
+                'method' => 'post',
+            ],
+        ]) ?>
   </div>
 
   <?php ActiveForm::end(); ?>

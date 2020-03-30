@@ -40,7 +40,7 @@ AppAsset::register($this);
                         ['label' => 'Inicio', 'url' => ['/site/index']],
                         ['label' => 'Actualizar Registro', 'url' => ['/registro/update','id'=> Yii::$app->user->identity->hacedor->idHacedor],'visible' => !Yii::$app->user->isGuest
                     && Yii::$app->user->identity->idRol == \app\models\Rol::ROL_MAKER],                        
-                        ['label' => 'Agregar Producto', 'url' => ['/producto/agregar'],'visible' => !Yii::$app->user->isGuest
+                        ['label' => 'Actualizar Producción', 'url' => ['/producto/agregar'],'visible' => !Yii::$app->user->isGuest
                     && Yii::$app->user->identity->idRol == \app\models\Rol::ROL_MAKER],                        
                         ['label' => 'Productos', 'url' => ['/producto'],'visible' => !Yii::$app->user->isGuest
                     && Yii::$app->user->identity->idRol == \app\models\Rol::ROL_ADMIN],

@@ -119,11 +119,11 @@ class EntregaController extends Controller {
 
             // Cambiar el formato recibido por el Widget (d/m/Y) al que
             // soporta MySQL (Y-m-d).
-            /*$date = \DateTime::createFromFormat('d/m/Y', $model->fecha);
+            $date = \DateTime::createFromFormat('d/m/Y', $model->fecha);
             $model->fecha = $date->format('Y-m-d');
-*/
+
             if ($model->cantidad > $model->producto->stock) {
-                $model->addError('cantidad', 'La cantidad a entregar supera a la del producto('.$model->producto->stock.')') ;
+                $model->addError('cantidad', 'La cantidad a entregar supera a la del producto(' . $model->producto->stock . ')');
             } else {
                 if (!$model->producto->save()) {
                     $error = 'No se pudo actualizar el producto';
@@ -136,11 +136,11 @@ class EntregaController extends Controller {
         }
 
         // Seteamos los valores por defecto
-        /*if ($model->fecha == null) {
+        if ($model->fecha == null) {
             $model->fecha = date('d/m/Y');
         } else {
             $model->fecha = date("d/m/Y", strtotime($model->fecha));
-        }*/
+        }
 
 
         $hacedor = Hacedor::por_usuario(Yii::$app->user->identity->idUsuario);
@@ -168,12 +168,19 @@ class EntregaController extends Controller {
         $this->validarDuenoProducto($model->producto);
         $stockSinActual = $model->producto->stock + $model->cantidad;
         if ($model->load(Yii::$app->request->post())) {
-            
+            $date = \DateTime::createFromFormat('d/m/Y', $model->fecha);
+            $model->fecha = $date->format('Y-m-d');
+
             if ($model->cantidad > $stockSinActual) {
-                $model->addError('cantidad', 'La cantidad a entregar supera a la del producto('.$stockSinActual.')');
+                $model->addError('cantidad', 'La cantidad a entregar supera a la del producto(' . $stockSinActual . ')');
             } elseif ($model->save()) {
                 return $this->goHome();
             }
+        }
+        if ($model->fecha == null) {
+            $model->fecha = date('d/m/Y');
+        } else {
+            $model->fecha = date("d/m/Y", strtotime($model->fecha));
         }
 
         return $this->render('update', [

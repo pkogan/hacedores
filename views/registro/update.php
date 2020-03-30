@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Registro */
 
-$this->title = 'Update Registro de ' . $model->apellidoNombre;
+$this->title = 'Actualizar Registro de ' . $model->apellidoNombre;
 $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="registro-update">
