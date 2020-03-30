@@ -5,11 +5,12 @@ namespace app\assets;
 use yii\web\AssetBundle;
 
 class IntrojsAsset extends AssetBundle{
+    public $sourcePath = '@npm/intro.js/minified';
     public $css = [
-        '@npm/intro.js/minified/introjs.min.css'
+        'introjs.min.css'
     ];
     public $js = [
-        '@npm/intro.js/minified/intro.min.js'
+        'intro.min.js'
     ];
 }
 
