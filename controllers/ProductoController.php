@@ -232,6 +232,10 @@ class ProductoController extends Controller
         if($producto->idHacedor0->idUsuario!= \Yii::$app->user->identity->idUsuario){
             throw new \yii\base\UserException('Esta intentando borrar un producto ajeno');
         }
+        if ($producto->tiene_entregas()){
+            throw new \yii\base\UserException('No se puede borrar productos con entregas.');
+        }
+        
         $producto->delete();
 
         return $this->goHome(); //$this->redirect(['index']);
