@@ -268,7 +268,7 @@ class RegistroController extends Controller {
     }
 
     public function actionEnviomasivo($cantidad = 10) {
-        $models =Registro::find()->where('token is null')->limit($cantidad)->all();
+        $models =Registro::find()->where('token is null and idUsuario is null')->limit($cantidad)->all();
        
         foreach ($models as $key=>$modelRegistro) {
             $this->envioMail($modelRegistro,true);
