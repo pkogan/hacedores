@@ -50,20 +50,17 @@ $this->title = 'Registro de Makers';
                                 </div>
                                 <div class="col-sm-4 counter-Txt margin-bot-35"> <span class="glyphicon glyphicon-tasks" ></span> <span class="counter-value" data-count="150"><?= $producto->stock ?></span> A Entregar<br/>
                                   <?php
-                                  if ($producto->tiene_entregas()){
-                                      $btn_class = 'btn btn-danger disabled';
-                                  }else{
-                                      $btn_class = 'btn btn-danger';
-                                  }
-                                  ?>
-                                    <?=
-                                    Html::a('Borrar<br/> Producto', ['producto/delete', 'id' => $producto->idProducto], [
+                                  if (!$producto->tiene_entregas()){
+                                      echo Html::a('Borrar<br/> Producto',
+                                                  ['producto/delete', 'id' => $producto->idProducto],
+                                                  [
                                         'class' => $btn_class,
                                         'data' => [
                                             'confirm' => 'Está seguro de Borrar el Producto?',
                                             'method' => 'post',
                                         ],
-                                    ])
+                                      ]);
+                                  }
                                     ?>
                                 </div>
                             </div>
