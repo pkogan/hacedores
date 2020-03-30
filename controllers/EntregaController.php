@@ -113,6 +113,8 @@ class EntregaController extends Controller {
 
         $model = new Entrega();
         $model->idProducto = $idProducto;
+        $model->fecha = date('Y-m-d');
+        
         $bien = true;
         if (Yii::$app->request->isPost) {
             $model->load(Yii::$app->request->post());
