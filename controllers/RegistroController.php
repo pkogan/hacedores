@@ -103,8 +103,12 @@ class RegistroController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id) {
+        $entregaSearch=new \app\models\EntregaSearch();
+        $entregaSearch->idHacedor=$id;
+        $entregaProvider=$entregaSearch->search([]);
         return $this->render('view', [
                     'model' => $this->findModel($id),
+                    'entregaProvider'=>$entregaProvider
         ]);
     }
 

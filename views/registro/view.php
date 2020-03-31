@@ -65,5 +65,24 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ])
     ?>
+</div>
+<div>
+                <h3>Entregas</h3>
+
+                <?=
+                //$entregaProvider->sort->sortParam = false;
+                yii\grid\GridView::widget([
+                    'dataProvider' => $entregaProvider,
+                    // 'filterModel' => $entregaSearch,
+                    
+                    'columns' => [
+                        'fecha',
+                            ['label' => 'Modelo', 'value' => 'producto.modelo.nombre'],
+                            ['label' => 'Institución', 'value' => 'institucion.nombre'],
+                        'cantidad',
+                        'observacion'
+                    ],
+                ]);
+                ?>
 
 </div>
