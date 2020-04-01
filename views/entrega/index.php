@@ -43,7 +43,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'idEntrega',
             'fecha',
             'cantidad',
-            'imagen',
             'producto.modelo.nombre',
             ['attribute' => 'institucion.nombre',
              'label' => 'Entregado a'],
