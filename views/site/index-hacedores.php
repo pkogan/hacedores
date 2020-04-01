@@ -33,7 +33,8 @@ $this->title = 'Registro de Makers';
                 ?>
                   <a href="javascript:void(0)"
                      onclick="javascript:ejecutar_ayuda();"
-                     style="float: right">Ver Ayuda | </a>
+                     style="float: right">| Ver Ayuda </a>
+                  <a href="#entregas" style="float: right"> Ver Entregas |</a>
                 <?php
                 foreach ($hacedor->productos as $producto) {
                     ?>
@@ -41,13 +42,13 @@ $this->title = 'Registro de Makers';
 
                     <hr/>
 
-                    <h2 center>Su producción del modelo:#<?= $producto->idModelo . ' ' . $producto->modelo->nombre ?> | <a href="<?= $producto->modelo->link ?>" >Descargar Modelo</a></h2>
+                    <h3 center>Producción del modelo:<b>#<?= $producto->idModelo . ' ' . $producto->modelo->nombre ?></b> | <a href="<?= $producto->modelo->link ?>" >Descargar Modelo</a></h3>
 
                     <div class="grey-bg c-no container-fluid">
                         <div class="container">
                             <div class="row" id="counter">
                                 <div class="col-sm-4 counter-Txt"> <span class="glyphicon glyphicon-wrench" > </span> <span class="counter-value" data-count="10"><?= $producto->cantidad ?></span>
-                                  Impresiones 3D <br/><?= Html::a('Actualizar <br/>Cantidad', ['producto/update', 'id' => $producto->idProducto],
+                                  Impresiones 3D <br/><?= Html::a('Actualizar <br/>Producción', ['producto/update', 'id' => $producto->idProducto],
                                                                ['class' => 'btn btn-sm btn-primary',
                                                                 'data-intro' => 'Con este botón, usted podrá sumar más cantidad a la producción de este producto. Cuando termine de producir una cierta cantidad de este modelo, haga clic aquí.']);
                     ?>
@@ -55,20 +56,16 @@ $this->title = 'Registro de Makers';
                                 <div class="col-sm-4 counter-Txt"> <span class="glyphicon glyphicon-send"></span> <span class="counter-value" data-count="25"><?= $producto->cant_entregas() ?> </span> Entregadas<br/>
                                     <?= Html::a('3) Agregar</br>Entrega', ['entrega/create', 'idProducto' => $producto->idProducto], ['class' => 'btn btn-warning', 'data-intro' => 'Si entregó al distribuidor una cantidad de producción de este modelo, haga clic aquí.']) ?>
                                 </div>
-                                <div class="col-sm-4 counter-Txt margin-bot-35"> <span class="glyphicon glyphicon-tasks" ></span> <span class="counter-value" data-count="150"><?= $producto->stock ?></span> A Entregar<br/>
-                                  <?php
-                                  if (!$producto->tiene_entregas()){
-                                      echo Html::a('Borrar<br/> Producto',
-                                                  ['producto/delete', 'id' => $producto->idProducto],
-                                                  [
-                                        'class' => $btn_class,
+                                <div class="col-sm-4 counter-Txt margin-bot-35"> <span class="glyphicon glyphicon-tasks" ></span> <span class="counter-value" data-count="150"><?= $producto->stock ?></span> Para  Entregar<br/>
+                                    <?php if (count($producto->entregas)==0) echo 
+                                    Html::a('Borrar<br/> Producción', ['producto/delete', 'id' => $producto->idProducto], [
+                                        'class' => 'btn btn-danger',
                                         'data' => [
-                                            'confirm' => 'Está seguro de Borrar el Producto?',
+                                            'confirm' => 'Está seguro de Borrar la Producción?',
                                             'method' => 'post',
                                             'intro' => 'Puede borrar sólo si no realizó ninguna entrega. Utilice este botón en caso de equivocación al cargar un producto.'
                                         ],
-                                      ]);
-                                  }
+                                    ])
                                     ?>
                                 </div>
                             </div>
@@ -81,10 +78,10 @@ $this->title = 'Registro de Makers';
 
                 <?php } ?>
             </div>
-            <div class="row" data-intro="Las entregas que usted registre se mostrarán aquí. Recuerde registrarlas todas con el botón '3) Agregar Entrega' apenas entrege su producción al distribuidor.">
+            <div class="row" id='entregas' data-intro="Las entregas que usted registre se mostrarán aquí. Recuerde registrarlas todas con el botón '3) Agregar Entrega' apenas entrege su producción al distribuidor.">
 
 
-                <h2> Sus entregas</h2>
+                <h3>Entregas</h3>
 
                 <?=
                 //$entregaProvider->sort->sortParam = false;
@@ -116,28 +113,29 @@ $this->title = 'Registro de Makers';
         <!-- -------------------- -->
 
 
+
+
+
     </div>
 
     <div class="jumbotron" id="ayuda">
         <h2 >Hola Maker !!!</h2>
         <p>Gracias por ser parte de esta red colaborativa que trata de aportar un grano de arena frente a la crisis del COVID-19.
-            El objetivo de esta aplicación es afrontar la demanda de máscaras e insumos impresos en 3d para combatir el COVID-19, de forma colaborativa, juntando fuerzas de grupos y redes de makers.</p>
-
-        <p>Para poder medir y compartir los insumos impresos por usted, que pueden ayudar al personal de salud 
-            u otros actores que necesiten protejerse del virus, es necesario que:</p>
+<!--            El objetivo de esta aplicación es afrontar la demanda de máscaras e insumos impresos en 3d para combatir el COVID-19, de forma colaborativa, juntando fuerzas de grupos y redes de makers.-->
+ Para poder medir y compartir los insumos impresos por usted, que pueden ayudar al personal de salud 
+            u otros actores que necesiten protejerse del virus, es necesario:</p>
         <hr/>
         <p data-intro="Primero, asegúrese de tener sus datos actualizados. De esta manera, podremos mantener informado al personal de salud y demás actores para dejarles a disposición su producción."
            data-step="1">
-          <?= Html::a('1) Actualizar el Registro', ['registro/update', 'id' => Yii::$app->user->identity->hacedors[0]->idHacedor], ['class' => 'btn btn-success']) ?> Con información de contacto y Stock con el que cuenta, de Materiales para imprimir.</p>
+           <?= Html::a('1) Actualizar el Registro', ['registro/update', 'id' => Yii::$app->user->identity->hacedors[0]->idHacedor], ['class' => 'btn btn-success']) ?> Con información de contacto y Stock de Materiales para imprimir que usted posee.</p>
         <hr/>
         <p data-intro="Luego, podrá indicar qué modelo y cuanto ha producido de él. Recuerde tener actualizada la cantidad de producción que realiza día a día"
            data-step="2">
-          <?= Html::a('2) Agregar Producto', ['producto/agregar'], ['class' => 'btn btn-sm btn-primary']); ?> Y tener actualizada la cantidad de máscaras que ha impreso.
-        </p>
+           <?= Html::a('2) Actualizar Producción', ['producto/agregar'], ['class' => 'btn btn-sm btn-primary']); ?> Con la cantidad de máscaras que ha impreso hasta el momento.</p>
         <hr/>
         <p data-intro="Recuerde registrar cada entrega luego de que lo haya visitado el distribuidor. Le comentaremos cómo puede hacer esto luego de que cargue un producto y reinicie el tutorial al hacer clic en 'Ver ayuda' nuevamente."
            data-step="3">
-          3) Luego de realizar cada entrega de máscaras, es importante que cargue los datos de Fecha, Institución u Organismo beneficiario y cantidad entregada de máscaras.</p>
+           3) Luego de realizar cada entrega de máscaras, es importante que cargue los datos de Fecha, Institución u Organismo beneficiario y cantidad entregada de máscaras.</p>
     </div>
 
     <div class="row">
@@ -189,14 +187,3 @@ $this->title = 'Registro de Makers';
     </div>
 
 </div>
-<script type="text/javascript">
-  function ejecutar_ayuda(){
-      introJs().setOptions({
-          'nextLabel': 'Siguiente >',
-          'prevLabel': '< Anterior ',
-          'skipLabel': 'Saltear',
-          'doneLabel': 'Terminar',
-          'scrollTo': 'tooltip'
-      }).start();
-  }
-</script>
