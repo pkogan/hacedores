@@ -29,7 +29,8 @@ class EntregaSearch extends Entrega
     {
         return [
             [['idEntrega', 'cantidad', 'idProducto', 'idInstitucion',
-              'idHacedor'], 'integer'],
+              'idHacedor', 'idEstado', 'idUsuarioValidador',
+              'receptor'], 'integer'],
             [['fecha', 'observacion',
               'producto.modelo.nombre', 'institucion.nombre'], 'safe'],
         ];
@@ -87,9 +88,12 @@ class EntregaSearch extends Entrega
             'idProducto' => $this->idProducto,
             'idInstitucion' => $this->idInstitucion,
             'hacedor.idHacedor' => $this->idHacedor,
+            'idUsuarioValidador' => $this->idUsuarioValidador,
+            'idEstado' => $this->idEstado,
         ]);
 
 
+        $query->andFilterWhere(['LIKE', 'receptor',  $this->receptor]);
         $query->andFilterWhere(['like', 'observacion', $this->observacion]);
 
         $dataProvider->sort->attributes['institucion.nombre'] = [
