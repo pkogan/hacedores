@@ -37,6 +37,14 @@ $this->params['breadcrumbs'][] = $this->title;
   <?= GridView::widget([
       'dataProvider' => $dataProvider,
       'filterModel' => $searchModel,
+      'rowOptions' => function ($model, $index, $widget, $grid) {
+          return [
+              'id' => $model['idEntrega'],
+              'onclick' => 'location.href="'
+                      . Yii::$app->urlManager->createUrl('entrega/view')
+                      . '&id="+(this.id);'
+          ];
+      },
       'columns' => [
           ['class' => 'yii\grid\SerialColumn'],
           
