@@ -187,3 +187,15 @@ $this->title = 'Registro de Makers';
     </div>
 
 </div>
+
+<script type="text/javascript">
+ function ejecutar_ayuda(){
+     introJs().setOptions({
+         'nextLabel': 'Siguiente >',
+         'prevLabel': '< Anterior ',
+         'skipLabel': 'Saltear',
+         'doneLabel': 'Terminar',
+         'scrollTo': 'tooltip'
+     }).start();
+ }
+</script>
