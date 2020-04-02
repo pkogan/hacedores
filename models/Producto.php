@@ -123,4 +123,13 @@ class Producto extends \yii\db\ActiveRecord
         
         return $this->cantidad - $this->cant_entregas();
     } // getStock
+
+    /**
+       Este producto, ¿tiene alguna entrega realizada?
+
+       @return {boolean}
+     */
+    public function tiene_entregas(){
+        return count($this->entregas) != 0;
+    } // tiene_entregas
 }

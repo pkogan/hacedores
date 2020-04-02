@@ -31,7 +31,7 @@ class RegistroController extends Controller {
                 'ruleConfig' => [
                     'class' => \app\models\AccessRule::className(),
                 ],
-                'only' => ['index', 'view', 'mapa', 'update', 'delete', 'create', 'resumen'],
+                'only' => ['index', 'view', 'mapa', 'update', 'delete', 'create', 'resumen','enviomasivo'],
                 'rules' => [
                         [
                         'allow' => true,
@@ -48,12 +48,11 @@ class RegistroController extends Controller {
                         'actions' => ['index', 'view', 'mapa'],
                         'roles' => [\app\models\Rol::ROL_ADMIN, \app\models\Rol::ROL_GESTOR],
                     ],
-                    [
+                        [
                         'allow' => true,
-                        'actions' => ['delete'],
+                        'actions' => ['delete','enviomasivo'],
                         'roles' => [\app\models\Rol::ROL_ADMIN],
                     ],
-                    
                 ],
             ],
         ];
@@ -104,8 +103,12 @@ class RegistroController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id) {
+        $entregaSearch=new \app\models\EntregaSearch();
+        $entregaSearch->idHacedor=$id;
+        $entregaProvider=$entregaSearch->search([]);
         return $this->render('view', [
                     'model' => $this->findModel($id),
+                    'entregaProvider'=>$entregaProvider
         ]);
     }
 
@@ -172,7 +175,7 @@ class RegistroController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id) {
-        if (($model = Registro::find()->joinWith('idCiudad0')->joinWith('productos.entregas')->where('hacedor.idHacedor='.$id)->one()) !== null) {
+        if (($model = Registro::find()->joinWith('idCiudad0')->joinWith('productos.entregas')->where('hacedor.idHacedor=' . $id)->one()) !== null) {
             return $model;
         }
 
@@ -268,7 +271,18 @@ class RegistroController extends Controller {
         return $this->render('recuperar', ['model' => $model]);
     }
 
-    protected function envioMail($modelRegistro) {
+    public function actionEnviomasivo($cantidad = 10) {
+        $models =Registro::find()->where('token is null and idUsuario is null')->limit($cantidad)->all();
+       
+        foreach ($models as $key=>$modelRegistro) {
+            $this->envioMail($modelRegistro,true);
+         
+        }
+
+        echo 'se enviaron ' . count($models) . ' de mails';
+    }
+
+    protected function envioMail($modelRegistro,$masivo=false) {
 
         $nuevaClave = substr(md5(time()), 0, 6);
         /* Agrego token y dirección a Registro */
@@ -283,11 +297,10 @@ class RegistroController extends Controller {
                     ->setSubject('Actualización del registro de Makers de la Patagonia Norte')
                     ->setHtmlBody('Estomadx, ' . $modelRegistro->apellidoNombre .
                             ', este correo es enviado por el sistema hacedores.fi.uncoma.edu.ar (registro de Makers de la Patagonia Norte). Ingrese al siguiente ' . \yii\helpers\Html::a('link', \yii\helpers\Url::base('http') . '?r=registro/recuperar2&token=' . $modelRegistro->token) .
-                            ' para cargar sus Productos Impresos, Entregas y Actualizar Stock de Material.  ')
+                            ' para cargar sus Productos Impresos, Entregas y Actualizar Stock de Material.  Muchas Gracias.')
                     ->send();
 
-
-            return $this->render('mensaje', ['mensaje' => 'Se le ha enviado un Correo Electrónico. Revise su casilla']);
+            if(!$masivo) return $this->render('mensaje', ['mensaje' => 'Se le ha enviado un Correo Electrónico. Revise su casilla']);
         } else {
             throw new \yii\base\UserException('no pudo guardar');
         }

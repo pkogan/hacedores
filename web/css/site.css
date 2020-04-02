@@ -140,3 +140,6 @@ a.desc:after {
 .counter-Txt{margin-top:10px;}
 .margin-bot-35{margin-bottom:35px;}
 }
+.jumbotron .btn {
+    margin: 2px;
+}

@@ -96,11 +96,11 @@ class RegistroSearch extends Registro
     }
 
     public static function searchQuery(){
-        $query = Registro::find()->joinWith('idCiudad0.idProvincia0')->joinWith('productos.entregas');
+        $query = Registro::find()->joinWith('idCiudad0.idProvincia0');//->joinWith('productos.entregas');
         $query->groupBy(['ciudad.idCiudad', 'provincia.provincia','ciudad.departamento_nombre','ciudad.ciudad']);
-        $query->select([ 'ciudad.idCiudad','provincia.provincia','ciudad.departamento_nombre','ciudad.ciudad', 'Count(distinct hacedor.idHacedor) as voluntarios', 'Sum(distinct impresores) as impresoras',
-            'Sum(distinct PLA) as PLA', 'Sum(distinct ABS) as ABS','Sum(distinct PETG) as PETG','Sum(distinct FLEX) as FLEX','Sum(distinct HIPS) as HIPS', 'Sum(distinct producto.cantidad) as productos1', 'Sum(entrega.cantidad) entregados',
-                       'Sum(distinct producto.cantidad)-Sum(distinct entrega.cantidad) as aentregar']);
+        $query->select([ 'ciudad.idCiudad','provincia.provincia','ciudad.departamento_nombre','ciudad.ciudad', 'Count(distinct hacedor.idHacedor) as voluntarios', 'Sum( impresores) as impresoras',
+            'Sum( PLA) as PLA', 'Sum( ABS) as ABS','Sum( PETG) as PETG','Sum( FLEX) as FLEX','Sum( HIPS) as HIPS'])->orderBy('ciudad.idCiudad');
+        //, 'Sum(distinct producto.cantidad) as productos1', 'Sum(entrega.cantidad) entregados',                       'Sum(distinct producto.cantidad)-Sum(distinct entrega.cantidad) as aentregar']);
         return $query;
     }
 
@@ -114,31 +114,36 @@ class RegistroSearch extends Registro
 
         $this->load($params);
 
-        /*if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            $dataProvider = new \yii\data\ArrayDataProvider([
-                'allModels' => $query->asArray()->all(),
-            ]);
-            return $dataProvider;
-        }*/
 
         // grid filtering conditions
-        $query->andFilterWhere([
-            //'idAsistencia' => $this->idAsistencia,
-            'provincia.idProvincia' => $this->idProvincia,
-            //'Fecha' => $this->Fecha,
-            //'Asistencia.idTipo' => $this->idTipo,
-            //'idEstadoAsistencia' => $this->idEstadoAsistencia,
+        $query->andFilterWhere(['provincia.idProvincia' => $this->idProvincia,
+          
         ]);
-        //$query->andFilterWhere(['like', 'modelos', $this->modelos]);
-/*
-        $query->andFilterWhere(['like', 'Puesto.Nombre', $this->puesto]);
-        */
-
+        
+        $resultado=$query->asArray()->all();
+        
+        $query=Registro::find()->joinWith('idCiudad0.idProvincia0')->joinWith('productos',true,'LEFT OUTER JOIN');
+        $query->select(['ciudad.idCiudad','Sum( producto.cantidad) as productos1']);//, 'Sum(entrega.cantidad) entregados', 'Sum(distinct producto.cantidad)-Sum(distinct entrega.cantidad) as aentregar']);
+         $query->groupBy(['ciudad.idCiudad'])->orderBy('ciudad.idCiudad');
+         
+        $query->andFilterWhere(['provincia.idProvincia' => $this->idProvincia]);
+        $resultado2= $query->asArray()->all();
+        
+        $query=Registro::find()->joinWith('idCiudad0.idProvincia0')->joinWith('productos.entregas',true,'LEFT OUTER JOIN');
+        $query->select(['ciudad.idCiudad','Sum( entrega.cantidad) as entregados']);//, 'Sum(entrega.cantidad) entregados', 'Sum(distinct producto.cantidad)-Sum(distinct entrega.cantidad) as aentregar']);
+         $query->groupBy(['ciudad.idCiudad'])->orderBy('ciudad.idCiudad');
+        $query->andFilterWhere(['provincia.idProvincia' => $this->idProvincia]);
+        $resultado3= $query->asArray()->all();
+        
+        //echo count($resultado). ' '. count($resultado2). ' '.count($resultado3);
+        //exit;
+        foreach ($resultado as $key => $value) {
+            $resultado[$key]= array_merge($value, array_merge($resultado2[$key],$resultado3[$key]));
+            $resultado[$key]['aentregar']=$resultado2[$key]['productos1']-$resultado3[$key]['entregados'];
+        }
         
         $dataProvider = new \yii\data\ArrayDataProvider([
-            'allModels' => $query->asArray()->all(),
+            'allModels' => $resultado,
         ]);
         return $dataProvider;
     }
@@ -147,11 +152,11 @@ class RegistroSearch extends Registro
 
     public function totalResumen($params) {
 
-        $query = Registro::find()->joinWith('idCiudad0.idProvincia0')->joinWith('productos.entregas');
+        $query = Registro::find()->joinWith('idCiudad0.idProvincia0');//->joinWith('productos.entregas',true,'LEFT OUTER JOIN');
         //$query->groupBy(['ciudad.idCiudad', 'provincia.provincia','ciudad.departamento_nombre','ciudad.ciudad']);
-        $query->select([   'Count(distinct hacedor.idHacedor) as voluntarios', 'Sum(distinct impresores) as impresoras',
-            'Sum(distinct PLA) as PLA', 'Sum(distinct ABS) as ABS','Sum(distinct PETG) as PETG','Sum(distinct FLEX) as FLEX','Sum(distinct HIPS) as HIPS', 'Sum(distinct producto.cantidad) as productos1', 'Sum(entrega.cantidad) entregados',
-                       'Sum(distinct producto.cantidad)-Sum(distinct entrega.cantidad) as aentregar']);
+        $query->select([   'Count( hacedor.idHacedor) as voluntarios', 'Sum(impresores) as impresoras',
+            'Sum( PLA) as PLA', 'Sum( ABS) as ABS','Sum( PETG) as PETG','Sum( FLEX) as FLEX','Sum( HIPS) as HIPS']);
+            //, 'Sum(distinct producto.cantidad) as productos1', 'Sum(entrega.cantidad) entregados', 'Sum(distinct producto.cantidad)-Sum(distinct entrega.cantidad) as aentregar']);
 
         $this->load($params);
 
@@ -162,11 +167,26 @@ class RegistroSearch extends Registro
             //'Asistencia.idTipo' => $this->idTipo,
             //'idEstadoAsistencia' => $this->idEstadoAsistencia,
         ]);
-
         
+          
          
         
-        return $query->asArray()->one();
+        $resultado= $query->asArray()->one();
+        
+        $query=Registro::find()->joinWith('idCiudad0.idProvincia0')->joinWith('productos',true,'LEFT OUTER JOIN');
+        $query->select(['Sum( producto.cantidad) as productos1']);//, 'Sum(entrega.cantidad) entregados', 'Sum(distinct producto.cantidad)-Sum(distinct entrega.cantidad) as aentregar']);
+        $query->andFilterWhere(['provincia.idProvincia' => $this->idProvincia]);
+        $resultado= array_merge($resultado,$query->asArray()->one());
+        
+        //$query->joinWith=[];
+        $query=Registro::find()->joinWith('idCiudad0.idProvincia0')->joinWith('entregas',true,'LEFT OUTER JOIN');
+        $query->select(['Sum(entrega.cantidad) entregados']);
+        $query->andFilterWhere(['provincia.idProvincia' => $this->idProvincia]);
+        $resultado= array_merge($resultado,$query->asArray()->one());
+        $resultado['aentregar']=$resultado['productos1']-$resultado['entregados'];
+        return $resultado;
+        
+        
     }
 
 

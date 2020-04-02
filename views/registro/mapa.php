@@ -46,7 +46,7 @@ $tileLayer = new TileLayer([
 // echo $leaflet->widget();
 
 
-$this->title = 'Mapa';
+$this->title = 'Mapa Makers Patagonia Norte';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="registro-index">

@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use yii\bootstrap\Alert;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ProductoSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -18,6 +20,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
+    <?php
+    if (($error != null) and ($error != '')){
+        echo Alert::widget([
+            'options' => ['class' => 'alert-danger'],
+            'body' => $error
+        ]);
+    }
+    ?>
+    
     <p>
       <?= Html::a('Agregar Producto',
                 ['create'],

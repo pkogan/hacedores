@@ -12,6 +12,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         Este sitio está desarrollado por la Facultad de Informática de la Universidad Nacional del Comahue    </p>
+    <p> Contacto para consultas del sistema:
+        <a href="mailto:hacedores@fi.uncoma.edu.ar">hacedores@fi.uncoma.edu.ar</a>
+    </p>
        
     <code>fuentes en github <a href="https://github.com/pkogan/hacedores">https://github.com/pkogan/hacedores</a></code>
 </div>
