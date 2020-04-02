@@ -13,6 +13,15 @@ class EntregaSearch extends Entrega
 {
 
     public $idHacedor;
+
+    /**
+     */
+    public function attributes(){
+        return array_merge(parent::attributes(),
+                      ['institucion.nombre',
+                       'producto.modelo.nombre']);
+    } // attributes
+    
     /**
      * {@inheritdoc}
      */
@@ -21,7 +30,8 @@ class EntregaSearch extends Entrega
         return [
             [['idEntrega', 'cantidad', 'idProducto', 'idInstitucion',
               'idHacedor'], 'integer'],
-            [['fecha', 'observacion'], 'safe'],
+            [['fecha', 'observacion',
+              'producto.modelo.nombre', 'institucion.nombre'], 'safe'],
         ];
     }
 
@@ -54,7 +64,8 @@ class EntregaSearch extends Entrega
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
+            // uncomment the following line if you do not want to
+            // return any records when validation fails
             // $query->where('0=1');
             return $dataProvider;
         }
@@ -63,6 +74,10 @@ class EntregaSearch extends Entrega
                     'producto.idProducto = entrega.idProducto');
         $query->join('LEFT JOIN', 'hacedor',
                     'hacedor.idHacedor = producto.idHacedor');
+        $query->join('LEFT JOIN', 'institucion',
+                    'institucion.idInstitucion = entrega.idInstitucion');
+        $query->join('LEFT JOIN', 'modelo',
+                    'producto.idModelo = modelo.idModelo');
 
         // grid filtering conditions
         $query->andFilterWhere([
@@ -76,6 +91,20 @@ class EntregaSearch extends Entrega
 
 
         $query->andFilterWhere(['like', 'observacion', $this->observacion]);
+
+        $dataProvider->sort->attributes['institucion.nombre'] = [
+            'asc' => ['institucion.nombre' => SORT_ASC],
+            'desc' => ['institucion.nombre' => SORT_DESC],
+        ];
+        $query->andFilterWhere(['LIKE', 'institucion.nombre',
+                               $this->getAttribute('institucion.nombre')]);
+
+        $dataProvider->sort->attributes['producto.modelo.nombre'] = [
+            'asc' => ['modelo.nombre' => SORT_ASC],
+            'desc' => ['modelo.nombre' => SORT_DESC],
+        ];
+        $query->andFilterWhere(['LIKE', 'modelo.nombre',
+                               $this->getAttribute('producto.modelo.nombre')]);
 
         return $dataProvider;
     }
