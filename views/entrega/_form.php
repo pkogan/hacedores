@@ -10,13 +10,13 @@ use app\models\Institucion;
 /* @var $model app\models\Entrega */
 /* @var $form yii\widgets\ActiveForm */
 
-$lst_productos = [];
-if (isset($productos)){
-    foreach ($productos as $prod){
-        $lst_productos[$prod->idProducto] =
-            $prod->short_string();
-    }
-}
+//$lst_productos = [];
+//if (isset($productos)){
+//    foreach ($productos as $prod){
+//        $lst_productos[$prod->idProducto] =
+//            $prod->short_string();
+//    }
+//}
 ?>
 
 <div class="entrega-form">
@@ -45,20 +45,24 @@ if (isset($productos)){
   ?>
 
   <?= $form->field($model, 'cantidad')->textInput() ?>
-    <p>En el caso de no Encontrar la Institución o tratarse de un caso particular agregar la Información detallada en el siguiente campo</p>
+    <p>Detalle Nombre, Apellido, Cargo e Institución del Receptor de la Entrega</p>
+    <?= $form->field($model, 'receptor')->textInput() ?>
   <?php
    echo $form->field($model, 'observacion')->textarea(['maxlength' => true])
   ?>
 
   <div class="form-group">
     <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?> 
-    <?php if(isset($model->idEntrega)) echo Html::a('Eliminar', ['delete', 'id' => $model->idEntrega], [
+    <?php if(isset($model->idEntrega)) {
+        echo Html::a('Eliminar', ['delete', 'id' => $model->idEntrega], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Está seguro de eliminar la entrega?',
                 'method' => 'post',
             ],
-        ]) ?>
+    ]);
+           //echo '<a href="whatsapp://send?text=Entrega'.$model->idEntrega.' '.  \yii\helpers\Url::base('http') . '?r=entrega/view&id=' . $model->idEntrega .'">WS</a>';
+    } ?>
   </div>
 
   <?php ActiveForm::end(); ?>

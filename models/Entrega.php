@@ -11,6 +11,9 @@ use Yii;
  * @property string $fecha
  * @property int $cantidad
  * @property string $observacion
+ * @property string $receptor De la entrega
+ * @property int $idEstado Estado de la entrego por defecto 0
+ * @property int $idUsuarioValidador Usuario Validador de la entrega
  *
  */
 class Entrega extends \yii\db\ActiveRecord
@@ -29,8 +32,8 @@ class Entrega extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['fecha', 'cantidad','idInstitucion'], 'required'],
-            [['cantidad'], 'integer'],
+            [['fecha', 'cantidad','idInstitucion','receptor'], 'required'],
+            [['cantidad','idEstado','idUsuarioValidador'], 'integer'],
             [['fecha'], 'safe'],
             [['observacion'], 'string', 'max' => 300],
             [['cantidad'],'number','min'=>1,'max'=>1000],
@@ -56,6 +59,7 @@ class Entrega extends \yii\db\ActiveRecord
             'fecha' => 'Fecha',
             'cantidad' => 'Cantidad Entregada',
             'observacion' => 'Observación',
+            'receptor'=>'Receptor'
         ];
     }
 
