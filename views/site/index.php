@@ -10,6 +10,7 @@ $this->title = 'Registro de Makers';
 ?>
 <div class="site-index">
 
+  <?= $this->render('_carousel_modelos.php'); ?>
 
     <div class="jumbotron">
         <h1>Registro de Makers</h1>

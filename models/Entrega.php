@@ -59,7 +59,9 @@ class Entrega extends \yii\db\ActiveRecord
             'fecha' => 'Fecha',
             'cantidad' => 'Cantidad Entregada',
             'observacion' => 'Observación',
-            'receptor'=>'Receptor'
+            'receptor '=> 'Receptor',
+            'idEstado' => 'Estado',
+            'idUsuarioValidador' => 'Id usuario validador',
         ];
     }
 

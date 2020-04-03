@@ -15,41 +15,57 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="entrega-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+  <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-      <?= Html::a('Registrar Entrega', ['create'],
-                ['class' => 'btn btn-success']) ?>
-    </p>
+  <p>
+    <?= Html::a('Registrar Entrega', ['create'],
+              ['class' => 'btn btn-success']) ?>
+  </p>
 
-    <?php
-    if ($can_view['todos']){
-        echo Alert::widget([
-            'options' => ['class' => 'alert-warning'],
-            'body' => 'Debido a su rol, puede ver todas las entregas',
-        ]);
-    }
-    ?>
-    
-    <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+  <?php
+  if ($can_view['todos']){
+      echo Alert::widget([
+          'options' => ['class' => 'alert-warning'],
+          'body' => 'Debido a su rol, puede ver todas las entregas',
+      ]);
+  }
+  ?>
+  
+  <?php Pjax::begin(); ?>
+  <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            
-            'idEntrega',
-            'fecha',
-            'cantidad',
-            'producto.modelo.nombre',
-            ['attribute' => 'institucion.nombre',
-             'label' => 'Entregado a'],
+  <?= GridView::widget([
+      'dataProvider' => $dataProvider,
+      'filterModel' => $searchModel,
+      'rowOptions' => function ($model, $index, $widget, $grid) {
+          return [
+              'id' => $model['idEntrega'],
+              'onclick' => 'location.href="'
+                      . Yii::$app->urlManager->createUrl('entrega/view')
+                      . '&id="+(this.id);'
+          ];
+      },
+      'columns' => [
+          ['class' => 'yii\grid\SerialColumn'],
+          
+          'idEntrega',
+          'fecha',
+          ['attribute' => 'producto.modelo.nombre',
+           'label' => 'Nombre modelo'],          
+          'cantidad',
+          'receptor',
+          ['attribute' => 'idEstado',
+           'label' => 'Estado',
+           'filter' => [
+               '0' => 'En espera',
+               '1' => 'Validado'
+          ]],                
+          ['attribute' => 'institucion.nombre',
+           'label' => 'Entregado a'],
 
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+          ['class' => 'yii\grid\ActionColumn'],
+      ],
+  ]); ?>
 
     <?php Pjax::end(); ?>
 
