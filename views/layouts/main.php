@@ -75,7 +75,7 @@ AppAsset::register($this);
                             && in_array(Yii::$app->user->identity->idRol,
                                        [\app\models\Rol::ROL_ADMIN,
                                         app\models\Rol::ROL_GESTOR])],
-                    ['label' => 'Pedidos (Demanda)', 'url' => ['/pedido'],
+                    ['label' => 'Pedidos (Entregas Gestor)', 'url' => ['/pedido'],
                      'visible' => !Yii::$app->user->isGuest
                             && in_array(Yii::$app->user->identity->idRol,
                                        [\app\models\Rol::ROL_ADMIN,

@@ -46,3 +46,10 @@ ALTER TABLE `institucion` ADD `idEstablecimiento` BIGINT NULL AFTER `tipologia`;
  * 
  */
 
+/* agregar id Ciudad en Pedido */
+
+ALTER TABLE `pedido` ADD `idCiudad` BIGINT NOT NULL AFTER `idPedido`, ADD INDEX (`idCiudad`);
+UPDATE `pedido`,institucion SET pedido.`idCiudad`=institucion.idCiudad where pedido.idInstitucion=institucion.idInstitucion;
+ALTER TABLE `pedido` ADD FOREIGN KEY (`idCiudad`) REFERENCES `ciudad`(`idCiudad`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+        

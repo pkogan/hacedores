@@ -17,11 +17,18 @@ class PedidoSearch extends Pedido
     /**
      * {@inheritdoc}
      */
+    public function attributes(){
+        return array_merge(parent::attributes(),
+                      [
+                'idCiudad0.ciudad'  ]);
+    }
+    
+    
     public function rules()
     {
         return [
             [['idPedido', 'idInstitucion', 'idSolicitante', 'idModelo', 'cantidad', 'idEstado'], 'integer'],
-            [['estadoFilter','usuarioFilter','institucionFilter','fecha', 'observacion', 'imagen'], 'safe'],
+            [['estadoFilter','idCiudad0.ciudad','usuarioFilter','institucionFilter','fecha', 'observacion', 'imagen'], 'safe'],
         ];
     }
 
@@ -43,7 +50,7 @@ class PedidoSearch extends Pedido
      */
     public function search($params)
     {
-        $query = Pedido::find()->joinWith('idInstitucion0')->joinWith('idSolicitante0');
+        $query = Pedido::find()->joinWith('idInstitucion0')->joinWith('idSolicitante0')->joinWith('idCiudad0');
 
         // add conditions that should always apply here
 
@@ -74,6 +81,7 @@ class PedidoSearch extends Pedido
             ->andFilterWhere(['like', 'imagen', $this->imagen])
             ->andFilterWhere(['like', 'institucion.nombre', $this->institucionFilter])
             ->andFilterWhere(['like', 'usuario.nombreUsuario', $this->usuarioFilter])
+            ->andFilterWhere(['like', 'ciudad.ciudad', $this->getAttribute('idCiudad0.ciudad')])
                 ->andFilterWhere(['like', 'estado.estado', $this->estadoFilter]);
 
         return $dataProvider;

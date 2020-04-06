@@ -16,17 +16,21 @@ use Yii;
  * @property int $idModelo
  * @property int $cantidad
  * @property int $idEstado
+ * @property int $idCiudad
  *
  * @property Institucion $idInstitucion0
  * @property Usuario $idSolicitante0
  * @property Modelo $idModelo0
  * @property Estado $idEstado0
+ * @property Ciudad $idCiudad0
  */
 class Pedido extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
+    public $idProvincia;
+    
     public static function tableName()
     {
         return 'pedido';
@@ -38,8 +42,8 @@ class Pedido extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['idInstitucion', 'idSolicitante', 'fecha', 'cantidad','idModelo', 'idEstado'], 'required'],
-            [['idInstitucion', 'idSolicitante', 'idModelo', 'cantidad', 'idEstado'], 'integer'],
+            [['idInstitucion', 'idSolicitante', 'fecha', 'cantidad','idModelo', 'idEstado','idCiudad'], 'required'],
+            [['idInstitucion', 'idSolicitante', 'idModelo', 'cantidad', 'idEstado','idCiudad'], 'integer'],
             [['fecha'], 'safe'],
             [['observacion'], 'string', 'max' => 300],
             [['imagen'], 'string', 'max' => 200],
@@ -47,6 +51,7 @@ class Pedido extends \yii\db\ActiveRecord
             [['idSolicitante'], 'exist', 'skipOnError' => true, 'targetClass' => Usuario::className(), 'targetAttribute' => ['idSolicitante' => 'idUsuario']],
             [['idModelo'], 'exist', 'skipOnError' => true, 'targetClass' => Modelo::className(), 'targetAttribute' => ['idModelo' => 'idModelo']],
             [['idEstado'], 'exist', 'skipOnError' => true, 'targetClass' => Estado::className(), 'targetAttribute' => ['idEstado' => 'idEstado']],
+            [['idCiudad'], 'exist', 'skipOnError' => true, 'targetClass' => Ciudad::className(), 'targetAttribute' => ['idCiudad' => 'idCiudad']],
         ];
     }
 
@@ -65,6 +70,7 @@ class Pedido extends \yii\db\ActiveRecord
             'idModelo' => 'Modelo',
             'cantidad' => 'Cantidad',
             'idEstado' => 'Estado',
+             'idCiudad' => 'Ciudad',
         ];
     }
 
@@ -106,5 +112,9 @@ class Pedido extends \yii\db\ActiveRecord
     public function getIdEstado0()
     {
         return $this->hasOne(Estado::className(), ['idEstado' => 'idEstado']);
+    }
+        public function getIdCiudad0()
+    {
+        return $this->hasOne(Ciudad::className(), ['idCiudad' => 'idCiudad']);
     }
 }
