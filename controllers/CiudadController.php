@@ -51,7 +51,7 @@ class CiudadController extends Controller {
             $parents = $_POST['depdrop_parents'];
             if ($parents != null) {
                 $idProvincia = $parents[0];
-                $out = \yii\helpers\ArrayHelper::toArray(\app\models\Ciudad::find()->where("idProvincia in ($idProvincia)")->orderBy('ciudad')->all(), [
+                $out = \yii\helpers\ArrayHelper::toArray(\app\models\Ciudad::find()->where("idProvincia in ($idProvincia) and categoria<>".'"ENTIDAD"')->orderBy('ciudad')->all(), [
                             'app\models\Ciudad' => [
                                 'id' => 'idCiudad',
                                 'name' => 'ciudad'

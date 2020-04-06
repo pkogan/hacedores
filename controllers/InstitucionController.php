@@ -17,6 +17,34 @@ class InstitucionController extends Controller
     /**
      * {@inheritdoc}
      */
+        public function actionCombo() {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $idProvincia = $parents[0];
+                $idCiudad = $parents[1];
+                $out = \yii\helpers\ArrayHelper::toArray(\app\models\Institucion::find()->where("idCiudad in ($idCiudad) and idTipologia=10")->orderBy('nombre')->all(), [
+                            'app\models\Institucion' => [
+                                'id' => 'idInstitucion',
+                                'name' => 'nombre'
+                            ]
+                ]);
+                //hack otro
+                $out= array_merge( $out,[['id'=>2,'name'=>'OTRO']]);
+                // the getSubCatList function will query the database based on the
+                // cat_id and return an array like below:
+                // [
+                //    ['id'=>'<sub-cat-id-1>', 'name'=>'<sub-cat-name1>'],
+                //    ['id'=>'<sub-cat_id_2>', 'name'=>'<sub-cat-name2>']
+                // ]
+                return ['output' => $out, 'selected' => ''];
+            }
+        }
+        return ['output' => '', 'selected' => ''];
+    }
+    
     public function behaviors()
     {
         return [

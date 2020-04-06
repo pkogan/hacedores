@@ -9,29 +9,29 @@ IntrojsAsset::register($this);
 $this->title = 'Registro de Makers';
 ?>
 <div class="site-index">
+          <?= $this->render('_carousel_modelos.php'); ?>
 
-  <?= $this->render('_carousel_modelos.php'); ?>
 
     <div class="jumbotron">
+
         <h1>Registro de Makers</h1>
-        <h3><span class="card-group"><span class="glyphicon glyphicon-user"></span><?= $total['voluntarios'] ?> Voluntarios</span> | <span class="card-group"> <span class="glyphicon glyphicon-tasks"> </span><?= $total['impresoras'] ?> Impresoras</span>
-         | <span><span class="glyphicon glyphicon-cog"></span><?= $total['productos1'] ?> Mascaras Impresas</span> | <span> <span class="glyphicon glyphicon-send"> </span><?= $total['entregados'] ?> Entregadas</span>
-        </h3>
-<!--        <div class="row " >
-            <div class="col-lg-3 ">
-                <div class="employees" >
-                    <p class="counter-count"><?= $total['voluntarios'] ?>
-                    </p>
-                    <p class="employee-p">Voluntarios</p>
-                </div>
+        <row>
+            <div class="col-md-3">
+                <h3><span class="glyphicon glyphicon-user"></span><?= $total['voluntarios'] ?><br/> Voluntarios</h3>
             </div>
-            <div class="col-lg-3 " >
-                <div class="customer">
-                    <p class="counter-count"><?= $total['impresoras'] ?></p>
-                    <p class="customer-p">Impresoras</p>
-                </div>
+            <div class="col-md-3">
+                <h3><span class="glyphicon glyphicon-tasks"> </span><?= $total['impresoras'] ?><br/> Impresoras</h3>
             </div>
-        </div>-->
+            <div class="col-md-3">
+                <h3><span class="glyphicon glyphicon-cog"></span><?= $total['productos1'] ?> Máscaras<br/> Impresas</h3> 
+            </div>
+            <div class="col-md-3">
+                    <h3><span class="glyphicon glyphicon-send"> </span><?= $total['entregados'] ?> Máscaras <br/> Entregadas</h3>
+            </div>
+        </row>
+        <br/>
+         
+
 
     <p class="lead">El objetivo de esta aplicación es afrontar la demanda de insumos impresos en impresoras 3d para combatir el COVID-19, de forma colaborativa, juntando fuerzas de grupos y redes de makers.</p>
     <p class="lead"><?= Html::a('Login/Registro', ['site/login'], ['class' => 'btn btn-success']) ?> <a class="btn btn-success" href="#modelo">Descargar Modelo</a>

@@ -19,7 +19,9 @@ class EntregaSearch extends Entrega
     public function attributes(){
         return array_merge(parent::attributes(),
                       ['institucion.nombre',
-                       'producto.modelo.nombre']);
+                       'producto.modelo.nombre',
+                        'producto.hacedor.apellidoNombre',
+                'ciudad.ciudad'  ]);
     } // attributes
     
     /**
@@ -29,10 +31,11 @@ class EntregaSearch extends Entrega
     {
         return [
             [['idEntrega', 'cantidad', 'idProducto', 'idInstitucion',
-              'idHacedor', 'idEstado', 'idUsuarioValidador',
-              'receptor'], 'integer'],
+              'idHacedor', 'idEstado', 'idUsuarioValidador'
+              ], 'integer'],
             [['fecha', 'observacion',
-              'producto.modelo.nombre', 'institucion.nombre'], 'safe'],
+              'producto.modelo.nombre', 'institucion.nombre','receptor','producto.hacedor.apellidoNombre',
+                'ciudad.ciudad'], 'safe'],
         ];
     }
 
@@ -71,11 +74,11 @@ class EntregaSearch extends Entrega
             return $dataProvider;
         }
 
-        $query->join('LEFT JOIN', 'producto',
-                    'producto.idProducto = entrega.idProducto');
-        $query->join('LEFT JOIN', 'hacedor',
-                    'hacedor.idHacedor = producto.idHacedor');
-        $query->join('LEFT JOIN', 'institucion',
+        /*$query->join('LEFT JOIN', 'producto',
+                    'producto.idProducto = entrega.idProducto');*/
+        $query->joinWith('producto.hacedor');
+        $query->joinWith('ciudad');
+        $query->join('LEFT Outer JOIN', 'institucion',
                     'institucion.idInstitucion = entrega.idInstitucion');
         $query->join('LEFT JOIN', 'modelo',
                     'producto.idModelo = modelo.idModelo');
@@ -93,7 +96,7 @@ class EntregaSearch extends Entrega
         ]);
 
 
-        $query->andFilterWhere(['LIKE', 'receptor',  $this->receptor]);
+        $query->andFilterWhere(['like', 'receptor',  $this->receptor]);
         $query->andFilterWhere(['like', 'observacion', $this->observacion]);
 
         $dataProvider->sort->attributes['institucion.nombre'] = [
@@ -109,6 +112,10 @@ class EntregaSearch extends Entrega
         ];
         $query->andFilterWhere(['LIKE', 'modelo.nombre',
                                $this->getAttribute('producto.modelo.nombre')]);
+        $query->andFilterWhere(['LIKE', 'ciudad.ciudad',
+                               $this->getAttribute('ciudad.ciudad')]);
+        $query->andFilterWhere(['LIKE', 'hacedor.apellidoNombre',
+                               $this->getAttribute('producto.hacedor.apellidoNombre')]);
 
         return $dataProvider;
     }

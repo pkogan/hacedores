@@ -18,8 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
   <h1><?= Html::encode($this->title) ?></h1>
 
   <p>
-    <?= Html::a('Registrar Entrega', ['create'],
-              ['class' => 'btn btn-success']) ?>
+    <?php //echo Html::a('Registrar Entrega', ['create'],['class' => 'btn btn-success']) ?>
   </p>
 
   <?php
@@ -50,20 +49,26 @@ $this->params['breadcrumbs'][] = $this->title;
           
           'idEntrega',
           'fecha',
+          ['attribute' => 'ciudad.ciudad',
+           'label' => 'Ciudad'],
+          ['attribute' => 'producto.hacedor.apellidoNombre',
+           'label' => 'Maker'],
+           ['attribute' => 'institucion.nombre',
+           'label' => 'Institucion'],
+                    'receptor',
+
           ['attribute' => 'producto.modelo.nombre',
-           'label' => 'Nombre modelo'],          
+           'label' => 'Nombre Modelo'],          
           'cantidad',
-          'receptor',
           ['attribute' => 'idEstado',
            'label' => 'Estado',
            'filter' => [
                '0' => 'En espera',
                '1' => 'Validado'
           ]],                
-          ['attribute' => 'institucion.nombre',
-           'label' => 'Entregado a'],
 
-          ['class' => 'yii\grid\ActionColumn'],
+
+         // ['class' => 'yii\grid\ActionColumn'],
       ],
   ]); ?>
 

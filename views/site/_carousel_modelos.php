@@ -5,19 +5,20 @@ use yii\bootstrap\Carousel;
 
 $items = [];
 $images = [
-    '@web/img/index-carrousel/doctor-1.jpeg',
-    '@web/img/index-carrousel/enfermera-1.jpeg',
-    '@web/img/index-carrousel/impresora-1.jpeg',
-    '@web/img/index-carrousel/mascaras-1.jpeg',
-    '@web/img/index-carrousel/mascaras-2.jpeg',
-    '@web/img/index-carrousel/mascaras-3.jpeg',
-    '@web/img/index-carrousel/mascaras-4.jpeg',
+        '@web/img/index-carrousel/doctor.png',
+    '@web/img/index-carrousel/modelo.png',
+//    '@web/img/index-carrousel/impresora.jpeg',
+    '@web/img/index-carrousel/impresoras.jpeg',
+    '@web/img/index-carrousel/mascaras.png',
+
+    '@web/img/index-carrousel/enfermera.png',
 ];
 foreach ($images as $image){
     $items[] = [
         'content' => Html::img($image,
-                             ['style' => 'height: 400px',
-                              'class' => 'center-block']),
+                             ['style' => 'height: 200px',
+                              'class' => 'center-block'
+                                 ]),
     ];
 }
 

@@ -38,10 +38,28 @@ class EntregaController extends Controller {
                     //'class' => AccessRule::className(),
                         [
                         'allow' => true,
-                        'actions' => ['index', 'view',
+                        'actions' => ['view',
+                        ],
+                        'roles' => ['?'],
+                    ],
+                        [
+                        'allow' => true,
+                        'actions' => ['view', 'index', 'validar'
+                        ],
+                        'roles' => [\app\models\Rol::ROL_GESTOR],
+                    ],
+                        [
+                        'allow' => true,
+                        'actions' => ['view',
                             'update', 'delete', 'create'],
-                        'roles' => [\app\models\Rol::ROL_ADMIN,
+                        'roles' => [
                             \app\models\Rol::ROL_MAKER],
+                    ],
+                        [
+                        'allow' => true,
+                        'actions' => ['index', 'view',
+                            'update', 'delete', 'create', 'validar'],
+                        'roles' => [\app\models\Rol::ROL_ADMIN],
                     ],
                 ],
             ],
@@ -60,7 +78,7 @@ class EntregaController extends Controller {
         // Nos aseguramos de que pueda ver sus productos a menos que tenga
         // los permisos.
         $params = Yii::$app->request->queryParams;
-        if (Yii::$app->user->identity->idRol == Rol::ROL_ADMIN) {
+        if (in_array(Yii::$app->user->identity->idRol, [Rol::ROL_ADMIN, Rol::ROL_GESTOR])) {
             $can_view['todos'] = true;
         } else {
             if ($hacedor != null) {
@@ -105,16 +123,18 @@ class EntregaController extends Controller {
         } else {
             throw new NotFoundHttpException('No existe el Producto');
         }
+        return $model->idHacedor0;
     }
 
     public function actionCreate($idProducto) {
-        $this->validarDuenoProducto(Producto::findOne($idProducto));
+        $hacedor=$this->validarDuenoProducto(Producto::findOne($idProducto));
 
 
         $model = new Entrega();
         $model->idProducto = $idProducto;
         $model->fecha = date('Y-m-d');
-        
+        $model->idCiudad=$hacedor->idCiudad;
+
         $bien = true;
         if (Yii::$app->request->isPost) {
             $model->load(Yii::$app->request->post());
@@ -132,7 +152,8 @@ class EntregaController extends Controller {
                     throw new \Exception($error);
                 }
                 if ($model->save()) {
-                    return $this->goHome(); //$this->redirect(['site/index']);
+                    //return $this->goHome(); //$this->redirect(['site/index']);
+                    return $this->redirect(['view','id'=>$model->idEntrega]);
                 }
             }
         }
@@ -145,15 +166,15 @@ class EntregaController extends Controller {
         }
 
 
-        $hacedor = Hacedor::por_usuario(Yii::$app->user->identity->idUsuario);
-        $productos = Producto::find()
+        //$hacedor = Hacedor::por_usuario(Yii::$app->user->identity->idUsuario);
+        /*$productos = Producto::find()
                 ->where(['idHacedor' => $hacedor->idHacedor])
                 ->all();
-
+*/
 
         return $this->render('create', [
                     'model' => $model,
-                    'productos' => $productos,
+                   // 'productos' => $productos,
                     'error' => $error,
         ]);
     }
@@ -176,7 +197,8 @@ class EntregaController extends Controller {
             if ($model->cantidad > $stockSinActual) {
                 $model->addError('cantidad', 'La cantidad a entregar supera a la del producto(' . $stockSinActual . ')');
             } elseif ($model->save()) {
-                return $this->goHome();
+                //return $this->goHome();
+                return $this->redirect(['view', 'id' => $model->idEntrega]);
             }
         }
         if ($model->fecha == null) {
@@ -204,6 +226,24 @@ class EntregaController extends Controller {
         $model->delete();
 
         return $this->goHome();
+    }
+
+    public function actionValidar($id, $idEstado) {
+        $model = $this->findModel($id);
+
+        //$this->validarDuenoProducto($model->producto);
+        $model->idEstado = $idEstado;
+        //hack receptor vacio
+        if ($model->receptor=='') {
+            $model->receptor = 'Sin Especificar';
+        }
+        if ($model->save()) {
+            return $this->redirect(['view', 'id' => $id]);
+        } else {
+            //print_r($model->getErrors());exit();
+            print_r($model);
+            throw new \yii\base\UserException('No se pudo cambiar a estado ' . $idEstado . '. ' . implode(', ', $model->getErrorSummary(true)));
+        }
     }
 
     /**

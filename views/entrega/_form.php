@@ -25,12 +25,39 @@ use app\models\Institucion;
 
   <?php // $form->field($model, 'idProducto')->dropdownList($lst_productos) ?>
 
-  <?= $form->field($model, 'idInstitucion')->dropdownList(
-      Institucion::find()
-                 ->select(['nombre'])
-                 ->indexBy('idInstitucion')
-                 ->column()
-  ,['prompt' => 'Seleccionar ...']) ?>
+ <?php
+    $options = [
+        'options' => ['id' => 'idCiudad', 'placeholder' => 'Seleccionar ...'],
+        'id' => 'idCuidad',
+        'pluginOptions' => [
+            'depends' => ['idProvincia'],
+            'url' => \yii\helpers\Url::to(['/ciudad/combo'])
+    ]];
+        $optionsInstitucion=[
+        'options' => ['id' => 'idInstitucion', 'placeholder' => 'Seleccionar ...'],
+        'id' => 'idInstitucion',
+        'pluginOptions' => [
+            'depends' => ['idProvincia','idCiudad'],
+            'url' => \yii\helpers\Url::to(['/institucion/combo'])
+    ]];
+
+    if (!is_null($model->idCiudad)) {
+        $model->idProvincia = $model->ciudad->idProvincia;
+
+        $options['data'] = yii\helpers\ArrayHelper::map(\app\models\Ciudad::find()->where("idProvincia in ($model->idProvincia) and categoria<>".'"ENTIDAD"')->orderBy('ciudad')->all(), 'idCiudad', 'ciudad');
+        $optionsInstitucion['data'] = array_merge(yii\helpers\ArrayHelper::map(\app\models\Institucion::find()->where("idCiudad in ($model->idCiudad) and idTipologia=10")->orderBy('nombre')->all(), 'idInstitucion', 'nombre'),[2=>'OTRO']);
+    }
+    
+
+    echo $form->field($model, 'idProvincia')->dropDownList(yii\helpers\ArrayHelper::map(\app\models\Provincia::find()->orderBy('provincia')->all(), 'idProvincia', 'provincia'), ['id' => 'idProvincia', 'prompt' => 'Seleccionar ...'])
+    ?>
+
+    <?=
+    $form->field($model, 'idCiudad')->widget(\kartik\depdrop\DepDrop::classname(), $options)
+    ?>   
+    
+    
+  <?= $form->field($model, 'idInstitucion')->widget(\kartik\depdrop\DepDrop::classname(), $optionsInstitucion) ?>
 
   <?= $form->field($model, 'fecha')
          ->widget(
@@ -53,7 +80,7 @@ use app\models\Institucion;
 
   <div class="form-group">
     <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?> 
-    <?php if(isset($model->idEntrega)) {
+    <?php /* if(isset($model->idEntrega)) {
         echo Html::a('Eliminar', ['delete', 'id' => $model->idEntrega], [
             'class' => 'btn btn-danger',
             'data' => [
@@ -62,7 +89,7 @@ use app\models\Institucion;
             ],
     ]);
            //echo '<a href="whatsapp://send?text=Entrega'.$model->idEntrega.' '.  \yii\helpers\Url::base('http') . '?r=entrega/view&id=' . $model->idEntrega .'">WS</a>';
-    } ?>
+    } */?>
   </div>
 
   <?php ActiveForm::end(); ?>

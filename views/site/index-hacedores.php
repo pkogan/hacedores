@@ -54,7 +54,7 @@ $this->title = 'Registro de Makers';
                     ?>
                                 </div>
                                 <div class="col-sm-4 counter-Txt"> <span class="glyphicon glyphicon-send"></span> <span class="counter-value" data-count="25"><?= $producto->cant_entregas() ?> </span> Entregadas<br/>
-                                    <?= Html::a('3) Agregar</br>Entrega', ['entrega/create', 'idProducto' => $producto->idProducto], ['class' => 'btn btn-warning', 'data-intro' => 'Si entregó al distribuidor una cantidad de producción de este modelo, haga clic aquí.']) ?>
+                                    <?= Html::a('3) Agregar</br>Entrega', ['entrega/create', 'idProducto' => $producto->idProducto], ['class' => 'btn btn-warning', 'data-intro' => 'Si realizó una Entrega de su producción de este modelo, haga clic aquí.']) ?>
                                 </div>
                                 <div class="col-sm-4 counter-Txt margin-bot-35"> <span class="glyphicon glyphicon-tasks" ></span> <span class="counter-value" data-count="150"><?= $producto->stock ?></span> Para  Entregar<br/>
                                     <?php if (count($producto->entregas)==0) echo 
@@ -78,7 +78,7 @@ $this->title = 'Registro de Makers';
 
                 <?php } ?>
             </div>
-            <div class="row" id='entregas' data-intro="Las entregas que usted registre se mostrarán aquí. Recuerde registrarlas todas con el botón '3) Agregar Entrega' apenas entrege su producción al distribuidor.">
+            <div class="row" id='entregas' data-intro="Las entregas que usted registre se mostrarán aquí. Recuerde registrarlas todas con el botón '3) Agregar Entrega' apenas entrege su producción a una Institución, Referente Zonal o Particular.">
 
 
                 <h3>Entregas</h3>
@@ -93,7 +93,7 @@ $this->title = 'Registro de Makers';
                         return [
                             'id' => $model['idEntrega'],
                             'onclick' => 'location.href="'
-                            . Yii::$app->urlManager->createUrl('entrega/update')
+                            . Yii::$app->urlManager->createUrl('entrega/view')
                             . '&id="+(this.id);'
                         ];
                     },
@@ -133,7 +133,7 @@ $this->title = 'Registro de Makers';
            data-step="2">
            <?= Html::a('2) Actualizar Producción', ['producto/agregar'], ['class' => 'btn btn-sm btn-primary']); ?> Con la cantidad de máscaras que ha impreso hasta el momento.</p>
         <hr/>
-        <p data-intro="Recuerde registrar cada entrega luego de que lo haya visitado el distribuidor. Le comentaremos cómo puede hacer esto luego de que cargue un producto y reinicie el tutorial al hacer clic en 'Ver ayuda' nuevamente."
+        <p data-intro="Recuerde registrar cada entrega luego de concretada. Le comentaremos cómo puede hacer esto luego de que cargue un producto y reinicie el tutorial al hacer clic en 'Ver ayuda' nuevamente."
            data-step="3">
            3) Luego de realizar cada entrega de máscaras, es importante que cargue los datos de Fecha, Institución u Organismo beneficiario y cantidad entregada de máscaras.</p>
     </div>
@@ -193,7 +193,7 @@ $this->title = 'Registro de Makers';
      introJs().setOptions({
          'nextLabel': 'Siguiente >',
          'prevLabel': '< Anterior ',
-         'skipLabel': 'Saltear',
+         'skipLabel': 'Cerrar Ayuda',
          'doneLabel': 'Terminar',
          'scrollTo': 'tooltip'
      }).start();

@@ -41,6 +41,8 @@ $this->params['breadcrumbs'][] = $this->title;
             //'logo',
             ['label' => 'Provincia', 'attribute' => 'provinciaFiltro', 'value' => 'idCiudad0.idProvincia0.provincia'],
             ['label' => 'Ciudad', 'attribute' => 'ciudadFiltro', 'value' => 'idCiudad0.ciudad'],
+            'idTipologia',
+            'siglaTipologia',
             ['label' => 'Productos Pedidos', 'value' => 'sumpedidos'],
             ['label' => 'Productos Entregados', 'value' =>'sumentregada']
             //'direccion',

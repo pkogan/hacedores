@@ -48,12 +48,7 @@ AppAsset::register($this);
                     ['label' => 'Productos', 'url' => ['/producto'],
                      'visible' => !Yii::$app->user->isGuest
                             && Yii::$app->user->identity->idRol == \app\models\Rol::ROL_ADMIN],
-                    ['label' => 'Entregas', 'url' => ['/entrega'],
-                     'visible' => !Yii::$app->user->isGuest
-                            && in_array(Yii::$app->user->identity->idRol,
-                                       [\app\models\Rol::ROL_ADMIN,
-                                        \app\models\Rol::ROL_GESTOR])
-                    ],
+                    
                     ['label' => 'Modelos',
                      'url' => ['/modelo'],
                      'visible' => !Yii::$app->user->isGuest
@@ -69,7 +64,12 @@ AppAsset::register($this);
                                        [\app\models\Rol::ROL_ADMIN,
                                         app\models\Rol::ROL_GESTOR])
                     ],
-                    
+                    ['label' => 'Entregas', 'url' => ['/entrega'],
+                     'visible' => !Yii::$app->user->isGuest
+                            && in_array(Yii::$app->user->identity->idRol,
+                                       [\app\models\Rol::ROL_ADMIN,
+                                        \app\models\Rol::ROL_GESTOR])
+                    ],
                     ['label' => 'Institucion', 'url' => ['/institucion'],
                      'visible' => !Yii::$app->user->isGuest
                             && in_array(Yii::$app->user->identity->idRol,
@@ -81,8 +81,8 @@ AppAsset::register($this);
                                        [\app\models\Rol::ROL_ADMIN,
                                         app\models\Rol::ROL_GESTOR])],
 
-                    [ 'label' => 'Usuario',
-                      'items' => [
+                   /* [ 'label' => 'Usuario',
+                      'items' => [*/
                           
                           ['label' => 'Usuarios', 'url' => ['/usuario'],
                            'visible' => !Yii::$app->user->isGuest
@@ -101,8 +101,8 @@ AppAsset::register($this);
                             . '</li>'
                           )
                       ],
-                    ],
-                ],
+                 /*   ],
+                ],*/
             ]);
             NavBar::end();
             ?>

@@ -20,7 +20,7 @@ class InstitucionSearch extends Institucion {
     public function rules() {
         return [
                 [['idInstitucion', 'idCiudad'], 'integer'],
-                [['provinciaFiltro', 'ciudadFiltro', 'nombre', 'logo', 'direccion', 'tel'], 'safe'],
+                [['idTipologia','provinciaFiltro', 'ciudadFiltro', 'siglaTipologia','nombre', 'logo', 'direccion', 'tel'], 'safe'],
         ];
     }
 
@@ -62,12 +62,14 @@ class InstitucionSearch extends Institucion {
         $query->andFilterWhere([
             'idInstitucion' => $this->idInstitucion,
             'idCiudad' => $this->idCiudad,
+            'idTipologia'=>$this->idTipologia
         ]);
 
         $query->andFilterWhere(['like', 'nombre', $this->nombre])
                 ->andFilterWhere(['like', 'logo', $this->logo])
                 ->andFilterWhere(['like', 'direccion', $this->direccion])
                 ->andFilterWhere(['like', 'tel', $this->tel])
+                                ->andFilterWhere(['like', 'siglaTipologia', $this->siglaTipologia])
                 ->andFilterWhere(['like', 'ciudad.ciudad', $this->ciudadFiltro])
                 ->andFilterWhere(['like', 'provincia.provincia', $this->provinciaFiltro]);
         ;

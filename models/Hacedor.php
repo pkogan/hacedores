@@ -9,10 +9,10 @@ use Yii;
  *
  * @property int $idHacedor
  * @property int $idUsuario
- * @property string $institucion
- * @property int $cantidadMaquinas
- * @property string $materialImprimir
- * @property string $link
+ * @property string|null $apellidoNombre
+ * @property Ciudad $idCiudad0
+
+
  *
  * @property Usuario $idUsuario0
  * @property Modelo[] $modelos
@@ -33,9 +33,9 @@ class Hacedor extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['idUsuario', 'institucion', 'cantidadMaquinas', 'materialImprimir', 'link'], 'required'],
-            [['idUsuario', 'cantidadMaquinas'], 'integer'],
-            [['institucion', 'materialImprimir', 'link'], 'string', 'max' => 300],
+            [['idUsuario'], 'required'],
+            [['idUsuario'], 'integer'],
+            [['apellidoNombre'], 'string'],
             [['idUsuario'], 'exist', 'skipOnError' => true, 'targetClass' => Usuario::className(), 'targetAttribute' => ['idUsuario' => 'idUsuario']],
         ];
     }
@@ -48,10 +48,8 @@ class Hacedor extends \yii\db\ActiveRecord
         return [
             'idHacedor' => 'Id Hacedor',
             'idUsuario' => 'Id Usuario',
-            'institucion' => 'Institucion',
-            'cantidadMaquinas' => 'Cantidad Maquinas',
-            'materialImprimir' => 'Material Imprimir',
-            'link' => 'Link',
+            'apellidoNombre' => 'Maker',
+            
         ];
     }
 
@@ -60,9 +58,9 @@ class Hacedor extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getAsignacions()
+    public function getIdCiudad0()
     {
-        return $this->hasMany(Asignacion::className(), ['idHacedor' => 'idHacedor']);
+        return $this->hasOne(Ciudad::className(), ['idCiudad' => 'idCiudad']);
     }
 
     /**

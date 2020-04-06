@@ -14,13 +14,17 @@ use Yii;
  * @property string $receptor De la entrega
  * @property int $idEstado Estado de la entrego por defecto 0
  * @property int $idUsuarioValidador Usuario Validador de la entrega
- *
+ * @property EstadoEntrega $estado Estado de la entrego por defecto 0
+ * @property Usuario $usuarioValidador Usuario Validador de la entrega
+ * @property int $idCiudad
+ * @property Ciudad $ciudad
  */
 class Entrega extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
+    public $idProvincia;
     public static function tableName()
     {
         return 'entrega';
@@ -32,8 +36,8 @@ class Entrega extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['fecha', 'cantidad','idInstitucion','receptor'], 'required'],
-            [['cantidad','idEstado','idUsuarioValidador'], 'integer'],
+            [['fecha', 'cantidad','idInstitucion','receptor','idCiudad'], 'required'],
+            [['cantidad','idEstado','idCiudad','idUsuarioValidador'], 'integer'],
             [['fecha'], 'safe'],
             [['observacion'], 'string', 'max' => 300],
             [['cantidad'],'number','min'=>1,'max'=>1000],
@@ -61,6 +65,8 @@ class Entrega extends \yii\db\ActiveRecord
             'observacion' => 'Observación',
             'receptor '=> 'Receptor',
             'idEstado' => 'Estado',
+            'idCiudad' =>'Ciudad',
+            'idProvincia'=> 'Provincia',
             'idUsuarioValidador' => 'Id usuario validador',
         ];
     }
@@ -95,4 +101,18 @@ class Entrega extends \yii\db\ActiveRecord
     public function getIdHacedor(){
         return $this->hacedor->idHacedor;
     } // getIdHacedor
-}
+
+    public function getEstado()
+    {
+        return $this->hasOne(EstadoEntrega::className(), ['idEstado' => 'idEstado']);
+    }
+    public function getUsuarioValidador()
+    {
+        return $this->hasOne(Usuario::className(), ['idUsuarioValidador' => 'idUsuario']);
+    }
+    public function getCiudad()
+    {
+        return $this->hasOne(Ciudad::className(), ['idCiudad' => 'idCiudad']);
+    }
+    
+    }
