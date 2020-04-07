@@ -18,6 +18,9 @@ AppAsset::register($this);
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Registro de makers con impresoras 3D y su producción para aportar un grano de arena frente a la crisis del COVID-19." />
+    <meta name="keywords" content="makers,hacedores,impresoras 3D,COVID-19" />
+    <meta name="author" content="faiweb.uncoma.edu.ar" />
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
