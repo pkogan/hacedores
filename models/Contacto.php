@@ -58,10 +58,12 @@ class Contacto extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'nombre' => 'Nombre',
-            'tel' => 'Tel',
-            'idInstitucion' => 'Id Institucion',
-            'con_caso' => 'Con Caso',
-            'mas_info' => 'Mas Info',
+            'tel' => 'Tel.',
+            'idCiudad' => 'Ciudad de la institución',
+            'idProvincia' => 'Provincia de la Institución',
+            'idInstitucion' => 'Institución',
+            'con_caso' => 'Con Caso Confirmado',
+            'mas_info' => 'Más Info',
         ];
     }
 

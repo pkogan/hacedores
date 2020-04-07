@@ -54,8 +54,13 @@ use yii\widgets\ActiveForm;
       
       $optionsInstitucion['data'][2]='OTRO';
   }
-  
+  ?>
 
+  <br/>
+  <p>Indique la provincia, ciudad y la institución a la que pertenece o hace referencia.</p>
+  <p>Si la institución no se encuentra, la opción "OTRO" se activará una vez seleccionada la provincia y ciudad. En dicho caso, aclare en el campo "Más Info" la institución al cual representa.</p>
+  
+  <?php 
   echo $form->field($model, 'idProvincia')
            ->dropDownList(
                yii\helpers\ArrayHelper::map(
@@ -74,7 +79,9 @@ use yii\widgets\ActiveForm;
   <?= $form->field($model, 'idInstitucion')
          ->widget(\kartik\depdrop\DepDrop::classname(),
                  $optionsInstitucion) ?>
-  
+
+  <br/>
+  <p>Indique si dicha institución posee un caso de COVID-19 confirmado.</p>
   <?= $form->field($model, 'con_caso')->checkbox() ?>
 
   <?= $form->field($model, 'mas_info')->textarea(['rows' => 6]) ?>
