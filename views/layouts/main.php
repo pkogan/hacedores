@@ -88,6 +88,9 @@ AppAsset::register($this);
                            'visible' => !Yii::$app->user->isGuest
                                   && Yii::$app->user->identity->idRol == \app\models\Rol::ROL_ADMIN
                           ],
+                    ['label' => 'Contacto', 'url' => ['/contacto/create'],
+                     'visible' => Yii::$app->user->isGuest],
+                        
                           ['label' => 'Acerca de', 'url' => ['/site/about']],
                           Yii::$app->user->isGuest ? (
                               ['label' => 'Login', 'url' => ['/site/login']]
