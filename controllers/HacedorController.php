@@ -17,6 +17,16 @@ use yii\filters\VerbFilter;
  */
 class HacedorController extends Controller
 {
+
+    /**
+     */
+    public function actions(){
+        return [
+            'captcha' => [
+                'class' => \yii\captcha\CaptchaAction::className(),
+            ]
+        ];
+    } // actions
     /**
      * {@inheritdoc}
      */
@@ -52,6 +62,27 @@ class HacedorController extends Controller
                 ],
             ],
         ];
+    }
+
+
+    public function actionEnviar_mensaje($id)
+    {
+        $hacedor = $this->findModel($id);
+        $model = new \app\models\HacedorMensajeForm();
+        $model->to_idHacedor = $id;
+
+        if (Yii::$app->request->isPost &&
+            $model->load(Yii::$app->request->post())) {
+            if ($model->validate()) {
+                // Enviar correo.
+                $model->enviar_correo();
+                return $this->goHome();
+            }
+        }
+
+        return $this->render('enviar_mensaje', [
+            'model' => $model,
+        ]);
     }
 
     /**
