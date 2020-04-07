@@ -102,6 +102,13 @@ class ContactoController extends Controller
         $model = new Contacto();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if (array_key_exists('contacto', Yii::$app->params)){
+                Yii::$app->mailer->compose('contacto')
+                   ->setFrom('hornero@fi.uncoma.edu.ar')
+                   ->setTo(Yii::$app->params['contacto']['lista_correo'])
+                   ->setSubject('Contacto recibido')
+                   ->send();
+            }
             return $this->goHome();
         }
 

@@ -72,8 +72,9 @@ class Contacto extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getIdInstitucion0()
+    public function getInstitucion()
     {
-        return $this->hasOne(Institucion::className(), ['idInstitucion' => 'idInstitucion']);
+        return $this->hasOne(Institucion::className(),
+                       ['idInstitucion' => 'idInstitucion']);
     }
 }
