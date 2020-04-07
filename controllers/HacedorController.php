@@ -38,9 +38,15 @@ class HacedorController extends Controller
                 'only' => ['index', 'view', 'update', 'delete', 'create'],
                 'rules' => [
                     //'class' => AccessRule::className(),
-                        [
+                    [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'update', 'delete', 'create'],
+                        'actions' => ['publica'],
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['index', 'view', 'update',
+                                     'delete', 'create'],
                         'roles' => [\app\models\Rol::ROL_ADMIN],
                     ],
                 ],
@@ -48,6 +54,22 @@ class HacedorController extends Controller
         ];
     }
 
+    /**
+     */
+    public function actionPublica(){
+        $searchModel = new HacedorSearch();
+
+        $param = Yii::$app->request->queryParams;
+        $searchModel->rol = \app\models\Rol::ROL_MAKER;
+        
+        $dataProvider = $searchModel->search($param);
+
+        return $this->render('publica', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    } // actionPublica
+    
     /**
      * Lists all Hacedor models.
      * @return mixed
@@ -71,13 +93,13 @@ class HacedorController extends Controller
      */
     public function actionView($id)
     {
-         $searchModel = new AsignacionSearch();
-         $searchModel->idHacedor=$id;
-         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new AsignacionSearch();
+        $searchModel->idHacedor=$id;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
-         $searchModel = new ModeloSearch();
-         $searchModel->idHacedor=$id;
-         $dataProviderModelo = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new ModeloSearch();
+        $searchModel->idHacedor=$id;
+        $dataProviderModelo = $searchModel->search(Yii::$app->request->queryParams);
 
         
 

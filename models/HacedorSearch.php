@@ -11,14 +11,16 @@ use app\models\Hacedor;
  */
 class HacedorSearch extends Hacedor
 {
+    public $rol = null;
+    
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['idHacedor', 'idUsuario', 'cantidadMaquinas'], 'integer'],
-            [['institucion', 'materialImprimir', 'link'], 'safe'],
+            [['rol', 'idHacedor', 'idUsuario'], 'integer'],
+            [['rol'], 'safe'],
         ];
     }
 
@@ -51,21 +53,21 @@ class HacedorSearch extends Hacedor
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
+            // uncomment the following line if you do not want to return
+            // any records when validation fails
             // $query->where('0=1');
             return $dataProvider;
         }
 
+        $query->joinWith('usuario');
+        
         // grid filtering conditions
         $query->andFilterWhere([
             'idHacedor' => $this->idHacedor,
             'idUsuario' => $this->idUsuario,
-            'cantidadMaquinas' => $this->cantidadMaquinas,
+            'usuario.idRol' => $this->rol,
         ]);
 
-        $query->andFilterWhere(['like', 'institucion', $this->institucion])
-            ->andFilterWhere(['like', 'materialImprimir', $this->materialImprimir])
-            ->andFilterWhere(['like', 'link', $this->link]);
 
         return $dataProvider;
     }
