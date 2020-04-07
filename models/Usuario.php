@@ -179,7 +179,7 @@ class Usuario extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     }
 
     public function getIdProvincia() {
-        return $this->idCiudad0->idProvincia;
+        return $this->idCiudad->idProvincia;
     }
     
 }
