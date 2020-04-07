@@ -38,6 +38,7 @@ class Contacto extends \yii\db\ActiveRecord
     {
         return [
             [['nombre', 'tel', 'captcha', 'idInstitucion'], 'required'],
+            [['captcha'], 'captcha'],
             [['idInstitucion', 'con_caso'], 'integer'],
             [['mas_info'], 'string'],
             [['nombre'], 'string', 'max' => 32],

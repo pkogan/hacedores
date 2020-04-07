@@ -14,6 +14,17 @@ use yii\filters\VerbFilter;
  */
 class ContactoController extends Controller
 {
+
+    /**
+     */
+    public function actions(){
+        return [
+            'captcha' => [
+                'class' => \yii\captcha\CaptchaAction::className(),
+            ]
+        ];
+    } // actions
+    
     /**
      * {@inheritdoc}
      */
