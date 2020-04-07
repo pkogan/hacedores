@@ -26,6 +26,30 @@ class ContactoController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'ruleConfig' => [
+                    'class' => \app\models\AccessRule::className(),
+                ],
+                'only' => ['index', 'view',
+                          'update', 'delete', 'create'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['create'],
+                        'roles' => ['?', '@'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['index', 'view',
+                                     'update', 'delete', 'create'],
+                        'roles' => [
+                            \app\models\Rol::ROL_ADMIN,
+                            \app\models\Rol::ROL_GESTOR
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 
