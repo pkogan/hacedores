@@ -10,22 +10,82 @@ use yii\widgets\ActiveForm;
 
 <div class="contacto-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+  <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
+  <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'tel')->textInput(['maxlength' => true]) ?>
+  <?= $form->field($model, 'tel')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'idInstitucion')->textInput() ?>
+  <?php
+  $options = [
+      'options' => ['id' => 'idCiudad', 'placeholder' => 'Seleccionar ...'],
+      'id' => 'idCuidad',
+      'pluginOptions' => [
+          'depends' => ['idProvincia'],
+          'url' => \yii\helpers\Url::to(['/ciudad/combo'])
+  ]];
+  
+  $optionsInstitucion=[
+      'options' => ['id' => 'idInstitucion', 'placeholder' => 'Seleccionar ...'],
+      'id' => 'idInstitucion',
+      'pluginOptions' => [
+          'depends' => ['idProvincia','idCiudad'],
+          'url' => \yii\helpers\Url::to(['/institucion/combo'])
+  ]];
 
-    <?= $form->field($model, 'con_caso')->textInput() ?>
+  if (!is_null($model->idCiudad)) {
+      $model->idProvincia = $model->ciudad->idProvincia;
 
-    <?= $form->field($model, 'mas_info')->textarea(['rows' => 6]) ?>
+      $options['data'] = yii\helpers\ArrayHelper::map(
+          \app\models\Ciudad::find()
+                            ->where("idProvincia in ($model->idProvincia) " .
+                                   "and categoria<>".'"ENTIDAD"')
+                            ->orderBy('ciudad')
+                            ->all(),
+          'idCiudad', 'ciudad');
+      
+      $optionsInstitucion['data'] = yii\helpers\ArrayHelper::map(
+          \app\models\Institucion::find()
+                                 ->where("idCiudad in ($model->idCiudad) " .
+                                        "and idTipologia=10")
+                                 ->orderBy('nombre')
+                                 ->all(),
+          'idInstitucion', 'nombre');
+      
+      $optionsInstitucion['data'][2]='OTRO';
+  }
+  
 
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
-    </div>
+  echo $form->field($model, 'idProvincia')
+           ->dropDownList(
+               yii\helpers\ArrayHelper::map(
+                   \app\models\Provincia::find()->orderBy('provincia')->all(),
+                   'idProvincia',
+                   'provincia'),
+               ['id' => 'idProvincia',
+                'prompt' => 'Seleccionar ...'])
+  ?>
+  
+  <?=
+  $form->field($model, 'idCiudad')->widget(
+      \kartik\depdrop\DepDrop::classname(), $options)
+  ?>   
 
-    <?php ActiveForm::end(); ?>
+  <?= $form->field($model, 'idInstitucion')
+         ->widget(\kartik\depdrop\DepDrop::classname(),
+                 $optionsInstitucion) ?>
+  
+  <?= $form->field($model, 'con_caso')->checkbox() ?>
+
+  <?= $form->field($model, 'mas_info')->textarea(['rows' => 6]) ?>
+
+  <?= $form->field($model, 'captcha')
+         ->widget(yii\captcha\Captcha::className()) ?>
+  
+  <div class="form-group">
+    <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+  </div>
+
+  <?php ActiveForm::end(); ?>
 
 </div>

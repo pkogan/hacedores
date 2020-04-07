@@ -91,7 +91,7 @@ class ContactoController extends Controller
         $model = new Contacto();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->goHome();
         }
 
         return $this->render('create', [

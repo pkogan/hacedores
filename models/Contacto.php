@@ -18,6 +18,11 @@ use Yii;
  */
 class Contacto extends \yii\db\ActiveRecord
 {
+
+    public $captcha;
+    public $idCiudad;
+    public $idProvincia;
+    
     /**
      * {@inheritdoc}
      */
@@ -32,11 +37,15 @@ class Contacto extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['nombre', 'tel', 'captcha', 'idInstitucion'], 'required'],
             [['idInstitucion', 'con_caso'], 'integer'],
             [['mas_info'], 'string'],
             [['nombre'], 'string', 'max' => 32],
             [['tel'], 'string', 'max' => 200],
-            [['idInstitucion'], 'exist', 'skipOnError' => true, 'targetClass' => Institucion::className(), 'targetAttribute' => ['idInstitucion' => 'idInstitucion']],
+            [['idInstitucion'], 'exist',
+             'skipOnError' => true,
+             'targetClass' => Institucion::className(),
+             'targetAttribute' => ['idInstitucion' => 'idInstitucion']],
         ];
     }
 
