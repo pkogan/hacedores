@@ -12,9 +12,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $btns = [
     'contact' => function ($url, $model, $key){
-        return Html::a('<span class="glyphicon glyphicon-envelope" />',
-                 ['hacedor/contact', 'id' => $model->idHacedor],
-                 []);
+        if ($model->mail != null){
+            return Html::a('<span class="glyphicon glyphicon-envelope" />',
+                     ['hacedor/enviar_mensaje', 'id' => $model->idHacedor],
+                     []);
+        }
     },
 ];
 ?>
