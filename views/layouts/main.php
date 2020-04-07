@@ -41,6 +41,7 @@ AppAsset::register($this);
                 'options' => ['class' => 'navbar-nav navbar-right'],
                 'items' => [
                     ['label' => 'Inicio', 'url' => ['/site/index']],
+                    ['label' => 'Makers', 'url' => ['/hacedor/publica']],
                     ['label' => 'Actualizar Registro',
                      'url' => ['/registro/update','id'=> Yii::$app->user->identity->hacedor->idHacedor],
                      'visible' => !Yii::$app->user->isGuest
