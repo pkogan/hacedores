@@ -42,6 +42,11 @@ class HacedorMensajeForm extends Model {
         ];
     } // attributeLabels
 
+    /**
+     */
+    public function getHacedor(){
+        return Hacedor::find($this->to_idHacedor);
+    } // getHacedor
 
     /**
      */
