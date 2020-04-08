@@ -64,7 +64,7 @@ AppAsset::register($this);
                                        [\app\models\Rol::ROL_ADMIN,
                                         app\models\Rol::ROL_GESTOR])
                     ],
-                    ['label' => 'Entregas', 'url' => ['/entrega'],
+                    ['label' => 'Recepción Entregas', 'url' => ['/entrega'],
                      'visible' => !Yii::$app->user->isGuest
                             && in_array(Yii::$app->user->identity->idRol,
                                        [\app\models\Rol::ROL_ADMIN,
@@ -75,7 +75,7 @@ AppAsset::register($this);
                             && in_array(Yii::$app->user->identity->idRol,
                                        [\app\models\Rol::ROL_ADMIN,
                                         app\models\Rol::ROL_GESTOR])],
-                    ['label' => 'Pedidos (Entregas Gestor)', 'url' => ['/pedido'],
+                    ['label' => 'Pedidos ', 'url' => ['/pedido'],
                      'visible' => !Yii::$app->user->isGuest
                             && in_array(Yii::$app->user->identity->idRol,
                                        [\app\models\Rol::ROL_ADMIN,

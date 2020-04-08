@@ -21,7 +21,8 @@ class EntregaSearch extends Entrega
                       ['institucion.nombre',
                        'producto.modelo.nombre',
                         'producto.hacedor.apellidoNombre',
-                'ciudad.ciudad'  ]);
+                'ciudad.ciudad',
+                          'usuarioValidador.nombreUsuario']);
     } // attributes
     
     /**
@@ -35,7 +36,7 @@ class EntregaSearch extends Entrega
               ], 'integer'],
             [['fecha', 'observacion',
               'producto.modelo.nombre', 'institucion.nombre','receptor','producto.hacedor.apellidoNombre',
-                'ciudad.ciudad'], 'safe'],
+                'usuarioValidador.nombreUsuario','ciudad.ciudad'], 'safe'],
         ];
     }
 
@@ -78,6 +79,8 @@ class EntregaSearch extends Entrega
                     'producto.idProducto = entrega.idProducto');*/
         $query->joinWith('producto.hacedor');
         $query->joinWith('ciudad');
+        $query->joinWith('usuarioValidador');
+        
         $query->join('LEFT Outer JOIN', 'institucion',
                     'institucion.idInstitucion = entrega.idInstitucion');
         $query->join('LEFT JOIN', 'modelo',
@@ -116,6 +119,8 @@ class EntregaSearch extends Entrega
                                $this->getAttribute('ciudad.ciudad')]);
         $query->andFilterWhere(['LIKE', 'hacedor.apellidoNombre',
                                $this->getAttribute('producto.hacedor.apellidoNombre')]);
+        $query->andFilterWhere(['LIKE', 'usuario.nombreUsuario',
+                               $this->getAttribute('usuarioValidador.nombreUsuario')]);
 
         return $dataProvider;
     }

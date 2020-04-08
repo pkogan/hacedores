@@ -119,7 +119,7 @@ $this->title = 'Registro de Makers';
     </div>
 
     <div class="jumbotron" id="ayuda">
-        <h2 >Hola Maker !!!</h2>
+        <h2 >Hola <?= Yii::$app->user->identity->rol->nombre?> !!!</h2>
         <p>Gracias por ser parte de esta red colaborativa que trata de aportar un grano de arena frente a la crisis del COVID-19.
 <!--            El objetivo de esta aplicación es afrontar la demanda de máscaras e insumos impresos en 3d para combatir el COVID-19, de forma colaborativa, juntando fuerzas de grupos y redes de makers.-->
  Para poder medir y compartir los insumos impresos por usted, que pueden ayudar al personal de salud 

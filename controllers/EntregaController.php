@@ -53,7 +53,7 @@ class EntregaController extends Controller {
                         'actions' => ['view',
                             'update', 'delete', 'create'],
                         'roles' => [
-                            \app\models\Rol::ROL_MAKER],
+                            \app\models\Rol::ROL_MAKER,\app\models\Rol::ROL_GESTOR],
                     ],
                         [
                         'allow' => true,
@@ -233,6 +233,7 @@ class EntregaController extends Controller {
 
         //$this->validarDuenoProducto($model->producto);
         $model->idEstado = $idEstado;
+        $model->idUsuarioValidador= Yii::$app->user->identity->idUsuario;
         //hack receptor vacio
         if ($model->receptor=='') {
             $model->receptor = 'Sin Especificar';
