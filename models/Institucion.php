@@ -20,6 +20,10 @@ use Yii;
  */
 class Institucion extends \yii\db\ActiveRecord
 {
+    const OTROID=2;
+    const CENTROENSAMLADOID=3;
+    const CENTRODISTSALUDID=4;
+    const NOMBRES=[2=>"OTRO",3=>"CENTRO DE ENSAMBLADO",4=>"CENTRO DE DISTRIBUCIÓN ZONAL SISTEMA DE SALUD"];
     public $idProvincia;
     /**
      * {@inheritdoc}

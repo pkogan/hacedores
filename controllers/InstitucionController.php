@@ -32,7 +32,14 @@ class InstitucionController extends Controller
                             ]
                 ]);
                 //hack otro
-                $out= array_merge( $out,[['id'=>2,'name'=>'OTRO'],['id'=>3,'name'=>'CENTRO DE DISTRIBUCIÓN ZONAL']]);
+                        $optionsInstitucion['data'][Institucion::OTROID]=Institucion::NOMBRES[Institucion::OTROID];
+        
+        //if(Yii::$app->user->identity->idRol== \app\models\Rol::ROL_MAKER){
+    
+                
+                $out= array_merge( $out,[['id'=>Institucion::OTROID,'name'=>Institucion::NOMBRES[Institucion::OTROID]],
+                    ['id'=>Institucion::CENTROENSAMLADOID,'name'=>Institucion::NOMBRES[Institucion::CENTROENSAMLADOID]],
+                    ['id'=>Institucion::CENTRODISTSALUDID,'name'=>Institucion::NOMBRES[Institucion::CENTRODISTSALUDID]]]);
                 // the getSubCatList function will query the database based on the
                 // cat_id and return an array like below:
                 // [

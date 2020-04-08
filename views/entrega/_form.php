@@ -46,8 +46,12 @@ use app\models\Institucion;
 
         $options['data'] = yii\helpers\ArrayHelper::map(\app\models\Ciudad::find()->where("idProvincia in ($model->idProvincia) and categoria<>".'"ENTIDAD"')->orderBy('ciudad')->all(), 'idCiudad', 'ciudad');
         $optionsInstitucion['data'] = yii\helpers\ArrayHelper::map(\app\models\Institucion::find()->where("idCiudad in ($model->idCiudad) and idTipologia=10")->orderBy('nombre')->all(), 'idInstitucion', 'nombre');
-        $optionsInstitucion['data'][2]='OTRO';
-        $optionsInstitucion['data'][3]='CENTRO DE DISTRIBUCIÓN ZONAL';
+        $optionsInstitucion['data'][Institucion::OTROID]=Institucion::NOMBRES[Institucion::OTROID];
+        
+        //if(Yii::$app->user->identity->idRol== \app\models\Rol::ROL_MAKER){
+            $optionsInstitucion['data'][Institucion::CENTROENSAMLADOID]= Institucion::NOMBRES[Institucion::CENTROENSAMLADOID];
+            $optionsInstitucion['data'][Institucion::CENTRODISTSALUDID]= Institucion::NOMBRES[Institucion::CENTRODISTSALUDID];
+
     }
     
 

@@ -133,6 +133,7 @@ class RegistroSearch extends Registro
         $query->select(['ciudad.idCiudad','Sum( entrega.cantidad) as entregados']);//, 'Sum(entrega.cantidad) entregados', 'Sum(distinct producto.cantidad)-Sum(distinct entrega.cantidad) as aentregar']);
          $query->groupBy(['ciudad.idCiudad'])->orderBy('ciudad.idCiudad');
          $query->where('idInstitucion<>3 or idInstitucion is null'); //Centro de distribuición
+         //todo otro caso puede ser idInstitucion==3 y idTipoProducto==2 para sumar los casos en que el gestor entrega a centro de distribución de salud   
         $query->andFilterWhere(['provincia.idProvincia' => $this->idProvincia]);
         $resultado3= $query->asArray()->all();
         

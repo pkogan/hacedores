@@ -63,3 +63,7 @@ CREATE TABLE `tipoProducto` ( `idTipoProducto` INT NOT NULL AUTO_INCREMENT ,  `t
 //insertar hacedores de los usuarios
 insert into hacedor(idUsuario,mail,apellidoNombre,idCiudad)
 SELECT usuario.idUsuario,nombreUsuario,nombreUsuario,58035070000 FROM `usuario` left outer join hacedor on usuario.idUsuario=hacedor.idUsuario where idHacedor is null
+
+Centro de Distribución zonal
+        UPDATE `institucion` SET `nombre` = 'CENTRO DE ENSAMBLADO' WHERE `institucion`.`idInstitucion` = 3;
+        UPDATE `institucion` SET `nombre` = 'CENTRO DE DISTRIBUCIÓN ZONAL SISTEMA DE SALUD', `idCiudad` = '58035070000', `direccion` = '', `idTipologia` = '1', `siglaTipologia` = '', `tipologia` = '', `idEstablecimiento` = '' WHERE `institucion`.`idInstitucion` = 4;
