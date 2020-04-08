@@ -34,6 +34,7 @@ use yii\widgets\ActiveForm;
         $options['data'] = yii\helpers\ArrayHelper::map(\app\models\Ciudad::find()->where("idProvincia in ($model->idProvincia) and categoria<>".'"ENTIDAD"')->orderBy('ciudad')->all(), 'idCiudad', 'ciudad');
         $optionsInstitucion['data'] = yii\helpers\ArrayHelper::map(\app\models\Institucion::find()->where("idCiudad in ($model->idCiudad) and idTipologia=10")->orderBy('nombre')->all(), 'idInstitucion', 'nombre');
         $optionsInstitucion['data'][2]='OTRO';
+        $optionsInstitucion['data'][3]='CENTRO DE DISTRIBUCIÓN ZONAL';
     }
     
 

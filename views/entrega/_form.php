@@ -47,6 +47,7 @@ use app\models\Institucion;
         $options['data'] = yii\helpers\ArrayHelper::map(\app\models\Ciudad::find()->where("idProvincia in ($model->idProvincia) and categoria<>".'"ENTIDAD"')->orderBy('ciudad')->all(), 'idCiudad', 'ciudad');
         $optionsInstitucion['data'] = yii\helpers\ArrayHelper::map(\app\models\Institucion::find()->where("idCiudad in ($model->idCiudad) and idTipologia=10")->orderBy('nombre')->all(), 'idInstitucion', 'nombre');
         $optionsInstitucion['data'][2]='OTRO';
+        $optionsInstitucion['data'][3]='CENTRO DE DISTRIBUCIÓN ZONAL';
     }
     
 
@@ -57,7 +58,7 @@ use app\models\Institucion;
     $form->field($model, 'idCiudad')->widget(\kartik\depdrop\DepDrop::classname(), $options)
     ?>   
     
-    
+  <p>Si la entrega se realiza a un Centro de distribución seleccionar Centro de Distribución Zonal</p>
   <?= $form->field($model, 'idInstitucion')->widget(\kartik\depdrop\DepDrop::classname(), $optionsInstitucion) ?>
 
   <?= $form->field($model, 'fecha')

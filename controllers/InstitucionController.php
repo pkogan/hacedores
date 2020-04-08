@@ -32,7 +32,7 @@ class InstitucionController extends Controller
                             ]
                 ]);
                 //hack otro
-                $out= array_merge( $out,[['id'=>2,'name'=>'OTRO']]);
+                $out= array_merge( $out,[['id'=>2,'name'=>'OTRO'],['id'=>3,'name'=>'CENTRO DE DISTRIBUCIÓN ZONAL']]);
                 // the getSubCatList function will query the database based on the
                 // cat_id and return an array like below:
                 // [
