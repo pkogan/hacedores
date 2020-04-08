@@ -58,7 +58,7 @@ use app\models\Institucion;
     $form->field($model, 'idCiudad')->widget(\kartik\depdrop\DepDrop::classname(), $options)
     ?>   
     
-  <p>Si la entrega se realiza a un Centro de distribución seleccionar Centro de Distribución Zonal</p>
+  <p>Si la entrega se realiza a un Referente de la Red, seleccionar Centro de Distribución Zonal</p>
   <?= $form->field($model, 'idInstitucion')->widget(\kartik\depdrop\DepDrop::classname(), $optionsInstitucion) ?>
 
   <?= $form->field($model, 'fecha')
