@@ -56,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
            ['attribute' => 'institucion.nombre',
            'label' => 'Institucion'],
                     'receptor',
-
+          'usuarioValidador.nombreUsuario',
           ['attribute' => 'producto.modelo.nombre',
            'label' => 'Nombre Modelo'],          
           'cantidad',

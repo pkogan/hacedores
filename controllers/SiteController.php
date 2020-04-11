@@ -74,7 +74,7 @@ class SiteController extends Controller
             [Rol::ROL_MAKER]
         );
         
-        if ($this->tiene_roles([ Rol::ROL_MAKER])){
+        if ($this->tiene_roles([ Rol::ROL_MAKER,Rol::ROL_GESTOR])){
             $hacedor = Yii::$app->user->identity->hacedor;
             
             $productoSearch = new ProductoSearch();

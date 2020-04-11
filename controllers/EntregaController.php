@@ -33,39 +33,65 @@ class EntregaController extends Controller {
                 'ruleConfig' => [
                     'class' => \app\models\AccessRule::className(),
                 ],
-                'only' => ['index', 'view', 'update', 'delete', 'create'],
+                'only' => ['index', 'view', 'update', 'delete', 'create','resumen','detalle'],
                 'rules' => [
                     //'class' => AccessRule::className(),
                         [
                         'allow' => true,
-                        'actions' => ['view',
+                        'actions' => ['view','resumen','detalle'
                         ],
                         'roles' => ['?'],
                     ],
                         [
                         'allow' => true,
-                        'actions' => ['view', 'index', 'validar'
+                        'actions' => ['view', 'index', 'validar','resumen','detalle'
                         ],
                         'roles' => [\app\models\Rol::ROL_GESTOR],
                     ],
                         [
                         'allow' => true,
                         'actions' => ['view',
-                            'update', 'delete', 'create'],
+                            'update', 'delete', 'create','resumen','detalle'],
                         'roles' => [
-                            \app\models\Rol::ROL_MAKER],
+                            \app\models\Rol::ROL_MAKER,\app\models\Rol::ROL_GESTOR],
                     ],
                         [
                         'allow' => true,
                         'actions' => ['index', 'view',
-                            'update', 'delete', 'create', 'validar'],
+                            'update', 'delete', 'create', 'validar','resumen','detalle'],
                         'roles' => [\app\models\Rol::ROL_ADMIN],
                     ],
                 ],
             ],
         ];
     }
+    
+    public function actionResumen() {
+        $searchModel = new EntregaSearch();
+        $dataProvider = $searchModel->searchResumen(Yii::$app->request->queryParams);
+        $total = $searchModel->totalResumen(Yii::$app->request->queryParams);
+        //print_r($total);exit;
+        return $this->render('resumen', [
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+                    'total' => $total,
+        ]);
+    }
 
+        public function actionDetalle($id) {
+        $param=explode('|',$id);
+        $searchModel = new EntregaSearch();
+        $searchModel->idCiudad=$param[0];
+        $searchModel->idInstitucion=$param[1];
+        $dataProvider = $searchModel->search([]);
+        //print_r($total);exit;
+        return $this->render('detalle', [
+                    //'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+                    //'total' => $total,
+        ]);
+    }
+    
     /**
      * Lists all Entrega models.
      * @return mixed
@@ -117,7 +143,7 @@ class EntregaController extends Controller {
      */
     protected function validarDuenoProducto($model) {
         if ($model !== null) {
-            if ($model->idHacedor0->idUsuario != \Yii::$app->user->identity->idUsuario) {
+            if (Yii::$app->user->identity->idRol!= Rol::ROL_ADMIN && $model->idHacedor0->idUsuario != \Yii::$app->user->identity->idUsuario) {
                 throw new \yii\web\HttpException('Está intentando crear una entrega para un producto ajeno');
             }
         } else {
@@ -233,6 +259,7 @@ class EntregaController extends Controller {
 
         //$this->validarDuenoProducto($model->producto);
         $model->idEstado = $idEstado;
+        $model->idUsuarioValidador= Yii::$app->user->identity->idUsuario;
         //hack receptor vacio
         if ($model->receptor=='') {
             $model->receptor = 'Sin Especificar';

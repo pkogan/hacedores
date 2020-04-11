@@ -29,9 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'idHacedor',
             'idUsuario',
-            'institucion',
-            'cantidadMaquinas',
-            'materialImprimir',
+            'mail',
             //'link',
 
             ['class' => 'yii\grid\ActionColumn'],

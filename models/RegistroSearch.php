@@ -125,25 +125,41 @@ class RegistroSearch extends Registro
         $query=Registro::find()->joinWith('idCiudad0.idProvincia0')->joinWith('productos',true,'LEFT OUTER JOIN');
         $query->select(['ciudad.idCiudad','Sum( producto.cantidad) as productos1']);//, 'Sum(entrega.cantidad) entregados', 'Sum(distinct producto.cantidad)-Sum(distinct entrega.cantidad) as aentregar']);
          $query->groupBy(['ciudad.idCiudad'])->orderBy('ciudad.idCiudad');
-         
+             $query->where('idTipoProducto=1 or idTipoProducto is null'); //impresos
         $query->andFilterWhere(['provincia.idProvincia' => $this->idProvincia]);
         $resultado2= $query->asArray()->all();
         
         $query=Registro::find()->joinWith('idCiudad0.idProvincia0')->joinWith('productos.entregas',true,'LEFT OUTER JOIN');
         $query->select(['ciudad.idCiudad','Sum( entrega.cantidad) as entregados']);//, 'Sum(entrega.cantidad) entregados', 'Sum(distinct producto.cantidad)-Sum(distinct entrega.cantidad) as aentregar']);
          $query->groupBy(['ciudad.idCiudad'])->orderBy('ciudad.idCiudad');
+         $query->where('idInstitucion<>3 or idInstitucion is null'); //Centro de distribuición
+         //todo otro caso puede ser idInstitucion==3 y idTipoProducto==2 para sumar los casos en que el gestor entrega a centro de distribución de salud   
         $query->andFilterWhere(['provincia.idProvincia' => $this->idProvincia]);
         $resultado3= $query->asArray()->all();
         
         //echo count($resultado). ' '. count($resultado2). ' '.count($resultado3);
         //exit;
+        
         foreach ($resultado as $key => $value) {
-            $resultado[$key]= array_merge($value, array_merge($resultado2[$key],$resultado3[$key]));
-            $resultado[$key]['aentregar']=$resultado2[$key]['productos1']-$resultado3[$key]['entregados'];
+            $key2=0;
+            $key3=0;
+            $resultado[$key]=$value;
+            while($value['idCiudad']!=$resultado2[$key2]['idCiudad']&&$key2<count($resultado2)){
+                $key2++;
+            }
+            if($key2<count($resultado2)) $resultado[$key]=array_merge($value, $resultado2[$key2]);
+            
+            while($value['idCiudad']!=$resultado3[$key3]['idCiudad']&&$key3<count($resultado3)){
+                $key3++;
+            }
+            if($key3<count($resultado3)) $resultado[$key]=array_merge($resultado[$key], $resultado3[$key3]);
+            
+            $resultado[$key]['aentregar']=$resultado[$key]['productos1']-$resultado[$key]['entregados'];
         }
         
         $dataProvider = new \yii\data\ArrayDataProvider([
             'allModels' => $resultado,
+            'pagination' => false,
         ]);
         return $dataProvider;
     }
@@ -173,14 +189,16 @@ class RegistroSearch extends Registro
         
         $resultado= $query->asArray()->one();
         
-        $query=Registro::find()->joinWith('idCiudad0.idProvincia0')->joinWith('productos',true,'LEFT OUTER JOIN');
+        $query=Registro::find()->joinWith('idCiudad0.idProvincia0')->joinWith('productos');
         $query->select(['Sum( producto.cantidad) as productos1']);//, 'Sum(entrega.cantidad) entregados', 'Sum(distinct producto.cantidad)-Sum(distinct entrega.cantidad) as aentregar']);
+        $query->where('idTipoProducto=1'); //impresos
         $query->andFilterWhere(['provincia.idProvincia' => $this->idProvincia]);
         $resultado= array_merge($resultado,$query->asArray()->one());
         
         //$query->joinWith=[];
-        $query=Registro::find()->joinWith('idCiudad0.idProvincia0')->joinWith('entregas',true,'LEFT OUTER JOIN');
+        $query=Registro::find()->joinWith('idCiudad0.idProvincia0')->joinWith('entregas');
         $query->select(['Sum(entrega.cantidad) entregados']);
+        $query->where('idInstitucion<>3'); //Centro de distribuición
         $query->andFilterWhere(['provincia.idProvincia' => $this->idProvincia]);
         $resultado= array_merge($resultado,$query->asArray()->one());
         $resultado['aentregar']=$resultado['productos1']-$resultado['entregados'];

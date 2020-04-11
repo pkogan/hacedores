@@ -14,6 +14,8 @@ use Yii;
  *
  * @property Hacedor $idHacedor0
  * @property Modelo $idModelo0
+ * @property int $idTipoProducto
+ * @property TipoProducto $tipoProducto
  */
 class Producto extends \yii\db\ActiveRecord
 {
@@ -31,8 +33,8 @@ class Producto extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['idHacedor', 'idModelo','cantidad'], 'required'],
-            [['idHacedor', 'idModelo', 'cantidad'], 'integer'],
+            [['idHacedor', 'idModelo','cantidad','idTipoProducto'], 'required'],
+            [['idHacedor', 'idModelo', 'cantidad','idTipoProducto'], 'integer'],
             [['cantidad'],'number','min'=>1,'max'=>1000],
             [['idHacedor'], 'exist', 'skipOnError' => true, 'targetClass' => Hacedor::className(), 'targetAttribute' => ['idHacedor' => 'idHacedor']],
             [['idModelo'], 'exist', 'skipOnError' => true, 'targetClass' => Modelo::className(), 'targetAttribute' => ['idModelo' => 'idModelo']],
@@ -49,6 +51,8 @@ class Producto extends \yii\db\ActiveRecord
             'idHacedor' => 'Maker',
             'idModelo' => 'Modelo',
             'cantidad' => 'Cantidad',
+            'idTipoProducto' => 'Tipo',
+            
         ];
     }
 

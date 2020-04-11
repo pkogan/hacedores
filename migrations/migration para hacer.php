@@ -52,4 +52,18 @@ ALTER TABLE `pedido` ADD `idCiudad` BIGINT NOT NULL AFTER `idPedido`, ADD INDEX 
 UPDATE `pedido`,institucion SET pedido.`idCiudad`=institucion.idCiudad where pedido.idInstitucion=institucion.idInstitucion;
 ALTER TABLE `pedido` ADD FOREIGN KEY (`idCiudad`) REFERENCES `ciudad`(`idCiudad`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
-        
+
+/*gestor con pedidos*/
+
+ALTER TABLE `producto` ADD `idTipoProducto` INT NOT NULL DEFAULT '1' AFTER `idProducto`, ADD INDEX (`idTipoProducto`);
+
+CREATE TABLE `tipoProducto` ( `idTipoProducto` INT NOT NULL AUTO_INCREMENT ,  `tipo` VARCHAR(50) NOT NULL ,    PRIMARY KEY  (`idTipoProducto`)) ENGINE = InnoDB; 
+
+
+//insertar hacedores de los usuarios
+insert into hacedor(idUsuario,mail,apellidoNombre,idCiudad)
+SELECT usuario.idUsuario,nombreUsuario,nombreUsuario,58035070000 FROM `usuario` left outer join hacedor on usuario.idUsuario=hacedor.idUsuario where idHacedor is null
+
+Centro de Distribución zonal
+        UPDATE `institucion` SET `nombre` = 'CENTRO DE ENSAMBLADO' WHERE `institucion`.`idInstitucion` = 3;
+        UPDATE `institucion` SET `nombre` = 'CENTRO DE DISTRIBUCIÓN ZONAL SISTEMA DE SALUD', `idCiudad` = '58035070000', `direccion` = '', `idTipologia` = '1', `siglaTipologia` = '', `tipologia` = '', `idEstablecimiento` = '' WHERE `institucion`.`idInstitucion` = 4;

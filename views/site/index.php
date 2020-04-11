@@ -17,16 +17,16 @@ $this->title = 'Registro de Makers';
         <h1>Registro de Makers</h1>
         <row>
             <div class="col-md-3">
-                <h3><span class="glyphicon glyphicon-user"></span><?= $total['voluntarios'] ?><br/> Voluntarios</h3>
+                <h3><?= Html::a('<span class=" glyphicon glyphicon-map-marker"></span>'. $total['voluntarios'] , ['registro/mapa'], ['class' => 'btn btn-success']) ?><br/> Voluntarios</h3>
             </div>
             <div class="col-md-3">
-                <h3><span class="glyphicon glyphicon-tasks"> </span><?= $total['impresoras'] ?><br/> Impresoras</h3>
+                <h3><?= Html::a('<span class="glyphicon glyphicon-tasks"> </span>'. $total['impresoras'], ['registro/resumen'], ['class' => 'btn btn-success']) ?> <br/> Impresoras</h3>
             </div>
             <div class="col-md-3">
-                <h3><span class="glyphicon glyphicon-cog"></span><?= $total['productos1'] ?> Máscaras<br/> Impresas</h3> 
+                <h3><?= Html::a('<span class="glyphicon glyphicon-cog"></span>'.$total['productos1'], ['registro/resumen'], ['class' => 'btn btn-success']) ?> <br/> Máscaras Impresas</h3>
             </div>
             <div class="col-md-3">
-                    <h3><span class="glyphicon glyphicon-send"> </span><?= $total['entregados'] ?> Máscaras <br/> Entregadas</h3>
+                    <h3><?= Html::a('<span class="glyphicon glyphicon-send"> </span>'. $total['entregados'], ['entrega/resumen'], ['class' => 'btn btn-success']) ?><br/>  Máscaras  Entregadas</h3>
             </div>
         </row>
         <br/>
@@ -35,7 +35,8 @@ $this->title = 'Registro de Makers';
 
     <p class="lead">El objetivo de esta aplicación es afrontar la demanda de insumos impresos en impresoras 3d para combatir el COVID-19, de forma colaborativa, juntando fuerzas de grupos y redes de makers.</p>
     <p class="lead"><?= Html::a('Login/Registro', ['site/login'], ['class' => 'btn btn-success']) ?> <a class="btn btn-success" href="#modelo">Descargar Modelo</a>
-        <?= Html::a('Ver Makers', ['registro/mapa'], ['class' => 'btn btn-success']) ?> <?php //echo Html::a('Ver Producción', ['registro/resumen'], ['class' => 'btn btn-success']) ?>  </p>
+        <?php //echo Html::a('Ver Makers', ['registro/mapa'], ['class' => 'btn btn-success']) ?>
+       <?php //echo Html::a('Ver Producción', ['registro/resumen'], ['class' => 'btn btn-success']) ?>  </p>
  
 </div>
 
