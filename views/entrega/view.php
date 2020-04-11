@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
  <p>
         <?php
-        if (Yii::$app->user->identity->idRol == \app\models\Rol::ROL_MAKER || $model->producto->hacedor->idUsuario==Yii::$app->user->identity->idUsuario) {
+        if (Yii::$app->user->identity->idRol == \app\models\Rol::ROL_ADMIN || $model->producto->hacedor->idUsuario==Yii::$app->user->identity->idUsuario) {
             echo Html::a('Volver a Inicio', ['/site'], ['class' => 'btn btn-success']). ' ';
             echo Html::a('Editar', ['update', 'id' => $model->idEntrega], ['class' => 'btn btn-primary']). ' ';
             echo Html::a('Eliminar', ['delete', 'id' => $model->idEntrega], [

@@ -9,7 +9,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $searchModel app\models\AsistenciaSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Resumen de Producción';
+$this->title = 'Resumen de Entregas';
 $this->params['breadcrumbs'][] = $this->title;
 $this->registerJs("
 $('.btn-search').click(function(){
@@ -23,9 +23,7 @@ $('.btn-search').click(function(){
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-<!--    <p>
-    <?= Html::a('Create Asistencia', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>-->
+
 
 
     <?php echo Html::a('Busqueda Avanzada','#',array('class'=>'btn-search btn btn-success')); ?>
@@ -38,21 +36,24 @@ $('.btn-search').click(function(){
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
         'showFooter' => true,
+        'rowOptions' => function ($model, $index, $widget, $grid) {
+
+            return [
+                'id' => $model['idCiudad'].'|'.$model['idInstitucion'],
+                
+                'onclick' => 'location.href="'
+                . Yii::$app->urlManager->createUrl('entrega/detalle')
+                . '&id="+(this.id);'
+            ];
+        },
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-                  ['label' => 'Provincia',  'value' => 'idCiudad0.idProvincia0.provincia'],
-                ['label' => 'Departamento',  'value' => 'idCiudad0.departamento_nombre'],
-                ['label' => 'Ciudad',  'value' => 'idCiudad0.ciudad','footer'=>'TOTAL'],
-                ['label' => 'Makers',  'value' => 'voluntarios', 'footer'=>$total['voluntarios']],
-                ['label' => 'Impresoras', 'value' => 'impresoras', 'footer'=>$total['impresoras']],
-                ['label' => 'Impresiones', 'value' => 'productos1', 'footer'=>$total['productos1']],
-                //['label' => 'Entregadas', 'value' => 'entregados', 'footer'=>$total['entregados']],
-               /* ['label' => 'A Entregar', 'value' => 'aentregar', 'footer'=>$total['aentregar']],
-                ['label' => 'PLA', 'value' => 'PLA', 'footer'=>$total['PLA']],
-                ['label' => 'ABS', 'value' => 'ABS', 'footer'=>$total['ABS']],
-                ['label' => 'PETG', 'value' => 'PETG', 'footer'=>$total['PETG']],
-                ['label' => 'FLEX', 'value' => 'FLEX', 'footer'=>$total['FLEX']]*/
+                ['label' => 'Provincia',  'value' => 'ciudad.idProvincia0.provincia'],
+                //['label' => 'Departamento',  'value' => 'ciudad.departamento_nombre'],
+                ['label' => 'Ciudad',  'value' => 'ciudad.ciudad'],
+                ['label' => 'Institucion',  'value' => 'nombre','footer'=>'TOTAL'],
+                ['label' => 'Entregadas', 'value' => 'entregados', 'footer'=>$total['entregados']]
                 //['label' => 'HIPS', 'value' => 'HIPS']
                  
         //['label' => 'Estado','attribute' => 'idEstadoAsistencia0.Descripcion'],

@@ -21,7 +21,8 @@ foreach ($registros as $registro) {
 
 // now lets create a marker that we are going to place on our map
         $descripcion = $registro['ciudad'].', '. $registro['voluntarios']. ' voluntarios'.', '. $registro['impresoras']. ' impresoras, ';
-        $descripcion.=$registro['PLA']. ' PLA, '.$registro['ABS']. ' ABS, '.$registro['PETG']. ' PETG, '.$registro['FLEX']. ' FLEX.';
+        //$descripcion.=$registro['PLA']. ' PLA, '.$registro['ABS']. ' ABS, '.$registro['PETG']. ' PETG, '.$registro['FLEX']. ' FLEX.';
+        //$descripcion.=$registro['productos1']. ' Máscaras Impresas';
         $marker = new Marker(['latLng' => $center, 'popupContent' => $descripcion
         ]);
         $markers[] = $marker; // add the marker (addLayer is used to add different layers to our map)

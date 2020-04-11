@@ -159,6 +159,7 @@ class RegistroSearch extends Registro
         
         $dataProvider = new \yii\data\ArrayDataProvider([
             'allModels' => $resultado,
+            'pagination' => false,
         ]);
         return $dataProvider;
     }

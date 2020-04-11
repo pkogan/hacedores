@@ -57,6 +57,7 @@ AppAsset::register($this);
                     ['label' => 'Mapa', 'url' => ['/registro/mapa']],
                     
                     ['label' => 'Producción', 'url' => ['/registro/resumen']],
+                    ['label' => 'Entregas', 'url' => ['/entrega/resumen']],
                     ['label' => 'Registro',
                      'url' => ['/registro'],
                      'visible' => !Yii::$app->user->isGuest
@@ -70,6 +71,10 @@ AppAsset::register($this);
                                        [\app\models\Rol::ROL_ADMIN,
                                         \app\models\Rol::ROL_GESTOR])
                     ],
+                    ['label'=> 'admin',
+                        'visible' => !Yii::$app->user->isGuest
+                                  && Yii::$app->user->identity->idRol == \app\models\Rol::ROL_ADMIN,
+                        'items'=>[
                     ['label' => 'Institucion', 'url' => ['/institucion'],
                      'visible' => !Yii::$app->user->isGuest
                             && in_array(Yii::$app->user->identity->idRol,
@@ -88,6 +93,7 @@ AppAsset::register($this);
                            'visible' => !Yii::$app->user->isGuest
                                   && Yii::$app->user->identity->idRol == \app\models\Rol::ROL_ADMIN
                           ],
+                        ]],
                           ['label' => 'Acerca de', 'url' => ['/site/about']],
                           Yii::$app->user->isGuest ? (
                               ['label' => 'Login', 'url' => ['/site/login']]

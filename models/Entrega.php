@@ -18,6 +18,7 @@ use Yii;
  * @property Usuario $usuarioValidador Usuario Validador de la entrega
  * @property int $idCiudad
  * @property Ciudad $ciudad
+ * @property Institucion $institucion
  */
 class Entrega extends \yii\db\ActiveRecord
 {
