@@ -62,27 +62,24 @@ AppAsset::register($this);
                     
                     ['label' => 'Producción', 'url' => ['/registro/resumen']],
                     ['label' => 'Entregas', 'url' => ['/entrega/resumen']],
-                    ['label' => 'Registro',
-                     'url' => ['/registro'],
-                     'visible' => !Yii::$app->user->isGuest
-                            && in_array(Yii::$app->user->identity->idRol,
-                                       [\app\models\Rol::ROL_ADMIN,
-                                        app\models\Rol::ROL_GESTOR])
-                    ],
+
                     ['label' => 'Recepción Entregas', 'url' => ['/entrega'],
                      'visible' => !Yii::$app->user->isGuest
                             && in_array(Yii::$app->user->identity->idRol,
                                        [\app\models\Rol::ROL_ADMIN,
                                         \app\models\Rol::ROL_GESTOR])
                     ],
+                    
                     ['label'=> 'admin',
                      'visible' => !Yii::$app->user->isGuest
                             && Yii::$app->user->identity->idRol == \app\models\Rol::ROL_ADMIN,
                      'items'=>[
-                         [
-                             'label' => 'Contactos ', 'url' => ['/contacto/index'],
-                             'visible' => !Yii::$app->user->isGuest
-                                    && Yii::$app->user->identity->idRol == \app\models\Rol::ROL_ADMIN
+                         ['label' => 'Registro',
+                          'url' => ['/registro'],
+                          'visible' => !Yii::$app->user->isGuest
+                                 && in_array(Yii::$app->user->identity->idRol,
+                                            [\app\models\Rol::ROL_ADMIN,
+                                             app\models\Rol::ROL_GESTOR])
                          ],
                          
                          ['label' => 'Institucion', 'url' => ['/institucion'],
@@ -96,6 +93,12 @@ AppAsset::register($this);
                                             [\app\models\Rol::ROL_ADMIN,
                                              app\models\Rol::ROL_GESTOR])],
 
+                         [
+                             'label' => 'Contactos ', 'url' => ['/contacto/index'],
+                             'visible' => !Yii::$app->user->isGuest
+                                    && Yii::$app->user->identity->idRol == \app\models\Rol::ROL_ADMIN
+                         ],
+                         
                          /* [ 'label' => 'Usuario',
                             'items' => [*/
                          
