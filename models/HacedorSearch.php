@@ -20,10 +20,24 @@ class HacedorSearch extends Hacedor
     {
         return [
             [['rol', 'idHacedor', 'idUsuario'], 'integer'],
-            [['rol'], 'safe'],
+            [[
+                'apellidoNombre',
+                'rol',
+                'ciudad0.provincia_nombre',
+                'ciudad0.ciudad'
+            ], 'safe'],
         ];
     }
 
+    /**
+     */
+    public function attributes(){
+        return array_merge(parent::attributes(), [
+            'ciudad0.provincia_nombre',
+            'ciudad0.ciudad',
+        ]);
+    } // attributes
+    
     /**
      * {@inheritdoc}
      */
@@ -59,6 +73,8 @@ class HacedorSearch extends Hacedor
             return $dataProvider;
         }
 
+        $query->join('LEFT JOIN', 'ciudad',
+                    'ciudad.idCiudad = hacedor.idCiudad');
         $query->joinWith('usuario');
         
         // grid filtering conditions
@@ -67,7 +83,22 @@ class HacedorSearch extends Hacedor
             'idUsuario' => $this->idUsuario,
             'usuario.idRol' => $this->rol,
         ]);
+        $query->andFilterWhere(['like', 'apellidoNombre',
+                               $this->apellidoNombre]);
+        $query->andFilterWhere(['like', 'ciudad.ciudad',
+                               $this->getAttribute('ciudad0.ciudad')]);
+        $query->andFilterWhere(['like', 'ciudad.provincia_nombre',
+                               $this->getAttribute('ciudad0.provincia_nombre')]);
 
+        $dataProvider->sort->attributes['ciudad0.ciudad'] = [
+            'asc' => ['ciudad.ciudad' => SORT_ASC],
+            'desc' => ['ciudad.ciudad' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['ciudad0.provincia_nombre'] = [
+            'asc' => ['ciudad.provincia_nombre' => SORT_ASC],
+            'desc' => ['ciudad.provincia_nombre' => SORT_DESC],
+        ];
 
         return $dataProvider;
     }

@@ -34,7 +34,18 @@ $btns = [
             ['class' => 'yii\grid\SerialColumn'],
 
             'apellidoNombre',
-            'ciudad.nombre',
+            [
+                'attribute' => 'ciudad0.provincia_nombre',
+                'label' => 'Provincia',
+            ],
+            [
+                'attribute' => 'ciudad0.ciudad',
+                'label' => 'Ciudad',
+            ],
+            [
+                'attribute' => 'sumproductos',
+                'label' => 'Producidos',
+            ],
 
             ['class' => 'yii\grid\ActionColumn',
              'buttons' => $btns,

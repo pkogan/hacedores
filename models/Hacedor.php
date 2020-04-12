@@ -64,6 +64,14 @@ class Hacedor extends \yii\db\ActiveRecord
     }
 
     /**
+       Name clashing en ciudad (hay un campo del mismo nombre).
+    */
+    public function getCiudad0()
+    {
+        return $this->hasOne(Ciudad::className(), ['idCiudad' => 'idCiudad']);
+    }
+    
+    /**
      * Gets query for [[IdUsuario0]].
      *
      * @return \yii\db\ActiveQuery
@@ -124,7 +132,7 @@ class Hacedor extends \yii\db\ActiveRecord
     public function getEntregas()
     {
         return $this->hasMany(Entrega::className(), ['idProducto' => 'idProducto'])
-            ->via('productos');
+              ->via('productos');
     }
     
     public function getSumproductos()
@@ -179,7 +187,7 @@ class Hacedor extends \yii\db\ActiveRecord
        - Cant. de producots entregados.
 
        @return {array} Un arreglo de `['producidos' => {int}, 
-         'stock' => {int}, 'entregas' => {int}]`.
+       'stock' => {int}, 'entregas' => {int}]`.
      */
     public function datos_prod(){
         $producidos = 0;
