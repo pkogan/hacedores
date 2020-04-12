@@ -11,6 +11,7 @@ use app\models\Hacedor;
  */
 class HacedorSearch extends Hacedor
 {
+    public $con_produccion = false;
     public $rol = null;
     
     /**
@@ -75,7 +76,15 @@ class HacedorSearch extends Hacedor
 
         $query->join('LEFT JOIN', 'ciudad',
                     'ciudad.idCiudad = hacedor.idCiudad');
-        $query->joinWith('usuario');
+        $query->join('LEFT JOIN', 'usuario',
+                    'usuario.idUsuario = hacedor.idUsuario');
+
+        if ($this->con_produccion){
+            $query->join('RIGHT JOIN', 'producto',
+                'producto.idHacedor = hacedor.idHacedor');
+            $query->from('hacedor');
+            $query->addGroupBy('hacedor.idHacedor');
+        }
         
         // grid filtering conditions
         $query->andFilterWhere([

@@ -91,6 +91,7 @@ class HacedorController extends Controller
         $searchModel = new HacedorSearch();
 
         $param = Yii::$app->request->queryParams;
+        $searchModel->con_produccion = true;
         $searchModel->rol = \app\models\Rol::ROL_MAKER;
         
         $dataProvider = $searchModel->search($param);
