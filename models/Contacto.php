@@ -20,7 +20,6 @@ class Contacto extends \yii\db\ActiveRecord
 {
 
     public $captcha;
-    public $idCiudad;
     public $idProvincia;
     
     /**
@@ -37,9 +36,10 @@ class Contacto extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nombre', 'tel', 'captcha', 'idInstitucion'], 'required'],
+            [['nombre', 'tel', 'captcha', 'idCiudad',
+              'idInstitucion'], 'required'],
             [['captcha'], 'captcha'],
-            [['idInstitucion', 'con_caso'], 'integer'],
+            [['idCiudad', 'idInstitucion', 'con_caso'], 'integer'],
             [['mas_info'], 'string'],
             [['nombre'], 'string', 'max' => 32],
             [['tel'], 'string', 'max' => 200],
@@ -77,4 +77,11 @@ class Contacto extends \yii\db\ActiveRecord
         return $this->hasOne(Institucion::className(),
                        ['idInstitucion' => 'idInstitucion']);
     }
+
+    /**
+     */
+    public function getCiudad(){
+        return $this->hasOne(Ciudad::className(),
+                       ['idCiudad' => 'idCiudad']);
+    } // getCiudad
 }
