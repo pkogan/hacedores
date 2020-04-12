@@ -18,6 +18,7 @@ use Yii;
  * @property Usuario $usuarioValidador Usuario Validador de la entrega
  * @property int $idCiudad
  * @property Ciudad $ciudad
+ * @property Institucion $institucion
  */
 class Entrega extends \yii\db\ActiveRecord
 {
@@ -108,7 +109,7 @@ class Entrega extends \yii\db\ActiveRecord
     }
     public function getUsuarioValidador()
     {
-        return $this->hasOne(Usuario::className(), ['idUsuarioValidador' => 'idUsuario']);
+        return $this->hasOne(Usuario::className(), ['idUsuario' => 'idUsuarioValidador']);
     }
     public function getCiudad()
     {

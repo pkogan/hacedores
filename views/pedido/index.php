@@ -38,8 +38,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             //'idPedido',
-            ['label'=>'Institucion','attribute'=>'institucionFilter','value'=>'idInstitucion0.nombre'],
             ['label'=>'Usuario','attribute'=>'usuarioFilter','value'=>'idSolicitante0.nombreUsuario'],
+            'idCiudad0.ciudad',
+            ['label'=>'Institucion','attribute'=>'institucionFilter','value'=>'idInstitucion0.nombre'],
+            
             'fecha',
             //'observacion',
             //'imagen',

@@ -11,17 +11,34 @@ use app\models\Hacedor;
  */
 class HacedorSearch extends Hacedor
 {
+    public $con_produccion = false;
+    public $rol = null;
+    
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['idHacedor', 'idUsuario', 'cantidadMaquinas'], 'integer'],
-            [['institucion', 'materialImprimir', 'link'], 'safe'],
+            [['rol', 'idHacedor', 'idUsuario'], 'integer'],
+            [[
+                'apellidoNombre',
+                'rol',
+                'ciudad0.provincia_nombre',
+                'ciudad0.ciudad'
+            ], 'safe'],
         ];
     }
 
+    /**
+     */
+    public function attributes(){
+        return array_merge(parent::attributes(), [
+            'ciudad0.provincia_nombre',
+            'ciudad0.ciudad',
+        ]);
+    } // attributes
+    
     /**
      * {@inheritdoc}
      */
@@ -51,21 +68,46 @@ class HacedorSearch extends Hacedor
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
+            // uncomment the following line if you do not want to return
+            // any records when validation fails
             // $query->where('0=1');
             return $dataProvider;
         }
 
+        $query->join('LEFT JOIN', 'ciudad',
+                    'ciudad.idCiudad = hacedor.idCiudad');
+        $query->join('LEFT JOIN', 'usuario',
+                    'usuario.idUsuario = hacedor.idUsuario');
+
+        if ($this->con_produccion){
+            $query->join('RIGHT JOIN', 'producto',
+                'producto.idHacedor = hacedor.idHacedor');
+            $query->from('hacedor');
+            $query->addGroupBy('hacedor.idHacedor');
+        }
+        
         // grid filtering conditions
         $query->andFilterWhere([
             'idHacedor' => $this->idHacedor,
             'idUsuario' => $this->idUsuario,
-            'cantidadMaquinas' => $this->cantidadMaquinas,
+            'usuario.idRol' => $this->rol,
         ]);
+        $query->andFilterWhere(['like', 'apellidoNombre',
+                               $this->apellidoNombre]);
+        $query->andFilterWhere(['like', 'ciudad.ciudad',
+                               $this->getAttribute('ciudad0.ciudad')]);
+        $query->andFilterWhere(['like', 'ciudad.provincia_nombre',
+                               $this->getAttribute('ciudad0.provincia_nombre')]);
 
-        $query->andFilterWhere(['like', 'institucion', $this->institucion])
-            ->andFilterWhere(['like', 'materialImprimir', $this->materialImprimir])
-            ->andFilterWhere(['like', 'link', $this->link]);
+        $dataProvider->sort->attributes['ciudad0.ciudad'] = [
+            'asc' => ['ciudad.ciudad' => SORT_ASC],
+            'desc' => ['ciudad.ciudad' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['ciudad0.provincia_nombre'] = [
+            'asc' => ['ciudad.provincia_nombre' => SORT_ASC],
+            'desc' => ['ciudad.provincia_nombre' => SORT_DESC],
+        ];
 
         return $dataProvider;
     }

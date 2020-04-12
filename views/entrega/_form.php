@@ -45,7 +45,13 @@ use app\models\Institucion;
         $model->idProvincia = $model->ciudad->idProvincia;
 
         $options['data'] = yii\helpers\ArrayHelper::map(\app\models\Ciudad::find()->where("idProvincia in ($model->idProvincia) and categoria<>".'"ENTIDAD"')->orderBy('ciudad')->all(), 'idCiudad', 'ciudad');
-        $optionsInstitucion['data'] = array_merge(yii\helpers\ArrayHelper::map(\app\models\Institucion::find()->where("idCiudad in ($model->idCiudad) and idTipologia=10")->orderBy('nombre')->all(), 'idInstitucion', 'nombre'),[2=>'OTRO']);
+        $optionsInstitucion['data'] = yii\helpers\ArrayHelper::map(\app\models\Institucion::find()->where("idCiudad in ($model->idCiudad) and idTipologia=10")->orderBy('nombre')->all(), 'idInstitucion', 'nombre');
+        $optionsInstitucion['data'][Institucion::OTROID]=Institucion::NOMBRES[Institucion::OTROID];
+        
+        //if(Yii::$app->user->identity->idRol== \app\models\Rol::ROL_MAKER){
+            $optionsInstitucion['data'][Institucion::CENTROENSAMLADOID]= Institucion::NOMBRES[Institucion::CENTROENSAMLADOID];
+            $optionsInstitucion['data'][Institucion::CENTRODISTSALUDID]= Institucion::NOMBRES[Institucion::CENTRODISTSALUDID];
+
     }
     
 
@@ -56,7 +62,7 @@ use app\models\Institucion;
     $form->field($model, 'idCiudad')->widget(\kartik\depdrop\DepDrop::classname(), $options)
     ?>   
     
-    
+  <p>Si la entrega se realiza a un Referente de la Red, seleccionar Centro de Distribución Zonal</p>
   <?= $form->field($model, 'idInstitucion')->widget(\kartik\depdrop\DepDrop::classname(), $optionsInstitucion) ?>
 
   <?= $form->field($model, 'fecha')

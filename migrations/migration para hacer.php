@@ -20,9 +20,9 @@ ALTER TABLE `entrega` ADD `receptor` VARCHAR(500) NULL;
 ALTER TABLE `entrega` ADD `idEstado` INT NOT NULL DEFAULT '0', ADD INDEX (`idEstado`);
 ALTER TABLE `entrega` ADD `idUsuarioValidador` INT NULL, ADD INDEX (`idUsuarioValidador`);
 
-CREATE TABLE `hacedores`.`estadoEntrega` ( `idEstado` INT NOT NULL AUTO_INCREMENT ,  `estado` VARCHAR(100) NOT NULL ,    PRIMARY KEY  (`idEstado`)) ENGINE = InnoDB;
+CREATE TABLE `estadoEntrega` ( `idEstado` INT NOT NULL ,  `estado` VARCHAR(100) NOT NULL ,    PRIMARY KEY  (`idEstado`)) ENGINE = InnoDB;
 INSERT INTO `estadoEntrega` (`idEstado`, `estado`) VALUES (0, 'En espera'), (1, 'Validada');
-ALTER TABLE `entrega` ADD `idCiudad` DEFAULT '58035070000' BIGINT NOT NULL AFTER `idProducto`, ADD INDEX (`idCiudad`);
+ALTER TABLE `entrega` ADD `idCiudad` BIGINT NOT NULL DEFAULT '58035070000' AFTER `idProducto`, ADD INDEX (`idCiudad`);
 
 *TODO ACTUALIZAR CON EL idCiudad del hacedor
 
@@ -46,3 +46,24 @@ ALTER TABLE `institucion` ADD `idEstablecimiento` BIGINT NULL AFTER `tipologia`;
  * 
  */
 
+/* agregar id Ciudad en Pedido */
+
+ALTER TABLE `pedido` ADD `idCiudad` BIGINT NOT NULL AFTER `idPedido`, ADD INDEX (`idCiudad`);
+UPDATE `pedido`,institucion SET pedido.`idCiudad`=institucion.idCiudad where pedido.idInstitucion=institucion.idInstitucion;
+ALTER TABLE `pedido` ADD FOREIGN KEY (`idCiudad`) REFERENCES `ciudad`(`idCiudad`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+/*gestor con pedidos*/
+
+ALTER TABLE `producto` ADD `idTipoProducto` INT NOT NULL DEFAULT '1' AFTER `idProducto`, ADD INDEX (`idTipoProducto`);
+
+CREATE TABLE `tipoProducto` ( `idTipoProducto` INT NOT NULL AUTO_INCREMENT ,  `tipo` VARCHAR(50) NOT NULL ,    PRIMARY KEY  (`idTipoProducto`)) ENGINE = InnoDB; 
+
+
+//insertar hacedores de los usuarios
+insert into hacedor(idUsuario,mail,apellidoNombre,idCiudad)
+SELECT usuario.idUsuario,nombreUsuario,nombreUsuario,58035070000 FROM `usuario` left outer join hacedor on usuario.idUsuario=hacedor.idUsuario where idHacedor is null
+
+Centro de Distribución zonal
+        UPDATE `institucion` SET `nombre` = 'CENTRO DE ENSAMBLADO' WHERE `institucion`.`idInstitucion` = 3;
+        UPDATE `institucion` SET `nombre` = 'CENTRO DE DISTRIBUCIÓN ZONAL SISTEMA DE SALUD', `idCiudad` = '58035070000', `direccion` = '', `idTipologia` = '1', `siglaTipologia` = '', `tipologia` = '', `idEstablecimiento` = '' WHERE `institucion`.`idInstitucion` = 4;

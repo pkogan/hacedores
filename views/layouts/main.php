@@ -18,6 +18,9 @@ AppAsset::register($this);
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Registro de makers con impresoras 3D y su producción para aportar un grano de arena frente a la crisis del COVID-19." />
+    <meta name="keywords" content="makers,hacedores,impresoras 3D,COVID-19" />
+    <meta name="author" content="faiweb.uncoma.edu.ar" />
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
@@ -38,6 +41,7 @@ AppAsset::register($this);
                 'options' => ['class' => 'navbar-nav navbar-right'],
                 'items' => [
                     ['label' => 'Inicio', 'url' => ['/site/index']],
+                    ['label' => 'Makers', 'url' => ['/hacedor/publica']],
                     ['label' => 'Actualizar Registro',
                      'url' => ['/registro/update','id'=> Yii::$app->user->identity->hacedor->idHacedor],
                      'visible' => !Yii::$app->user->isGuest
@@ -57,52 +61,70 @@ AppAsset::register($this);
                     ['label' => 'Mapa', 'url' => ['/registro/mapa']],
                     
                     ['label' => 'Producción', 'url' => ['/registro/resumen']],
-                    ['label' => 'Registro',
-                     'url' => ['/registro'],
-                     'visible' => !Yii::$app->user->isGuest
-                            && in_array(Yii::$app->user->identity->idRol,
-                                       [\app\models\Rol::ROL_ADMIN,
-                                        app\models\Rol::ROL_GESTOR])
-                    ],
-                    ['label' => 'Entregas', 'url' => ['/entrega'],
+                    ['label' => 'Entregas', 'url' => ['/entrega/resumen']],
+
+                    ['label' => 'Recepción Entregas', 'url' => ['/entrega'],
                      'visible' => !Yii::$app->user->isGuest
                             && in_array(Yii::$app->user->identity->idRol,
                                        [\app\models\Rol::ROL_ADMIN,
                                         \app\models\Rol::ROL_GESTOR])
                     ],
-                    ['label' => 'Institucion', 'url' => ['/institucion'],
+                    
+                    ['label'=> 'admin',
                      'visible' => !Yii::$app->user->isGuest
-                            && in_array(Yii::$app->user->identity->idRol,
-                                       [\app\models\Rol::ROL_ADMIN,
-                                        app\models\Rol::ROL_GESTOR])],
-                    ['label' => 'Pedidos (Demanda)', 'url' => ['/pedido'],
-                     'visible' => !Yii::$app->user->isGuest
-                            && in_array(Yii::$app->user->identity->idRol,
-                                       [\app\models\Rol::ROL_ADMIN,
-                                        app\models\Rol::ROL_GESTOR])],
+                            && Yii::$app->user->identity->idRol == \app\models\Rol::ROL_ADMIN,
+                     'items'=>[
+                         ['label' => 'Registro',
+                          'url' => ['/registro'],
+                          'visible' => !Yii::$app->user->isGuest
+                                 && in_array(Yii::$app->user->identity->idRol,
+                                            [\app\models\Rol::ROL_ADMIN,
+                                             app\models\Rol::ROL_GESTOR])
+                         ],
+                         
+                         ['label' => 'Institucion', 'url' => ['/institucion'],
+                          'visible' => !Yii::$app->user->isGuest
+                                 && in_array(Yii::$app->user->identity->idRol,
+                                            [\app\models\Rol::ROL_ADMIN,
+                                             app\models\Rol::ROL_GESTOR])],
+                         ['label' => 'Pedidos ', 'url' => ['/pedido'],
+                          'visible' => !Yii::$app->user->isGuest
+                                 && in_array(Yii::$app->user->identity->idRol,
+                                            [\app\models\Rol::ROL_ADMIN,
+                                             app\models\Rol::ROL_GESTOR])],
 
-                   /* [ 'label' => 'Usuario',
-                      'items' => [*/
-                          
-                          ['label' => 'Usuarios', 'url' => ['/usuario'],
-                           'visible' => !Yii::$app->user->isGuest
-                                  && Yii::$app->user->identity->idRol == \app\models\Rol::ROL_ADMIN
-                          ],
-                          ['label' => 'Acerca de', 'url' => ['/site/about']],
-                          Yii::$app->user->isGuest ? (
-                              ['label' => 'Login', 'url' => ['/site/login']]
-                          ) : (
-                              '<li>'
-                            . Html::beginForm(['/site/logout'], 'post')
-                            . Html::submitButton(
-                                'Logout (' . Yii::$app->user->identity->username . ')', ['class' => 'btn btn-link logout']
-                            )
-                            . Html::endForm()
-                            . '</li>'
-                          )
-                      ],
-                 /*   ],
-                ],*/
+                         [
+                             'label' => 'Contactos ', 'url' => ['/contacto/index'],
+                             'visible' => !Yii::$app->user->isGuest
+                                    && Yii::$app->user->identity->idRol == \app\models\Rol::ROL_ADMIN
+                         ],
+                         
+                         /* [ 'label' => 'Usuario',
+                            'items' => [*/
+                         
+                         ['label' => 'Usuarios', 'url' => ['/usuario'],
+                          'visible' => !Yii::$app->user->isGuest
+                                 && Yii::$app->user->identity->idRol == \app\models\Rol::ROL_ADMIN
+                         ],
+                    ]],
+                    ['label' => 'Contacto', 'url' => ['/contacto/create'],
+                     'visible' => Yii::$app->user->isGuest],
+                    
+                    ['label' => 'Acerca de', 'url' => ['/site/about']],
+                    Yii::$app->user->isGuest ? (
+                        ['label' => 'Login', 'url' => ['/site/login']]
+                    ) : (
+                        '<li>'
+                      . Html::beginForm(['/site/logout'], 'post')
+                      . Html::submitButton(
+                          'Logout (' . Yii::$app->user->identity->username . ')', ['class' => 'btn btn-link logout']
+                      )
+                      . Html::endForm()
+                      . '</li>'
+                    )
+                ],
+                /*   ],
+                   ],*/
             ]);
             NavBar::end();
             ?>

@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
  <p>
         <?php
-        if (Yii::$app->user->identity->idRol == \app\models\Rol::ROL_MAKER) {
+        if (Yii::$app->user->identity->idRol == \app\models\Rol::ROL_ADMIN || $model->producto->hacedor->idUsuario==Yii::$app->user->identity->idUsuario) {
             echo Html::a('Volver a Inicio', ['/site'], ['class' => 'btn btn-success']). ' ';
             echo Html::a('Editar', ['update', 'id' => $model->idEntrega], ['class' => 'btn btn-primary']). ' ';
             echo Html::a('Eliminar', ['delete', 'id' => $model->idEntrega], [
@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ?>
 
         <?php
-        if (in_array(Yii::$app->user->identity->idRol, [\app\models\Rol::ROL_GESTOR, \app\models\Rol::ROL_ADMIN])) {
+        if (in_array(Yii::$app->user->identity->idRol, [\app\models\Rol::ROL_GESTOR, \app\models\Rol::ROL_ADMIN])&&  $model->producto->hacedor->idUsuario!=Yii::$app->user->identity->idUsuario) {
             echo Html::a('Volver a Inicio', ['index'], ['class' => 'btn btn-success']). ' ';
             if ($model->idEstado == 0) {
                 echo Html::a('Validar', ['validar', 'id' => $model->idEntrega, 'idEstado' => 1], [
