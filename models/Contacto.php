@@ -10,6 +10,8 @@ use Yii;
  * @property int $id
  * @property string|null $nombre
  * @property string|null $tel
+ * @property string $email
+ * @property string $idCiudad
  * @property int|null $idInstitucion
  * @property int|null $con_caso
  * @property string|null $mas_info
@@ -36,12 +38,13 @@ class Contacto extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nombre', 'tel', 'captcha', 'idCiudad',
+            [['nombre', 'email', 'tel', 'captcha', 'idCiudad',
               'idInstitucion'], 'required'],
             [['captcha'], 'captcha'],
             [['idCiudad', 'idInstitucion', 'con_caso'], 'integer'],
             [['mas_info'], 'string'],
             [['nombre'], 'string', 'max' => 32],
+            [['email'], 'email'],
             [['tel'], 'string', 'max' => 200],
             [['idInstitucion'], 'exist',
              'skipOnError' => true,
@@ -58,6 +61,7 @@ class Contacto extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'nombre' => 'Nombre',
+            'email' => 'E-Mail',
             'tel' => 'Tel.',
             'idCiudad' => 'Ciudad de la institución',
             'idProvincia' => 'Provincia de la Institución',

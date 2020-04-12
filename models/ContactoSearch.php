@@ -17,10 +17,22 @@ class ContactoSearch extends Contacto
     public function rules()
     {
         return [
-            [['id', 'idInstitucion', 'con_caso'], 'integer'],
-            [['nombre', 'tel', 'mas_info'], 'safe'],
+            [['id', 'idCiudad', 'idInstitucion', 'con_caso'], 'integer'],
+            [[
+                'nombre', 'email', 'tel', 'mas_info',
+                'ciudad.ciudad', 'institucion.nombre'
+            ], 'safe'],
         ];
     }
+
+    /**
+     */
+    public function attributes(){
+        return array_merge(parent::attributes(), [
+            'institucion.nombre',
+            'ciudad.ciudad'
+        ]);
+    } // attributes
 
     /**
      * {@inheritdoc}
@@ -56,17 +68,38 @@ class ContactoSearch extends Contacto
             return $dataProvider;
         }
 
+        $query->join('LEFT JOIN', 'institucion',
+                    'institucion.idInstitucion = contacto.idInstitucion');
+        $query->join('LEFT JOIN', 'ciudad',
+                    'ciudad.idCiudad = contacto.idCiudad');
+        
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'idInstitucion' => $this->idInstitucion,
+            'ciudad.idCiudad' => $this->idCiudad,
+            'institucion.idInstitucion' => $this->idInstitucion,
             'con_caso' => $this->con_caso,
         ]);
 
         $query->andFilterWhere(['like', 'nombre', $this->nombre])
-            ->andFilterWhere(['like', 'tel', $this->tel])
-            ->andFilterWhere(['like', 'mas_info', $this->mas_info]);
+             ->andFilterWhere(['like', 'email', $this->email])
+             ->andFilterWhere(['like', 'tel', $this->tel])
+             ->andFilterWhere(['like', 'mas_info', $this->mas_info])
+             ->andFilterWhere(['like', 'institucion.nombre',
+                              $this->getAttribute('institucion.nombre')])
+             ->andFilterWhere(['like', 'ciudad.ciudad',
+                              $this->getAttribute('ciudad.ciudad')]);
 
+        $dataProvider->sort->attributes['institucion.nombre'] = [
+            'asc' => ['institucion.nombre' => SORT_ASC],
+            'desc' => ['institucion.nombre' => SORT_DESC],
+        ];
+        
+        $dataProvider->sort->attributes['ciudad.ciudad'] = [
+            'asc' => ['ciudad.ciudad' => SORT_ASC],
+            'desc' => ['ciudad.ciudad' => SORT_DESC],
+        ];
+        
         return $dataProvider;
     }
 }

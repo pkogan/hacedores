@@ -25,6 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'nombre',
+            'email',
             'tel',
             ['attribute' => 'ciudad.ciudad',
              'label' => 'Ciudad'],

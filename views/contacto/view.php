@@ -31,6 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'nombre',
+            'email',
             'tel',
             ['attribute' => 'ciudad.provincia_nombre',
              'label' => 'Provincia'],
