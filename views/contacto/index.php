@@ -14,10 +14,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Create Contacto', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -30,8 +26,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'nombre',
             'tel',
-            'idInstitucion',
-            'con_caso',
+            ['attribute' => 'ciudad.ciudad',
+             'label' => 'Ciudad'],
+            ['attribute' => 'institucion.nombre',
+             'label' => 'Institución'],
+            'con_caso:boolean',
             //'mas_info:ntext',
 
             ['class' => 'yii\grid\ActionColumn'],
